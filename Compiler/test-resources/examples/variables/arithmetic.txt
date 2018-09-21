@@ -1,0 +1,8 @@
+int foo; 
+int bar; 
+
+foo = 2; 
+bar = 56; 
+
+println(foo); 
+println(foo*2+bar);

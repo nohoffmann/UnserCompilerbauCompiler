@@ -1,0 +1,7 @@
+int randomNumber() { 
+	int i; 
+	i = 42; 
+	return i; 
+} 
+
+println(randomNumber());

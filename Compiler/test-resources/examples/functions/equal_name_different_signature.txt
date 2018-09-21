@@ -1,0 +1,12 @@
+int testFunc() { 
+	return 42; 
+} 
+
+
+int testFunc(int a) { 
+	return a; 
+} 
+
+
+println(testFunc()); 
+println(testFunc(23));

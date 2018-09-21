@@ -1,0 +1,8 @@
+Versionen der verwendeten Tools:
+    -   ANTLR v4.7.1		(liegt unter Parser/lib)
+    -   Eclipse Photon v4.8.0
+	- mit TestNG-Plugin (k.A. welche Version genau, ich werde es noch in Erfahrung bringen)
+    -   Jasmin v2.4		(liegt unter Compiler/lib)
+    -   Java/JRE v1.8.0_181	(sollte man schon installiert haben (-: )
+
+    

@@ -1,0 +1,10 @@
+TODO (in dieser Priorität):
+	-	Konstanten implementieren
+	-	Main-Funktion anpassen, vernünftige Kommandozeilenschnittstelle implementieren
+	-	Bugs finden
+	- 	Mehr Testfälle
+	
+	-	float-Datentyp implementieren
+	-	String-Datentyp implementieren
+	-	void-Datentyp implementieren
+	

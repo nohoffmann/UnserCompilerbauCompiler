@@ -1,0 +1,5 @@
+int randomNumber() { 
+	return 42; 
+} 
+
+println(randomNumber());
