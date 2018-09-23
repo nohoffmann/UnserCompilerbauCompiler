@@ -172,13 +172,13 @@ public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 				compareInstruction = "if_icmple";
 				break;
 			case ">":
-				compareInstruction = "if_icmpgt ";
+				compareInstruction = "if_icmpgt";
 				break;
 			case ">=":
 				compareInstruction = "if_icmpge";
 				break;
 			case "==":
-				compareInstruction = "ifeq;
+				compareInstruction = "ifeq";
 				break;
 			default:
 				throw new IllegalArgumentException("Unknown operator: " + ctx.compareOp.getText());

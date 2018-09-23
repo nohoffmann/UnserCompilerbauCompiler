@@ -8,6 +8,7 @@ INTEGER : [0-9]+ ;         	//beliebige folge der ziffern 0 bis 9		//
 WS : [ \t\r\n]+ -> skip ;	//ueberspringt spaces, tabstops, linefeeds	//
 LPAREN : '(';		  		//oeffndende runde klammer					//
 RPAREN : ')';		  		//schliessende runde klammer				//
+CONSTTOK: 'const';			//Konstant - Keyword						//
 //mathematische operatoren												//
 PLUSOP : '+';															//
 MINOP  : '-';															//
@@ -46,6 +47,7 @@ progPart : statement 			#MainStatement							//
 																		//
 statement : println ';'													//
 		  | varDeclaration ';'											//
+		  | constVarDec ';'												//
 		  | assignment ';'												//
 		  | branch 														//
 		  | loop														//
@@ -68,8 +70,14 @@ assignment : varName=ID ASSIGNOP expr=expression						//
 			;															//
 //////////////////////////////////////////////////////////////////////////
 
-
-
+//////////////////////////////////////////////////////////////////////////
+//Regeln fuer Konstanten												//
+//////////////////////////////////////////////////////////////////////////
+constVarDec : CONSTTOK 'int' constVarName=ID	 						//
+			   ;														//
+constAssign : constVarName=ID ASSIGNOP expr=expression					//
+			   ;														//
+//////////////////////////////////////////////////////////////////////////
 
 
 //////////////////////////////////////////////////////////////////////////
