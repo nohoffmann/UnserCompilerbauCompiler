@@ -88,7 +88,7 @@ Der erste Schritt ist dabei die sogenannte lexikalische Analyse. Die Eingabedate
 zu den folgenden Tokens aufgelöst werden.
 
 % @Marvin, pls eine bessere Grafik erstellen. Dankeschön (-:
-% @topkek, wird gemacht.
+% @topkek, ist gemacht. Die neue ist jetzt erst mal Schwarz-Weiß, aber weil ich - faul wie ich bin - das mit Pages gemacht habe und das Dokument (.pages) gleich mit reingepackt habe, können wir das jederzeit ein wenig verschönern.
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=0.37]{lex_beispiel.png}
@@ -97,12 +97,14 @@ zu den folgenden Tokens aufgelöst werden.
 \end{figure}
 
 
-Der Teil des Compilers, der diese Aufgabe übernimmt, wird Lexer genannt. Der Lexer überprüft für jedes Zeichen der Eingabedatei, welchem Token dieses zugeordnet werden kann. Dies geschiet auf Grundlage von definierten Regeln, welche mit sogenannten regulären Ausdrücken formuliert werden. Ein regulärer Ausdruck besteht aus einer Sequenz von Zeichen, die ein bestimmtes Muster definieren. Reguläre Ausdrücke können auch rekursiv verwendet werden, um auf Grundlage einfacher regulärer Ausdrücke komplexere zu bilden. Beispiele für reguläre Ausdrücke werden im Kapitel HIER KAPITELNUMMER EINFÜGEN Erste Schritte: Auswertung von arithmetischen Ausdrücken aufgeführt.
+Der Teil des Compilers, der diese Aufgabe übernimmt, wird \textit{Lexer} genannt. Der Lexer überprüft für jedes Zeichen der Eingabedatei, welchem Token dieses zugeordnet werden kann. Dies geschieht auf Grundlage von definierten Regeln, welche mit sogenannten \textit{regulären Ausdrücken} formuliert werden. Ein regulärer Ausdruck besteht aus einer Sequenz von Zeichen, die ein bestimmtes Muster definieren. Reguläre Ausdrücke können auch rekursiv verwendet werden, um auf Grundlage einfacher regulärer Ausdrücke komplexere zu bilden. Beispiele für reguläre Ausdrücke werden im Kapitel \texit{6.1 Erste Schritte: Auswertung von arithmetischen Ausdrücken} GGF. KAPITELNUMMER ÄNDERN! aufgeführt.
 
 \subsection{Syntaktische Analyse}
-Der zweite größere Abschnitt besteht in der syntaktischen Analyse. Dabei wird überprüft, ob die Eingabedatei einer definierten Grammatik entspricht. Bei der lexikalischen Analyse wird lediglich die übergebene Zeichenfolge in Tokens aufgeteilt, jedoch nicht überprüft, ob diese der Grammatik entsprechend zusammengeführt werden können. 
+Im zweiten Schritt der Verarbeitung wird die \textit{syntaktische Analyse} durchgeführt. Dabei wird überprüft, ob die Eingabedatei einer definierten Grammatik entspricht, während bei der lexikalischen Analyse lediglich die übergebene Zeichenfolge in Tokens aufgeteilt wird, nicht jedoch überprüft wird, ob diese der Grammatik entsprechend zusammengeführt werden können. 
+
 Bei einer erfolgreichen Auswertung wird die Folge an Tokens, die bei der lexikalischen Analyse ermittelt wurde, in einen Syntaxbaum übergeführt. Dies ist notwendig, um die Tokens in der richtigen Reihenfolge auszuwerten. 
 %hier wäre eine Grafik auch hilfreich
+%ich kümmere mich drum  -- lg marvin
 
 \subsection{Syntaxgesteuerte Übersetzung}
 Die eigentlich Erzeugung von Code in der Ausgangssprache findet zuletzt statt. Hierbei wird jeder Knoten des Syntaxbaum betrachtet und je nach Kontext eine Zeichenkette mit Anweisungen in der Zielsprache generiert. In diesem Schritt findet ebenfalls die semantische Analyse statt, beispielsweise die Überprüfung, ob eine aufgerufene Variable vorher deklariert wurde.
