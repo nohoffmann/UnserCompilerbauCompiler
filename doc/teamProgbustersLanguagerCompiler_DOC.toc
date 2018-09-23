@@ -1,5 +1,5 @@
-\select@language {german}
-\select@language {german}
+\babel@toc {german}{}
+\babel@toc {german}{}
 \contentsline {section}{\numberline {1}Einleitung}{4}{section.1}
 \contentsline {section}{\numberline {2}Anforderungen}{5}{section.2}
 \contentsline {subsection}{\numberline {2.1}Infrastruktur}{5}{subsection.2.1}
@@ -37,6 +37,6 @@
 \contentsline {subsection}{\numberline {7.3}Funktionen}{20}{subsection.7.3}
 \contentsline {subsection}{\numberline {7.4}Bedingte Verzweigungen}{20}{subsection.7.4}
 \contentsline {section}{\numberline {8}Verwendung des Compilers}{21}{section.8}
-\contentsline {section}{\numberline {9}Anhang}{22}{section.9}
-\contentsline {subsection}{\numberline {9.1}Quellenangaben}{22}{subsection.9.1}
-\contentsline {subsection}{\numberline {9.2}Quellcode des Compiler(?)}{22}{subsection.9.2}
+\contentsline {section}{\numberline {9}Anhang}{21}{section.9}
+\contentsline {subsection}{\numberline {9.1}Quellenangaben}{21}{subsection.9.1}
+\contentsline {subsection}{\numberline {9.2}Quellcode des Compiler(?)}{21}{subsection.9.2}

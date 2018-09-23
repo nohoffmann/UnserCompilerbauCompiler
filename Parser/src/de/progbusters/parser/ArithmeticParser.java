@@ -19,8 +19,8 @@ public class ArithmeticParser extends Parser {
 	public static final int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
 		T__9=10, ID=11, INTEGER=12, WS=13, LPAREN=14, RPAREN=15, PLUSOP=16, MINOP=17, 
-		MULTOP=18, DIVOP=19, LT=20, LEQ=21, GT=22, GEQ=23, AND=24, OR=25, NOT=26, 
-		ASSIGNOP=27;
+		MULTOP=18, DIVOP=19, LT=20, LEQ=21, GT=22, GEQ=23, EQ=24, AND=25, OR=26, 
+		NOT=27, ASSIGNOP=28;
 	public static final int
 		RULE_program = 0, RULE_progPart = 1, RULE_statement = 2, RULE_println = 3, 
 		RULE_varDeclaration = 4, RULE_assignment = 5, RULE_functionDefinition = 6, 
@@ -36,12 +36,12 @@ public class ArithmeticParser extends Parser {
 	private static final String[] _LITERAL_NAMES = {
 		null, "';'", "'println('", "'int'", "'{'", "'return'", "'}'", "','", "'if'", 
 		"'else'", "'while'", null, null, null, "'('", "')'", "'+'", "'-'", "'*'", 
-		"'/'", "'<'", "'<='", "'>'", "'>='", "'&&'", "'||'", "'!'", "'='"
+		"'/'", "'<'", "'<='", "'>'", "'>='", "'=='", "'&&'", "'||'", "'!'", "'='"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, null, null, null, null, null, null, null, null, null, null, "ID", 
 		"INTEGER", "WS", "LPAREN", "RPAREN", "PLUSOP", "MINOP", "MULTOP", "DIVOP", 
-		"LT", "LEQ", "GT", "GEQ", "AND", "OR", "NOT", "ASSIGNOP"
+		"LT", "LEQ", "GT", "GEQ", "EQ", "AND", "OR", "NOT", "ASSIGNOP"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -1005,6 +1005,7 @@ public class ArithmeticParser extends Parser {
 		public TerminalNode LEQ() { return getToken(ArithmeticParser.LEQ, 0); }
 		public TerminalNode GT() { return getToken(ArithmeticParser.GT, 0); }
 		public TerminalNode GEQ() { return getToken(ArithmeticParser.GEQ, 0); }
+		public TerminalNode EQ() { return getToken(ArithmeticParser.EQ, 0); }
 		public ComparisonContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
@@ -1227,7 +1228,7 @@ public class ArithmeticParser extends Parser {
 						setState(156);
 						((ComparisonContext)_localctx).compareOp = _input.LT(1);
 						_la = _input.LA(1);
-						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LT) | (1L << LEQ) | (1L << GT) | (1L << GEQ))) != 0)) ) {
+						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LT) | (1L << LEQ) | (1L << GT) | (1L << GEQ) | (1L << EQ))) != 0)) ) {
 							((ComparisonContext)_localctx).compareOp = (Token)_errHandler.recoverInline(this);
 						}
 						else {
@@ -1313,7 +1314,7 @@ public class ArithmeticParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\35\u00ac\4\2\t\2"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\36\u00ac\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\3\2\6\2\"\n\2\r\2"+
 		"\16\2#\3\3\3\3\5\3(\n\3\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\5"+
@@ -1326,7 +1327,7 @@ public class ArithmeticParser extends Parser {
 		"\3\20\3\20\5\20\u0090\n\20\3\20\3\20\3\20\3\20\3\20\3\20\3\20\3\20\3\20"+
 		"\3\20\3\20\3\20\3\20\3\20\3\20\3\20\3\20\3\20\3\20\3\20\3\20\7\20\u00a7"+
 		"\n\20\f\20\16\20\u00aa\13\20\3\20\2\3\36\21\2\4\6\b\n\f\16\20\22\24\26"+
-		"\30\32\34\36\2\3\3\2\26\31\2\u00b3\2!\3\2\2\2\4\'\3\2\2\2\6\64\3\2\2\2"+
+		"\30\32\34\36\2\3\3\2\26\32\2\u00b3\2!\3\2\2\2\4\'\3\2\2\2\6\64\3\2\2\2"+
 		"\b\66\3\2\2\2\n:\3\2\2\2\f=\3\2\2\2\16A\3\2\2\2\20M\3\2\2\2\22U\3\2\2"+
 		"\2\24a\3\2\2\2\26l\3\2\2\2\30n\3\2\2\2\32v\3\2\2\2\34|\3\2\2\2\36\u008f"+
 		"\3\2\2\2 \"\5\4\3\2! \3\2\2\2\"#\3\2\2\2#!\3\2\2\2#$\3\2\2\2$\3\3\2\2"+
@@ -1335,7 +1336,7 @@ public class ArithmeticParser extends Parser {
 		"\3\2\2\61\65\3\2\2\2\62\65\5\30\r\2\63\65\5\32\16\2\64)\3\2\2\2\64,\3"+
 		"\2\2\2\64/\3\2\2\2\64\62\3\2\2\2\64\63\3\2\2\2\65\7\3\2\2\2\66\67\7\4"+
 		"\2\2\678\5\36\20\289\7\21\2\29\t\3\2\2\2:;\7\5\2\2;<\7\r\2\2<\13\3\2\2"+
-		"\2=>\7\r\2\2>?\7\35\2\2?@\5\36\20\2@\r\3\2\2\2AB\7\5\2\2BC\7\r\2\2CD\7"+
+		"\2=>\7\r\2\2>?\7\36\2\2?@\5\36\20\2@\r\3\2\2\2AB\7\5\2\2BC\7\r\2\2CD\7"+
 		"\20\2\2DE\5\24\13\2EF\7\21\2\2FG\7\6\2\2GH\5\22\n\2HI\7\7\2\2IJ\5\36\20"+
 		"\2JK\7\3\2\2KL\7\b\2\2L\17\3\2\2\2MN\7\r\2\2NO\7\20\2\2OP\5\26\f\2PQ\7"+
 		"\21\2\2Q\21\3\2\2\2RT\5\6\4\2SR\3\2\2\2TW\3\2\2\2US\3\2\2\2UV\3\2\2\2"+
@@ -1350,15 +1351,15 @@ public class ArithmeticParser extends Parser {
 		"\2\2\2\u0082\u0080\3\2\2\2\u0083\u0084\7\b\2\2\u0084\35\3\2\2\2\u0085"+
 		"\u0086\b\20\1\2\u0086\u0090\7\16\2\2\u0087\u0090\7\r\2\2\u0088\u0089\7"+
 		"\20\2\2\u0089\u008a\5\36\20\2\u008a\u008b\7\21\2\2\u008b\u0090\3\2\2\2"+
-		"\u008c\u008d\7\34\2\2\u008d\u0090\5\36\20\4\u008e\u0090\5\20\t\2\u008f"+
+		"\u008c\u008d\7\35\2\2\u008d\u0090\5\36\20\4\u008e\u0090\5\20\t\2\u008f"+
 		"\u0085\3\2\2\2\u008f\u0087\3\2\2\2\u008f\u0088\3\2\2\2\u008f\u008c\3\2"+
 		"\2\2\u008f\u008e\3\2\2\2\u0090\u00a8\3\2\2\2\u0091\u0092\f\13\2\2\u0092"+
 		"\u0093\7\25\2\2\u0093\u00a7\5\36\20\f\u0094\u0095\f\n\2\2\u0095\u0096"+
 		"\7\24\2\2\u0096\u00a7\5\36\20\13\u0097\u0098\f\t\2\2\u0098\u0099\7\23"+
 		"\2\2\u0099\u00a7\5\36\20\n\u009a\u009b\f\b\2\2\u009b\u009c\7\22\2\2\u009c"+
 		"\u00a7\5\36\20\t\u009d\u009e\f\7\2\2\u009e\u009f\t\2\2\2\u009f\u00a7\5"+
-		"\36\20\b\u00a0\u00a1\f\6\2\2\u00a1\u00a2\7\32\2\2\u00a2\u00a7\5\36\20"+
-		"\7\u00a3\u00a4\f\5\2\2\u00a4\u00a5\7\33\2\2\u00a5\u00a7\5\36\20\6\u00a6"+
+		"\36\20\b\u00a0\u00a1\f\6\2\2\u00a1\u00a2\7\33\2\2\u00a2\u00a7\5\36\20"+
+		"\7\u00a3\u00a4\f\5\2\2\u00a4\u00a5\7\34\2\2\u00a5\u00a7\5\36\20\6\u00a6"+
 		"\u0091\3\2\2\2\u00a6\u0094\3\2\2\2\u00a6\u0097\3\2\2\2\u00a6\u009a\3\2"+
 		"\2\2\u00a6\u009d\3\2\2\2\u00a6\u00a0\3\2\2\2\u00a6\u00a3\3\2\2\2\u00a7"+
 		"\u00aa\3\2\2\2\u00a8\u00a6\3\2\2\2\u00a8\u00a9\3\2\2\2\u00a9\37\3\2\2"+

@@ -19,14 +19,15 @@ LT  : '<'  ;															//
 LEQ : '<=' ;															//
 GT  : '>'  ;															//
 GEQ : '>=' ;															//
-																		//	
+EQ  : '==' ;															//
+																		//
 //logische verknuepfungen												//
 AND : '&&' ;															//
-OR : '||' ;																//
-NOT : '!' ;																//
+OR : '||'  ;															//
+NOT : '!'  ;															//
 																		//
 //sonstige operatoren													//
-ASSIGNOP : '=';															//	
+ASSIGNOP : '=';															//
 //////////////////////////////////////////////////////////////////////////
 
 
@@ -52,7 +53,7 @@ statement : println ';'													//
 		  	  															//
 //Regel fuer Ausgabefunktion											//
 println : 'println(' argument=expression ')' 							//
-		;																//	  
+		;																//
 //////////////////////////////////////////////////////////////////////////
 
 		  
@@ -130,7 +131,7 @@ expression: INTEGER									#Number				//
 	| expression MULTOP expression					#Multiplication		//
 	| expression MINOP  expression  				#Subtraction		//
 	| expression PLUSOP expression  				#Addition			//
-	| expression compareOp=(LT | LEQ | GT | GEQ) expression	#Comparison	//
+	| expression compareOp=(LT | LEQ | GT | GEQ | EQ) expression	#Comparison
 	| leftSide=expression AND rightSide=expression	#AndGate			//
 	| leftSide=expression OR rightSide=expression	#OrGate				//
 	| NOT expr=expression							#InverseGate		//

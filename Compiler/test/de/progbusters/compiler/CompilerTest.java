@@ -85,6 +85,9 @@ public class CompilerTest {
 			{"lower than evaluates to true", "println(3<4);", "1" + System.lineSeparator()},
 			{"lower than evaluates to false", "println(4<4);", "0" + System.lineSeparator()},
 			
+			{"equal evaluates to true", "println(1 == 1);", "1" + System.lineSeparator()},
+			{"equal evaluates to false", "println(1 == 0);", "0" + System.lineSeparator()},
+			
 			{"lower or equal evaluates to true", "println(3<=4);", "1" + System.lineSeparator()},
 			{"lower or equal evaluates to true", "println(4<=4);", "1" + System.lineSeparator()},
 			{"lower or equal evaluates to false", "println(5<=4);", "0" + System.lineSeparator()},
