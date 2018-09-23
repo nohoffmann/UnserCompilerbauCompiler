@@ -33,14 +33,17 @@
 
 Als Abschlussprojekt des Moduls 'Compilerbau' unter Leitung von Thorsten Jakobs, M.Sc., htw saar wurde dieser Compiler zur von uns eigens entwickelten Sprache \textit{Team Progbusters Language} (Arbeitstitel) entwickelt, mit den in \textit{2. Anforderungen} beschriebenen Voraussetzungen und Zielen. Die Sprache basiert im Wesentlichen auf C, wurde jedoch auf wesentliche Elemente wie Grundrechenarten, Funktionen, if-Statements und eine Form der Schleife reduziert. Weiterhin vorhanden sind Bezeichner, Konstanten, Variablen, die Klammerung wird ebenfalls ber\"ucksichtigt.
 
+
+Diese Dokumentation behandelt die Anforderungen an den Compiler, den theoretischen Hintergrund, die Konzeption der Entwicklung, unsere verwendeten Technologien, sowie unsere Vorgehensweise während der Entwicklung und die Probleme, auf die wir gestoßen sind und unsere Lösungsansätze. Ausgangs wird auch die Handhabung des Compilers näher erläutert.
+
 \newpage
 
 \section{Anforderungen}
 
-Um zu gewährleisten, dass alle Modulteilnehmer die gleichen Vorraussetzungen besitzen und unter festen Kriterien bewertet werden können, wurden einige Rahmenbedingungen vorgegeben. Die Prüfleistung besteht dabei aus der Entwicklung einer einfachen Programmiersprache, dem Anfertigen einer Dokumentation sowie einer Präsentation der Ergebnisse. Die Anforderungen an das Projekt werden in den folgenden Abschnitten aufgeführt und erläutert.
+Um zu gewährleisten, dass alle Modulteilnehmer über die gleichen Vorraussetzungen verfügen und nach festgelegten Kriterien bewertet werden können, wurden durch den Modulverantwortlichen einige Rahmenbedingungen vorgegeben. Die Prüfleistung besteht dabei aus der Entwicklung einer einfachen Programmiersprache, dem Anfertigen einer Dokumentation sowie der Präsentation der Ergebnisse. Die Anforderungen an das Projekt werden in den folgenden Abschnitten aufgeführt und erläutert.
 
 \subsection{Infrastruktur}
-Das Ziel ist die Enwicklung eines Frontends, das Quelltext in der von uns entwickelten Programmiersprache zu Jasmin-Code übersetzt. 
+Das Ziel ist die Enwicklung eines Frontends, welches Quelltext in der von uns entwickelten Programmiersprache zu Jasmin-Code übersetzt. 
 Jasmin ist ein Assembler für die Java Virtual Machine, der Quelltext in einer assembler-artigen Syntax zu Bytecode übersetzt. 
 Dieser Bytecode kann schließlich von der Java Virtual Machine ausgeführt werden.
 
@@ -62,12 +65,12 @@ Die Entwicklung wird mit 50\% in der Gesamtbewertung gewichtet.
 In einem späteren Kapitel dieser Dokumentation wird erläutert, wie die Programmiersprache verwendet wird.
 
 \subsection{Dokumentation}
-Es ist eine Dokumentation anzufertigen, die Aufschluss über die Konzeption der Entwicklung, verwendete Technoligen, das Vorgehen während der Entwicklung, aufgetretene Probleme und deren Lösungen sowie die Verwendung des Compilers gibt.
+Es ist eine Dokumentation anzufertigen, die Aufschluss über die Konzeption der Entwicklung, die verwendeten Technoligen, das Vorgehen während der Entwicklung, aufgetretene Probleme und Lösungsansätze zu diesen sowie die Verwendung des Compilers gibt.
 
 Die Dokumentation wird mit 30\% in der Gesamtbewertung gewichtet.
 
 \subsection{Präsentation}
-In einer circa 20 minütigen Präsentation werden die verwendeten Technologien, wichtige Entwicklungsschritte sowie aufgetretene Probleme erläutert. Außerdem wird der Compiler vorgeführt. 
+In einer circa 20-minütigen Präsentation werden die verwendeten Technologien, wichtige Entwicklungsschritte sowie aufgetretene Probleme erläutert. Außerdem wird der Compiler vorgeführt. 
 
 Die Präsentation wird mit 20\% in der Gesamtbewertung gewichtet.
 
@@ -77,7 +80,7 @@ Um die folgenden Abschnitte verständlich zu machen ist eine kurze Erläuterung 
 \subsection{Verallgemeinerung}
 Der zu entwickelnde Compiler nimmt als Eingabe eine Text-Datei mit Instruktionen in der Ausgangssprache. Der Compiler verarbeitet diese Eingabe und gibt als Ausgabe eine Datei mit Anweisungen in der Zielsprache zurück. Diese Verarbeitung kann grob in drei Abschnitte eingeteilt werden.
 \subsection{Lexikalische Analyse}
-Der erste Schritt ist dabei die sogenannte lexikalische Analyse. Die Eingabedatei ist für den Computer zunächst nur eine Kette von Zeichen. Es gilt diese Zeichen in sogenannte Tokens aufzuteilen. Beispielhaft könnte die Eingabe
+Der erste Schritt ist dabei die sogenannte lexikalische Analyse. Die Eingabedatei ist für den Computer zunächst nur eine Kette von Zeichen. Diese Zeichen sind in sogenannte Tokens aufzuteilen. Beispielhaft könnte die Eingabe
 \begin{lstlisting} [frame=single]
  a = b + c;
 \end{lstlisting}
@@ -85,6 +88,7 @@ Der erste Schritt ist dabei die sogenannte lexikalische Analyse. Die Eingabedate
 zu den folgenden Tokens aufgelöst werden.
 
 % @Marvin, pls eine bessere Grafik erstellen. Dankeschön (-:
+% @topkek, wird gemacht.
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=0.37]{lex_beispiel.png}
