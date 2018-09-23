@@ -134,6 +134,7 @@ block : '{' statement* '}' 												//
 //////////////////////////////////////////////////////////////////////////
 expression: INTEGER									#Number				//
 	| varName=ID									#Variable			//
+	| constVarName=ID								#Constant			//
 	| LPAREN expression RPAREN						#Parenthesis		//
 	| expression DIVOP  expression  				#Division			//
 	| expression MULTOP expression					#Multiplication		//

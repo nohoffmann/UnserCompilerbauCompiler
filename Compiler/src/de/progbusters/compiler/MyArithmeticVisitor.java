@@ -21,6 +21,7 @@ import de.progbusters.parser.ArithmeticBaseVisitor;
 import de.progbusters.parser.ArithmeticParser.AdditionContext;
 import de.progbusters.parser.ArithmeticParser.AndGateContext;
 import de.progbusters.parser.ArithmeticParser.AssignmentContext;
+import de.progbusters.parser.ArithmeticParser.ConstAssignContext;
 import de.progbusters.parser.ArithmeticParser.BranchContext;
 import de.progbusters.parser.ArithmeticParser.ComparisonContext;
 import de.progbusters.parser.ArithmeticParser.DivisionContext;
@@ -37,6 +38,8 @@ import de.progbusters.parser.ArithmeticParser.ProgramContext;
 import de.progbusters.parser.ArithmeticParser.SubtractionContext;
 import de.progbusters.parser.ArithmeticParser.VarDeclarationContext;
 import de.progbusters.parser.ArithmeticParser.VariableContext;
+import de.progbusters.parser.ArithmeticParser.ConstVarDecContext;
+import de.progbusters.parser.ArithmeticParser.ConstantContext;
 
 
 //heißt zwar ArithmeticVisitor, handelt aber alles (war bisher nur zu faul es umzubenenn lel)
@@ -48,9 +51,18 @@ import de.progbusters.parser.ArithmeticParser.VariableContext;
 public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 
 	/**@brief
-	 * Speichert Variablen. Dabei ist der key der Bezeichner der Variable und value der Index in der lokalen Variablentabell der JVM
+	 * Speichert Variablen. Dabei ist der key der Bezeichner der Variable und value der Index in der lokalen Variablentabelle der JVM
 	 */
 	private Map<String, Integer> variables = new HashMap<>();
+	
+	/**@brief
+	 * Speichert Konstanten. Dabei ist der key der Bezeichner der Konstante und value der Index in der lokalen Konstantentabelle der JVM
+	 */
+	private Map<String, Integer> constants = new HashMap<>();
+	/**@brief
+	 * Speichert die Anzahl an Lesezugriffen auf Konstanten. Dabei ist der key der Bezeichner der Konstante und value die Zahl der Lesezugriffe in der lokalen Konstantentabell der JVM
+	 */
+	private Map<String, Integer> constantsReadCount = new HashMap<>();
 	/**@brief
 	 * Speichert definierte Funktionen.
 	 */
@@ -285,7 +297,6 @@ public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 		
 	}
 	
-	
 	/**@brief
 	 * verarbeitet ganze Zahlen
 	 */
@@ -348,7 +359,6 @@ public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 				"endOfWhileLabel" + loopCount + ":";
 	}
 	
-	
 	/**@brief
 	 * verarbeitet Variablen-Deklarationen.
 	 * Der Name der Variable wird in der Hashmap variables mit dem zugehoerigen Index in der Variablentabelle gespeichert 
@@ -358,6 +368,19 @@ public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 			throw new VariableAlreadyDefinedException(ctx.varName);
 		}
 		variables.put(ctx.varName.getText(), variables.size());	//speichert in variablen tabelle
+		return ";delclaration\n";
+	}
+	
+	/**@brief
+	 * verarbeitet Konstanten-Deklarationen.
+	 * Der Name der Konstante wird in der Hashmap constants mit dem zugehoerigen Index in der Konstantentabelle gespeichert 
+	 */
+	public String visitConstVarDec(ConstVarDecContext ctx) {
+		if(constants.containsKey(ctx.varName.getText())) {
+			throw new VariableAlreadyDefinedException(ctx.varName); // ToDo
+		}
+		constants.put(ctx.varName.getText(), constants.size());	//speichert in constants tabelle
+		constantsReadCount.put(ctx.varName.getText(), constantsReadCount.size()); // Weist Konstante Platz in Lesezugriff-Counter-Map zu
 		return ";delclaration\n";
 	}
 	
@@ -374,6 +397,19 @@ public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 	}
 	
 	/**@brief
+	 * verarbeitet Zuweisungen von Konstanten. 
+	 * Es erfolgt ein Zugriff auf die Konstanten-Map, um den Index der lokalen Konstantentabelle zu erhalten.
+	 */
+	public String visitConstAssign(ConstAssignContext ctx) {
+		return visit(ctx.expr) 
+			 + "\n" 
+			 + "istore " 
+			 + requireConstantIndex(ctx.varName)
+			 + "\n";
+	}
+	
+	
+	/**@brief
 	 * verarbeitet den Aufruf von Variablen
 	 * Es erfolgt ein Zugriff auf die Variablen-Map, um den Index der lokalen Variablentabelle zu erhalten.
 	 */
@@ -382,8 +418,17 @@ public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 			 + requireVariableIndex(ctx.varName)
 			 + "\n";
 	}
-
 	
+	/**@brief
+	 * verarbeitet den Aufruf von Konstanten
+	 * Es erfolgt ein Zugriff auf die Konstanten-Map, um den Index der lokalen Konstantentabelle zu erhalten.
+	 */
+	public String visitConstant(ConstantContext ctx) {
+		return "iload " 
+			 + requireConstantIndex(ctx.varName)
+			 + "\n";
+	}
+
 	/**@brief
 	 * verarbeitet funktions-aufrufe
 	 */
@@ -475,6 +520,21 @@ public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 		}
 		return varIndex;
 	}
+	
+	/**@brief
+	 * Loest den Namen einer Konstante zu dessen Index in der lokalen Konstantentabelle auf
+	 * @param varNameToken	Token mit dem Namen der Konstanten
+	 * @return				Index der Konstanten in der lokalen Konstantentabelle falls gefunden
+	 */
+	private int requireConstantIndex(Token varNameToken) {
+		Integer constIndex = constants.get(varNameToken.getText());
+		//falls Konstante nicht existiert
+		if(constIndex == null) {
+			throw new UndeclaredVariableException(varNameToken);	// ToDo
+		}
+		return varIndex;
+	}
+	
 	
 	/**@brief
 	 * spezifiziert, wie zwei Strings konkateniert werden (?)
