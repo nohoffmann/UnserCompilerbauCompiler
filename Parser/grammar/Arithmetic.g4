@@ -8,7 +8,7 @@ INTEGER : [0-9]+ ;         	//beliebige folge der ziffern 0 bis 9		//
 WS : [ \t\r\n]+ -> skip ;	//ueberspringt spaces, tabstops, linefeeds	//
 LPAREN : '(';		  		//oeffndende runde klammer					//
 RPAREN : ')';		  		//schliessende runde klammer				//
-CONSTTOK: 'const';			//Konstant - Keyword						//
+CONSTKEYWORD: 'const int';		//Konstant - Keyword					//
 //mathematische operatoren												//
 PLUSOP : '+';															//
 MINOP  : '-';															//
@@ -46,9 +46,11 @@ progPart : statement 			#MainStatement							//
          ;																//
 																		//
 statement : println ';'													//
+		  | constDeclaration ';'										//
 		  | varDeclaration ';'											//
-		  | constVarDec ';'												//
+	 
 		  | assignment ';'												//
+//		  | constAssignment ';'											//
 		  | branch 														//
 		  | loop														//
 		  ;																//
@@ -57,6 +59,21 @@ statement : println ';'													//
 println : 'println(' argument=expression ')' 							//
 		;																//
 //////////////////////////////////////////////////////////////////////////
+
+
+
+
+//////////////////////////////////////////////////////////////////////////
+//Regeln fuer Konstanten												//
+//////////////////////////////////////////////////////////////////////////
+constDeclaration : CONSTKEYWORD constName=ID	 						//
+			     ;														//
+//constAssignment : constName=ID ASSIGNOP expr=expression					//
+//			;															//
+//////////////////////////////////////////////////////////////////////////
+
+
+
 
 		  
 
@@ -70,14 +87,6 @@ assignment : varName=ID ASSIGNOP expr=expression						//
 			;															//
 //////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////////
-//Regeln fuer Konstanten												//
-//////////////////////////////////////////////////////////////////////////
-constVarDec : CONSTTOK 'int' constVarName=ID	 						//
-			   ;														//
-constAssign : constVarName=ID ASSIGNOP expr=expression					//
-			   ;														//
-//////////////////////////////////////////////////////////////////////////
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -108,8 +117,6 @@ expressionList : expressions+=expression (',' expressions+=expression)*	//
 //////////////////////////////////////////////////////////////////////////
 
 
-
-
 		  
 //////////////////////////////////////////////////////////////////////////
 //Regeln fuer Kontrollstrukturen										//
@@ -134,7 +141,7 @@ block : '{' statement* '}' 												//
 //////////////////////////////////////////////////////////////////////////
 expression: INTEGER									#Number				//
 	| varName=ID									#Variable			//
-	| constVarName=ID								#Constant			//
+	| constName=ID									#Constant			//
 	| LPAREN expression RPAREN						#Parenthesis		//
 	| expression DIVOP  expression  				#Division			//
 	| expression MULTOP expression					#Multiplication		//

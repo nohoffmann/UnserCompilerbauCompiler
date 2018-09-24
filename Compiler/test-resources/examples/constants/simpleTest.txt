@@ -1,0 +1,5 @@
+const int TEST;
+TEST = 42;
+
+println(TEST);
+

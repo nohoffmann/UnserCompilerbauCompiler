@@ -43,6 +43,12 @@ public interface ArithmeticVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPrintln(ArithmeticParser.PrintlnContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link ArithmeticParser#constDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConstDeclaration(ArithmeticParser.ConstDeclarationContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link ArithmeticParser#varDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -103,13 +109,6 @@ public interface ArithmeticVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBlock(ArithmeticParser.BlockContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code Parenthesis}
-	 * labeled alternative in {@link ArithmeticParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitParenthesis(ArithmeticParser.ParenthesisContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code Multiplication}
 	 * labeled alternative in {@link ArithmeticParser#expression}.
 	 * @param ctx the parse tree
@@ -130,6 +129,34 @@ public interface ArithmeticVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitVariable(ArithmeticParser.VariableContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Constant}
+	 * labeled alternative in {@link ArithmeticParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConstant(ArithmeticParser.ConstantContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code InverseGate}
+	 * labeled alternative in {@link ArithmeticParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInverseGate(ArithmeticParser.InverseGateContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code AndGate}
+	 * labeled alternative in {@link ArithmeticParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAndGate(ArithmeticParser.AndGateContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Parenthesis}
+	 * labeled alternative in {@link ArithmeticParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParenthesis(ArithmeticParser.ParenthesisContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Subtraction}
 	 * labeled alternative in {@link ArithmeticParser#expression}.
@@ -152,13 +179,6 @@ public interface ArithmeticVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitComparison(ArithmeticParser.ComparisonContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code InverseGate}
-	 * labeled alternative in {@link ArithmeticParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitInverseGate(ArithmeticParser.InverseGateContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code functionCallExpression}
 	 * labeled alternative in {@link ArithmeticParser#expression}.
 	 * @param ctx the parse tree
@@ -179,11 +199,4 @@ public interface ArithmeticVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitDivision(ArithmeticParser.DivisionContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code AndGate}
-	 * labeled alternative in {@link ArithmeticParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAndGate(ArithmeticParser.AndGateContext ctx);
 }

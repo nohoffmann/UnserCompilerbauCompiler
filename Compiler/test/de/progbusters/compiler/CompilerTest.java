@@ -16,6 +16,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import de.progbusters.compiler.exceptions.ConstantAlreadyDefinedException;
+import de.progbusters.compiler.exceptions.ConstantReassignException;
 import de.progbusters.compiler.exceptions.FunctionAlreadyDefinedException;
 import de.progbusters.compiler.exceptions.UndeclaredVariableException;
 import de.progbusters.compiler.exceptions.UndefinedFunctionException;
@@ -85,9 +87,6 @@ public class CompilerTest {
 			{"lower than evaluates to true", "println(3<4);", "1" + System.lineSeparator()},
 			{"lower than evaluates to false", "println(4<4);", "0" + System.lineSeparator()},
 			
-			{"equal evaluates to true", "println(1 == 1);", "1" + System.lineSeparator()},
-			{"equal evaluates to false", "println(1 == 0);", "0" + System.lineSeparator()},
-			
 			{"lower or equal evaluates to true", "println(3<=4);", "1" + System.lineSeparator()},
 			{"lower or equal evaluates to true", "println(4<=4);", "1" + System.lineSeparator()},
 			{"lower or equal evaluates to false", "println(5<=4);", "0" + System.lineSeparator()},
@@ -117,7 +116,9 @@ public class CompilerTest {
 				"1" + System.lineSeparator() +
 				"3" + System.lineSeparator() + 
 				"6" + System.lineSeparator() + 
-				"10"+ System.lineSeparator()}
+				"10"+ System.lineSeparator()},
+			
+			{"simple test for constant usage", example("constants/simpleTest"), "42" + System.lineSeparator()}
 		};
 	}
 	
@@ -156,6 +157,19 @@ public class CompilerTest {
 		//evaluation performed by expceted exception
 	}
 
+	@Test(expectedExceptions = ConstantAlreadyDefinedException.class, expectedExceptionsMessageRegExp = "2:10 constant already defined: <X>")
+	public void compilingCode_throwsConstantAlreadyDefiniedException_whenRedifingConstant() throws Exception{
+		//execution
+		compileAndRun("const int X;" + System.lineSeparator() + "const int X;");
+		//evaluation performed by expceted exception
+	}
+	
+	@Test(expectedExceptions = ConstantReassignException.class, expectedExceptionsMessageRegExp = "3:0 cannot reassign constants: <X>")
+	public void compilingCode_throwsConstantReassignException_whenRedifingConstant() throws Exception{
+		//execution
+		compileAndRun("const int X;" + System.lineSeparator() + "X = 3;" + System.lineSeparator() + "X = 5;");
+		//evaluation performed by expceted exception
+	}
 	
 	
 	private static String example(String fileName) throws Exception {
@@ -166,9 +180,7 @@ public class CompilerTest {
 			return new Scanner(in, "UTF-8").useDelimiter("\\A").next();
 		}
 	}
-	
-	
-	
+		
 	private String compileAndRun(String code) throws Exception {
 		CharStream test = CharStreams.fromString(code);
 		code = Main.compile(test);

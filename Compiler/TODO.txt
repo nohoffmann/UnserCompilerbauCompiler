@@ -7,5 +7,4 @@ TODO (in dieser Priorität):
 	-	float-Datentyp implementieren
 	-	String-Datentyp implementieren
 	-	void-Datentyp implementieren
-
 	
