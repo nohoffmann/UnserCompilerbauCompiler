@@ -16,7 +16,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import de.progbusters.compiler.exceptions.ConstantAlreadyDefinedException;
 import de.progbusters.compiler.exceptions.ConstantReassignException;
-import de.progbusters.compiler.exceptions.UndeclaredConstantException;
 import de.progbusters.compiler.exceptions.UndeclaredVariableException;
 import de.progbusters.compiler.exceptions.UndefinedFunctionException;
 import de.progbusters.compiler.exceptions.VariableAlreadyDefinedException;
@@ -56,10 +55,6 @@ public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 	 * Speichert Variablen. Dabei ist der key der Bezeichner der Variable und value der Index in der lokalen Variablentabell der JVM
 	 */
 	private Map<String, Integer> variables = new HashMap<>();
-	/**@brief
-	 * Speichert Konstanten. Dabei ist der key der Bezeichner der Konstante und value der Index in der lokalen Konstantentabelle der JVM
-	 */
-	private Map<String, Integer> constants = new HashMap<>();
 	/**@brief
 	 * Speichert Schreibzugriffen auf Konstanten. Dabei ist der key der Bezeichner der Konstante und value die Zahl der Lesezugriffe in der lokalen Konstantentabell der JVM
 	 */
@@ -376,10 +371,10 @@ public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 	 * Der Name der Konstante wird in der Hashmap constants mit dem zugehoerigen Index in der Konstantentabelle gespeichert 
 	 */
 	public String visitConstDeclaration(ConstDeclarationContext ctx) {
-		if(constants.containsKey(ctx.constName.getText())) {
+		if(variables.containsKey(ctx.constName.getText())) {
 			throw new ConstantAlreadyDefinedException(ctx.constName);
 		}
-		constants.put(ctx.constName.getText(), constants.size());	//speichert in constants tabelle
+		variables.put(ctx.constName.getText(), variables.size());	//speichert in constants tabelle
 		constantsHasBeenAssigned.put(ctx.constName.getText(), false);
 		return ";delclaration\n";
 	}
@@ -391,17 +386,16 @@ public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 	public String visitAssignment(AssignmentContext ctx) {
 		int index = -1;
 		
-		try {
+		//wenn kein eintrag vorhanden ist, muss es eine variable sein
+		if(constantsHasBeenAssigned.get(ctx.varName.getText()) == null) {
 			index = requireVariableIndex(ctx.varName);
-		} catch(Exception e) {
-			index = requireConstantIndex(ctx.varName);
-			
-			if(constantsHasBeenAssigned.get(ctx.varName.getText()) == true) {
-				throw new ConstantReassignException(ctx.varName);
-			}
+		} else if (constantsHasBeenAssigned.get(ctx.varName.getText()) == true) {
+			throw new ConstantReassignException(ctx.varName);
+		} else {
+			index = requireVariableIndex(ctx.varName);
 			constantsHasBeenAssigned.put(ctx.varName.getText(), true);
 		}
-		
+	
 		
 		return visit(ctx.expr) 
 			 + "\n" 
@@ -415,16 +409,8 @@ public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 	 * Es erfolgt ein Zugriff auf die Variablen-Map, um den Index der lokalen Variablentabelle zu erhalten.
 	 */
 	public String visitVariable(VariableContext ctx) {
-		int index = -1;
-		
-		try {
-			index = requireConstantIndex(ctx.varName);
-		} catch(Exception e) {
-			index = requireVariableIndex(ctx.varName);
-		}
-		
 		return "iload " 
-			 + index
+			 + requireVariableIndex(ctx.varName)
 			 + "\n";
 	}
 	
@@ -434,7 +420,7 @@ public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 	 */
 	public String visitConstant(ConstantContext ctx) {
 		return "iload " 
-			 + requireConstantIndex(ctx.constName)
+			 + requireVariableIndex(ctx.constName)
 			 + "\n";
 	}
 
@@ -529,20 +515,6 @@ public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 			throw new UndeclaredVariableException(varNameToken);
 		}
 		return varIndex;
-	}
-	
-	/**@brief
-	 * Loest den Namen einer Konstante zu dessen Index in der lokalen Konstantentabelle auf
-	 * @param varNameToken	Token mit dem Namen der Konstanten
-	 * @return				Index der Konstanten in der lokalen Konstantentabelle falls gefunden
-	 */
-	private int requireConstantIndex(Token constNameToken) {
-		Integer constIndex = constants.get(constNameToken.getText());
-		//falls Konstante nicht existiert
-		if(constIndex == null) {
-			throw new UndeclaredConstantException(constNameToken);	// ToDo
-		}
-		return constIndex;
 	}
 	
 	/**@brief

@@ -15,19 +15,19 @@ import de.progbusters.parser.ArithmeticParser;
 
 public class Main {
 	public static void main(String[] args) throws Exception {
-		String inputFile = /*""*/ "basic.maths";
-		String outputFile = "/home/noah/eclipse-workspace/tpblcOut.j";
-		/*
+		String inputFile = ""/* "basic.maths"*/;
+		String outputFile = "./tpblcOut.j";
+		
 		 for (String s: args) {
 	            inputFile = s;
 	        }
-		*/
+		
 		CharStream input = CharStreams.fromFileName(inputFile);
 		
 		
 		/*obere Zeile schreibt auf Standardausgabe
 		  untere Zeile schreibt in Datei outputFile*/
-		System.out.println(compile(input));
+		//System.out.println(compile(input));
 		writeJasminCodeToFile(compile(input), outputFile);
 	}
 	

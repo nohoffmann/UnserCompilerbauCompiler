@@ -8,7 +8,7 @@ INTEGER : [0-9]+ ;         	//beliebige folge der ziffern 0 bis 9		//
 WS : [ \t\r\n]+ -> skip ;	//ueberspringt spaces, tabstops, linefeeds	//
 LPAREN : '(';		  		//oeffndende runde klammer					//
 RPAREN : ')';		  		//schliessende runde klammer				//
-CONSTKEYWORD: 'const int';		//Konstant - Keyword					//
+CONSTKEYWORD: 'const int';	//Konstant - Keyword						//
 //mathematische operatoren												//
 PLUSOP : '+';															//
 MINOP  : '-';															//
@@ -30,6 +30,7 @@ NOT : '!'  ;															//
 //sonstige operatoren													//
 ASSIGNOP : '=';															//
 //////////////////////////////////////////////////////////////////////////
+
 
 
 
@@ -63,18 +64,18 @@ println : 'println(' argument=expression ')' 							//
 
 
 
+
 //////////////////////////////////////////////////////////////////////////
 //Regeln fuer Konstanten												//
 //////////////////////////////////////////////////////////////////////////
 constDeclaration : CONSTKEYWORD constName=ID	 						//
 			     ;														//
-//constAssignment : constName=ID ASSIGNOP expr=expression					//
+//constAssignment : constName=ID ASSIGNOP expr=expression				//
 //			;															//
 //////////////////////////////////////////////////////////////////////////
 
 
-
-
+	
 		  
 
 //////////////////////////////////////////////////////////////////////////
@@ -86,6 +87,8 @@ varDeclaration : 'int' varName=ID 										//
 assignment : varName=ID ASSIGNOP expr=expression						//
 			;															//
 //////////////////////////////////////////////////////////////////////////
+
+
 
 
 
@@ -117,6 +120,8 @@ expressionList : expressions+=expression (',' expressions+=expression)*	//
 //////////////////////////////////////////////////////////////////////////
 
 
+
+
 		  
 //////////////////////////////////////////////////////////////////////////
 //Regeln fuer Kontrollstrukturen										//
@@ -133,6 +138,8 @@ loop : 'while' '(' condition=expression ')' onTrue=block				//
 block : '{' statement* '}' 												//
 	  ;																	//
 //////////////////////////////////////////////////////////////////////////
+
+
 
 
 
