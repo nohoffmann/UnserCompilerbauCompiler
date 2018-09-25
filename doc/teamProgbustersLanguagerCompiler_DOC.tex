@@ -30,6 +30,7 @@
 
 
 \section{Einleitung}
+% TO-DO: Auf finalen Namen der Sprache eingehen
 
 Als Abschlussprojekt des Moduls 'Compilerbau' unter Leitung von Thorsten Jakobs, M.Sc., htw saar wurde dieser Compiler zur von uns eigens entwickelten Sprache \textit{Team Progbusters Language} (Arbeitstitel) entwickelt, mit den in \textit{2. Anforderungen} beschriebenen Voraussetzungen und Zielen. Die Sprache basiert im Wesentlichen auf C, wurde jedoch auf wesentliche Elemente wie Grundrechenarten, Funktionen, if-Statements und eine Form der Schleife reduziert. Weiterhin vorhanden sind Bezeichner, Konstanten, Variablen, die Klammerung wird ebenfalls ber\"ucksichtigt.
 
@@ -52,13 +53,13 @@ Dieser Bytecode kann schließlich von der Java Virtual Machine ausgeführt werde
 Die von uns entwickelte Programmiersprache besitzt folgende Komponenten: 
 \begin{itemize}
 \item Bezeichner
-\item Konstanten (TO BE IMPLEMENTED!)
+\item Konstanten
 \item Variablen
 \item Arithmetik mit Grundrechenarten
 \item Klammerung
 \item Funktionen
 \item if-else-Anweisung
-\item while-Schleife (TO BE IMPLEMENTED!)
+\item while-Schleife
 \end{itemize}
 \noindent
 Die Entwicklung wird mit 50\% in der Gesamtbewertung gewichtet.
@@ -97,9 +98,11 @@ zu den folgenden Tokens aufgelöst werden.
 \end{figure}
 
 
+% TO-DO: Kapitelnummer prüfen!
 Der Teil des Compilers, der diese Aufgabe übernimmt, wird \textit{Lexer} genannt. Der Lexer überprüft für jedes Zeichen der Eingabedatei, welchem Token dieses zugeordnet werden kann. Dies geschieht auf Grundlage von definierten Regeln, welche mit sogenannten \textit{regulären Ausdrücken} formuliert werden. Ein regulärer Ausdruck besteht aus einer Sequenz von Zeichen, die ein bestimmtes Muster definieren. Reguläre Ausdrücke können auch rekursiv verwendet werden, um auf Grundlage einfacher regulärer Ausdrücke komplexere zu bilden. Beispiele für reguläre Ausdrücke werden im Kapitel \texit{6.1 Erste Schritte: Auswertung von arithmetischen Ausdrücken} GGF. KAPITELNUMMER ÄNDERN! aufgeführt.
 
 \subsection{Syntaktische Analyse}
+% TO-DO: Grafik
 Im zweiten Schritt der Verarbeitung wird die \textit{syntaktische Analyse} durchgeführt. Dabei wird überprüft, ob die Eingabedatei einer definierten Grammatik entspricht, während bei der lexikalischen Analyse lediglich die übergebene Zeichenfolge in Tokens aufgeteilt wird, nicht jedoch überprüft wird, ob diese der Grammatik entsprechend zusammengeführt werden können. 
 
 Bei einer erfolgreichen Auswertung wird die Folge an Tokens, die bei der lexikalischen Analyse ermittelt wurde, in einen Syntaxbaum übergeführt. Dies ist notwendig, um die Tokens in der richtigen Reihenfolge auszuwerten. 
@@ -133,35 +136,38 @@ Unser Compiler verwendet im Zusammenspiel mit dem von ANTLR generierten Lexer un
 
 \subsection{Eclipse}
 Zur Entwicklung wurde die integrierte Entwicklungsumgebung Eclipse Photon in der aktuellesten Version (4.8.0) genutzt. 
-Eclipse bietet mehrere Vorteile, die ein einfacheres und effizienteres Entwickeln erlauben. Eclipse enthält einen Datei-Explorer mit dessen Hilfe die Navigation durch die verschiedenen Verzeichnisse im gleichen Fenster wie der Editor und die Konsole geschehen kann. Des Weiteren bietet Eclipse automatische Vervollständigungsvorschläge an, was die Schreibgeschwindigkeit erhöht. 
-Außerdem kann Eclipse durch Plug-Ins erweitert werden. Wir nutzten beispielsweise das Testframework TestNG als Plug-In um verschiedene Testfälle automatisiert zu prüfen.
+Eclipse bietet mehrere Vorteile, die ein einfacheres und effizienteres Entwickeln erlauben. Eclipse enthält einen Datei-Explorer, mit dessen Hilfe die Navigation durch die verschiedenen Verzeichnisse zusammen mit Editor und Konsole innerhalb eines Fensters geschehen kann. Des Weiteren bietet Eclipse automatische Vervollständigungsvorschläge an, was die Schreibgeschwindigkeit erhöht. 
+Außerdem kann Eclipse durch Plug-Ins erweitert werden. Wir nutzten beispielsweise das Testframework TestNG als Plug-In, um verschiedene Testfälle automatisiert zu prüfen.
 
 \subsection{TestNG}
-TestNG ist ein Framework, dass dem zu testenden Programm Eingabewerte übergeben und die tatsächlichen Ergebnisse des Programms mit erwarteten Ergbnisses abgleicht. Dabei können beliebig viele Testszenarien geprüft werden. Es werden sogenannte positive Tests, also solche bei denen die Eingabe ein vorgehesenes Ergebnis hervorruft, als auch negative Tests, bei denen geprüft wird, ob nicht vorhergesehene Eingaben mit entsprechenden Fehlermeldungen korrekt gehandhabt werden, durchgeführt. TestNG wurde von uns in Version HIERVERSIONEINFÜGEN genutzt.
+% TO-DO: Versionsnummer prüfen
+TestNG ist ein Framework, das dem zu testenden Programm Eingabewerte übergibt und die tatsächlichen Ergebnisse des Programms mit den erwarteten Ergbnissen abgleicht. Dabei können beliebig viele Testszenarien geprüft werden. Es werden sogenannte positive Tests, also solche, bei denen die Eingabe ein erwartetes Ergebnis hervorruft, als auch negative Tests, bei denen geprüft wird, ob nicht vorhergesehene Eingaben mit entsprechenden Fehlermeldungen korrekt behandelt werden, durchgeführt. TestNG wurde von uns in Version 6.10 (PRÜFEN!) genutzt.
 \linebreak
 Als Beispiel: Der Quelltext ''println(1+4);'' sollte als Ergebnis ''5'' auf der Konsole ausgeben. TestNG übergibt den Quelltext an unseren Compiler, ruft Jasmin auf, führt das Programm aus und gleicht dann die Ergebnisse ab. Wenn das Ergebnis ''5'' ist gilt der Test als bestanden, andernfalls als durchgefallen. 
 
 \subsection{ANTLR}
-ANTLR steht für ANother Tool for Language Recognition und ist ein Lexer- und Parsergenerator. ANTLR generiert auf Grundlage einer Grammatik-Datei Java-Code, der einen entsprechenden Lexer sowie ein Template für Teile des Parsers implementiert. Dadurch, dass die von ANTLR generierten Programme aus einer Eingabedatei in der Ausgangssprache einen Syntaxbaum erstellen können, liegt unsere Arbeit größtenteils darin Grammatiken für ANTLR zu formulieren und Teile des Parsers (in unserem Fall ein Visitor) zu implementieren. Wir verwendeten die ANTLR-Version 4.7.1.
+ANTLR steht für \textit{ANother Tool for Language Recognition} und ist ein Lexer- und Parsergenerator. ANTLR generiert auf Grundlage einer Grammatik-Datei Java-Code, der einen entsprechenden Lexer sowie ein Template für Teile des Parsers implementiert. Dadurch, dass die von ANTLR generierten Programme aus einer Eingabedatei in der Ausgangssprache einen Syntaxbaum erstellen können, besteht unsere Arbeit größtenteils daraus, Grammatiken für ANTLR zu formulieren und Teile des Parsers (in unserem Fall ein Visitor) zu implementieren. Wir haben die ANTLR-Version 4.7.1 verwendet.
 
 \subsection{Jasmin}
 Jasmin ist ein Assembler für die Java Virtual Machine. Dabei werden Textdateien mit Anweisungen in Jasmin-Syntax zu Bytecode übersetzt. Dieser Bytecode kann von der JVM ausgeführt werden.
 
 \subsection{Java}
+% TO-DO: Finalen Namen der Sprache einfügen
 Die Programmiersprache Java wurde für das Projekt gewählt, da der von ANTLR generierte Code ebenfalls in Java ist. Es ist teilweise notwendig von Klassen des ANTLR generierten Code abzuleiten, weshalb die Wahl einer anderen Programmiersprache keinen Sinn ergeben hätte. 
 Des Weiteren muss die Java Runtime Environment ohnehin genutzt werden, um ANTLR, Jasmin sowie schließlich die Kompilate des HIERNAMEUNSERERSPRACHEEINFÜGEN-Compilers auszuführen.
 
 \subsection{Java Virtual Machine}
 Die Java VM ist ein Zwischenschritt beim Ausführen von Java-Code. Eine Java-Quelldatei (.java) wird zunächst durch den Java-Compiler zu Bytecode (.class) übersetzt und dann von der Java VM interpretiert. Dieser Zwischenschritt ermöglicht eine Plattformunabhängigkeit, da die Kompilate (.class-Dateien) nicht maschinenspezifisch übersetzt werden. Plattformabhängiger Maschinencode wird erst von der Java VM generiert, weshalb jeder Bytecode ausgeführt werden kann, solange für die entsprechende Maschine die Java VM verfügbar ist.
 
-In diesem Projekt wird die Java VM jedoch nicht nur zur Übersetzung unseres Code genutzt, sondern auch um die Kompilate unseres eigenen Compilers auszuführen. Diese Kompilate werden von Jasmin zu Bytecode übersetzt, der Bytecode wiederrum wird von der Java VM ausgeführt.
+In diesem Projekt wird die Java VM jedoch nicht nur zur Übersetzung unseres Code genutzt, sondern auch um die Kompilate unseres eigenen Compilers auszuführen. Diese Kompilate werden von Jasmin zu Bytecode übersetzt, der Bytecode wiederum wird von der Java VM ausgeführt.
 
-Zu beachten ist, dass die JavaVM stack-basiert operiert und nicht wie der x86-Befehlssatz beispielsweise mit Registern arbeitet, was bei der Implementierung zu beachten ist und eine besondere Denkweise erfordert. 
+Zu beachten ist, dass die Java VM stack-basiert operiert und nicht wie beispielsweise der x86-Befehlssatz mit Registern arbeitet, was bei der Implementierung zu beachten ist und eine besondere Denkweise erfordert. 
 
 \pagebreak
 \section{Vorgehen während der Entwicklung}
 \subsection{Erste Schritte: Auswertung von artihmetischen Ausdrücken}
-Der Vorgehensweise unter 5.IRGENDWAS HIER KAPITEL EINFÜGEN entsprechend, implemntierten wir zuerst die unserer Sicht nach grundlegendste Fähigkeit einer Programmiersprache: das Auswerten von arithmetischen Ausdrücken. Es soll möglich sein, Ausdrücke, die die Grundrechenarten sowie eine beliebig tiefe Schachtelung von Klammern enthalten, zu erkennen und der Operatorenpriorität entsprechend die gelesenen Tokens in einem Syntaxbaum zusammenzuführen. Dazu formulierten wir folgende Grammatik:
+% TO-DO: Kapitelnummer einfügen und prüfen
+Der Vorgehensweise unter 5.IRGENDWAS HIER KAPITEL EINFÜGEN entsprechend, implementierten wir zuerst die unserer Sicht nach grundlegendste Fähigkeit einer Programmiersprache: das Auswerten von arithmetischen Ausdrücken. Es soll möglich sein, Ausdrücke, die die Grundrechenarten sowie eine beliebig tiefe Schachtelung von Klammern enthalten, zu erkennen und der Operatorenpriorität entsprechend die gelesenen Tokens in einem Syntaxbaum zusammenzuführen. Dazu formulierten wir folgende Grammatik:
 
 
 \begin{lstlisting} [frame=single] 
@@ -196,12 +202,13 @@ expression: INTEGER
 
 \end{lstlisting}
 
-Eine Grammatik für ANTLR hat folgende Aufbau:
+Eine Grammatik für ANTLR hat folgenden Aufbau:
+
 Die Definition der Grammatik beginnt mit dem Schlüsselwort ''grammar'' sowie dem Namen der Grammatik. Dabei gilt es zu beachten, dass die Datei den gleichen Namen wie die Grammatik selbst sowie die Dateiendung ''.g4'' besitzt. Diese Deklaration wird mit einem Semikolon abgeschlossen.
 
 Zeilen, die mit ''//'' beginnen, sind Kommentare und haben keinen Einfluss auf die Grammatik. Sie dienen lediglich als Erläuterungen und zur Formatierung, um die Lesbarkeit zu verbessern.
 
-Auf die Deklaration dürfen beliebig viele Regeln für die Grammatik folgen. Zur Formulierung der Regeln werden reguläre Ausdrücke genutzt. Beispielsweise besagt die sechste Zeile, dass es eine Regel INTEGER gibt, wobei ein INTEGER sich aus einer beliebigen Folge der Ziffern von 0 bis 9 zusammensetzt. Der reguläre Ausdruck [0-9] gibt an, das ein beliebiges Zeichen im Bereich von 0 bis 9 vorkommen darf. Das abschließende ''+'' bedeutet, dass es sich um eine Kette dieser Zeichen, die belibig lange ist, jedoch mindestens die Länge 1 besitzt, handelt.
+Auf die Deklaration dürfen beliebig viele Regeln für die Grammatik folgen. Zur Formulierung der Regeln werden reguläre Ausdrücke genutzt. Beispielsweise besagt die sechste Zeile, dass es eine Regel INTEGER gibt, wobei ein INTEGER sich aus einer beliebigen Folge der Ziffern von 0 bis 9 zusammensetzt. Der reguläre Ausdruck [0-9] gibt an, dass ein beliebiges Zeichen im Bereich von 0 bis 9 vorkommen darf. Das abschließende ''+'' bedeutet, dass es sich um eine Kette dieser Zeichen, die beliebig lange ist, jedoch mindestens die Länge 1 besitzt, handelt.
 
 Die Regel WS (Whitespace) besagt, dass bestimmte Zeichen, die nur der Formatierung dienen, ignoriert werden, da sie für das Übersetzen einer Quelldatei keine Bedeutung haben.
 
@@ -219,7 +226,8 @@ Die wohl relevanteste Regel trägt den Namen ''expression'' und legt fest, wie s
 besteht.
 Durch die Rekursion (die Regel verweist auf sich selbst) ist eine beliebige Länge des Ausdruckes möglich.
 
-Eine Besonderheit, die zu beachten ist, besteht in der Rangfolge der Operatoren. Die höchste Bindung besitzt ein geklammerter Term, die nächst stärke Bindung Divisionen und Multiplikationen. Die schwächste Bindung besitzen Subtraktionen und Additionen. 
+Eine Besonderheit, die zu beachten ist, besteht in der Rangfolge der Operatoren. Die höchste Bindung besitzt ein geklammerter Term, die nächststärke Divisionen und Multiplikationen. Die schwächste Bindung besitzen Subtraktionen und Additionen.
+
 Damit diese Priorität gewährleistet werden kann, sind die Regeln in dieser bestimmten Reihenfolge notiert. ANTLR versucht immer zuerst die ''oberste'' Regel anzuwenden, daraufhin die darunter usw.. Deshalb wird der folgende Ausdruck 
 
 \begin{lstlisting} [frame=single]
