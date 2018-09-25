@@ -50,7 +50,6 @@ import de.progbusters.parser.ArithmeticParser.VariableContext;
  *
  */
 public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
-
 	/**@brief
 	 * Speichert Variablen. Dabei ist der key der Bezeichner der Variable und value der Index in der lokalen Variablentabell der JVM
 	 */
@@ -90,7 +89,8 @@ public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 		} 
 		this.definedFunctions = definedFunctions;
 	}
-
+	
+	////////////////////////////////GRUNDLEGENDES////////////////////////////////
 	//Startpunkt des Programms
 	public String visitProgram(ProgramContext ctx) {
 		//es wird zwischen code f.d. main-funktion
@@ -131,6 +131,215 @@ public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 				"invokevirtual java/io/PrintStream/println(I)V\n\n"; 			//ruft die Methode println des System.out-Objekts auf
 	}
 	
+	/**@brief
+	 * verarbeitet ganze Zahlen
+	 */
+	public String visitNumber(NumberContext ctx) {
+		return "ldc " + ctx.getChild(0) + "\n";
+	}
+	
+	/**@brief
+	 * verarbeitet Zuweisungen. 
+	 * Es erfolgt ein Zugriff auf die Variablen-Map, um den Index der lokalen Variablentabelle zu erhalten.
+	 */
+	public String visitAssignment(AssignmentContext ctx) {
+		int index = -1;
+		
+		//wenn kein eintrag vorhanden ist, muss es eine variable sein
+		if(constantsHasBeenAssigned.get(ctx.varName.getText()) == null) {
+			index = requireVariableIndex(ctx.varName);
+		} 
+		//bei konstanten:
+		//wenn bereits ein wert zugewiesen wurde, darf dies nicht erneut geschehen
+		else if (constantsHasBeenAssigned.get(ctx.varName.getText()) == true) {
+			throw new ConstantReassignException(ctx.varName);
+		} 
+		//falls erste zuweisung
+		else {
+			index = requireVariableIndex(ctx.varName);
+			constantsHasBeenAssigned.put(ctx.varName.getText(), true);
+		}
+	
+		return visit(ctx.expr) 
+			 + "\n" 
+			 + "istore " 
+			 + index
+			 + "\n";
+	}
+
+	
+	////////////////////////////////VARIABLEN////////////////////////////////////
+	/**@brief
+	 * verarbeitet Variablen-Deklarationen.
+	 * Der Name der Variable wird in der Hashmap variables mit dem zugehoerigen Index in der Variablentabelle gespeichert 
+	 */
+	public String visitVarDeclaration(VarDeclarationContext ctx) {
+		if(variables.containsKey(ctx.varName.getText())) {
+			throw new VariableAlreadyDefinedException(ctx.varName);
+		}
+		variables.put(ctx.varName.getText(), variables.size());	//speichert in variablen tabelle
+		return ";delclaration\n";
+	}
+	
+	/**@brief
+	 * verarbeitet den Aufruf von Variablen
+	 * Es erfolgt ein Zugriff auf die Variablen-Map, um den Index der lokalen Variablentabelle zu erhalten.
+	 */
+	public String visitVariable(VariableContext ctx) {
+		return "iload " 
+			 + requireVariableIndex(ctx.varName)
+			 + "\n";
+	}
+	
+	
+	////////////////////////////////KONSTANTEN///////////////////////////////////
+	/**@brief
+	 * verarbeitet Konstanten-Deklarationen.
+	 * Der Name der Konstante wird in der Hashmap constants mit dem zugehoerigen Index in der Konstantentabelle gespeichert 
+	 */
+	public String visitConstDeclaration(ConstDeclarationContext ctx) {
+		if(variables.containsKey(ctx.constName.getText())) {
+			throw new ConstantAlreadyDefinedException(ctx.constName);
+		}
+		variables.put(ctx.constName.getText(), variables.size());	//speichert in constants tabelle
+		constantsHasBeenAssigned.put(ctx.constName.getText(), false);
+		return ";delclaration\n";
+	}
+	
+	/**@brief
+	 * verarbeitet den Aufruf von Konstanten
+	 * Es erfolgt ein Zugriff auf die Konstanten-Map, um den Index der lokalen Konstantentabelle zu erhalten.
+	 */
+	public String visitConstant(ConstantContext ctx) {
+		return "iload " 
+			 + requireVariableIndex(ctx.constName)
+			 + "\n";
+	}
+
+	
+	////////////////////////////////FUNKTIONEN///////////////////////////////////
+	/**@brief
+	 * verarbeitet funktions-aufrufe
+	 */
+	public String visitFunctionCall(FunctionCallContext ctx) {
+		int numberOfParams = ctx.arguments.expressions.size();
+		
+		//ueberprueft, ob Funktion definiert wurde
+		if(!definedFunctions.contains(ctx.functionName.getText(), numberOfParams)) {
+			throw new UndefinedFunctionException(ctx.functionName);
+		}
+		
+		String instructions = "";
+		
+		//verarbeitet ggf. uebergebene parameter
+		String argumentInstructions = visit(ctx.arguments);
+		if(argumentInstructions != null) {
+			instructions += argumentInstructions + "\n";
+		}
+		
+		//jasmin-instruction um funktion aufzurufen
+		instructions +=  "invokestatic tpblcOut/" + ctx.functionName.getText() + "(";
+		
+		//generiert korrekte signatur fuer die funktion (anzahl der parameter)
+		instructions += stringRepeat("I", numberOfParams);
+		instructions += ")I\n";
+		
+		return instructions;
+	}
+	
+	/**@brief
+	 * verarbeitet funktions-deklarationen 
+	 */
+	public String visitFunctionDefinition(FunctionDefinitionContext ctx) {
+		//kopiert die variablentabelle, um unterschiedliche scopes zu ermoeglichen
+		Map<String, Integer> oldVariables = variables;
+
+		//neue hasmap fuer den aktuellen gueltigkeitsbereich
+		variables = new HashMap<>();
+		//verarbeitet parameter-deklarationen der funktion
+		visit(ctx.params);
+		
+		//verarbeitet funktionsrumpf
+		String statementInstructions = visit(ctx.statements);
+		
+		//generiert korrekte signatur 
+		String result = ".method public static " + ctx.functionName.getText() + "(";
+		//aehnlich wie bei functionCall
+		int numberOfParams = ctx.params.declarations.size();
+		result += stringRepeat("I", numberOfParams);
+		result += ")I\n"
+			 + ".limit locals 100\n"
+			 + ".limit stack 100\n"
+			 //und fuehrt instructions in korrekter reihenfolge zusammen
+			 + (statementInstructions == null ? " " : statementInstructions + "\n")
+			 + visit(ctx.returnValue) + "\n"
+			 + "ireturn\n"
+			 + ".end method\n";
+		
+		//stellt die variablen-tabelle des vorangegangenen gueltigkeitsbereich wieder her
+		variables = oldVariables;
+		return result;
+	}
+	
+	
+	////////////////////////////////KONTROLLSTRUKTUREN///////////////////////////
+	/**@brief
+	 * verarbeitet if-else-statements
+	 */
+	public String visitBranch(BranchContext ctx) {
+		String conditionInstructions = visit(ctx.condition);
+		String onTrueInstructions = visit(ctx.onTrue);
+		String onFalseInstructions = visit(ctx.onFalse);
+		/*es muss ein index mitgezählt 
+		  und angegeben werden, da sonst bei mehreren if-else-statements 
+		  die labels nicht mehr eindeutig waeren*/
+		branchCount++;	
+		
+		return conditionInstructions + "\n"
+				//jasmin instruction, die zum angegebenen label springt, 
+				//falls der wert auf dem stack != 0
+				+ "ifne ifTrueLabel" + branchCount + "\n"
+				//falls nicht gesprungen wurde, also wert auf dem stack == 0, 
+				//werden die onFalseInstructions geladen
+				+ onFalseInstructions + "\n"
+				//und die onTrueInstructions uebersprungen
+				+ "goto endIfLabel" + branchCount + "\n"
+				+ "ifTrueLabel" + branchCount + ":\n"
+				+ onTrueInstructions + "\n"
+				+ "endIfLabel" + branchCount + ":\n";
+	}
+	
+	/**@brief
+	 * verarbeitet den Aufruf der while-Schleife
+	 */
+	public String visitLoop(LoopContext ctx) {
+		String conditionInstructions = visit(ctx.condition);
+		String onTrueInstructions = visit(ctx.onTrue);
+		//es muss ein counter mitgezaehlt werden, um die labels im jasmin code eindeutig benennen zu koennen
+		loopCount++;
+			
+		return ";check condition\n" + 
+				//bedingung fuer die schleife
+				"conditionLabel" + loopCount + ":\n" + 
+				conditionInstructions + "\n" +
+				//wenn die bedingung true ist
+				//sprung zum rumpf der schleife + 
+				"ifne onTrueWhileLabel" + loopCount + "\n" + 
+				//sonst abbruch der schleife 
+				"goto endOfWhileLabel" + loopCount + "\n" +
+				
+				//funktionsrump
+				"onTrueWhileLabel" + loopCount + ":\n" + 
+				onTrueInstructions + "\n" +
+				//am ende wird die condition erneut geprueft
+				
+				"goto conditionLabel" + loopCount + "\n" +
+				//label fuer abbruch
+				"endOfWhileLabel" + loopCount + ":";
+	}
+	
+	
+	///////////////////////////////ARITHMETIK UND LOGIK//////////////////////////
 	/**@brief
 	 * verarbeitet Divisionen
 	 */
@@ -188,7 +397,6 @@ public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 			default:
 				throw new IllegalArgumentException("Unknown operator: " + ctx.compareOp.getText());
 		}
-		
 		
 		return visitChildren(ctx) + "\n"
 			  + compareInstruction + 
@@ -290,205 +498,8 @@ public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 		
 	}
 	
-	
-	/**@brief
-	 * verarbeitet ganze Zahlen
-	 */
-	public String visitNumber(NumberContext ctx) {
-		return "ldc " + ctx.getChild(0) + "\n";
-	}
-	
-	/**@brief
-	 * verarbeitet if-else-statements
-	 */
-	public String visitBranch(BranchContext ctx) {
-		String conditionInstructions = visit(ctx.condition);
-		String onTrueInstructions = visit(ctx.onTrue);
-		String onFalseInstructions = visit(ctx.onFalse);
-		/*es muss ein index mitgezählt 
-		  und angegeben werden, da sonst bei mehreren if-else-statements 
-		  die labels nicht mehr eindeutig waeren*/
-		branchCount++;	
 		
-		return conditionInstructions + "\n"
-				//jasmin instruction, die zum angegebenen label springt, 
-				//falls der wert auf dem stack != 0
-				+ "ifne ifTrueLabel" + branchCount + "\n"
-				//falls nicht gesprungen wurde, also wert auf dem stack == 0, 
-				//werden die onFalseInstructions geladen
-				+ onFalseInstructions + "\n"
-				//und die onTrueInstructions uebersprungen
-				+ "goto endIfLabel" + branchCount + "\n"
-				+ "ifTrueLabel" + branchCount + ":\n"
-				+ onTrueInstructions + "\n"
-				+ "endIfLabel" + branchCount + ":\n";
-	}
-	
-	/**@brief
-	 * verarbeitet den Aufruf der while-Schleife
-	 */
-	public String visitLoop(LoopContext ctx) {
-		String conditionInstructions = visit(ctx.condition);
-		String onTrueInstructions = visit(ctx.onTrue);
-		//es muss ein counter mitgezaehlt werden, um die labels im jasmin code eindeutig benennen zu koennen
-		loopCount++;
-			
-		return ";check condition\n" + 
-				//bedingung fuer die schleife
-				"conditionLabel" + loopCount + ":\n" + 
-				conditionInstructions + "\n" +
-				//wenn die bedingung true ist
-				//sprung zum rumpf der schleife + 
-				"ifne onTrueWhileLabel" + loopCount + "\n" + 
-				//sonst abbruch der schleife 
-				"goto endOfWhileLabel" + loopCount + "\n" +
-				
-				//funktionsrump
-				"onTrueWhileLabel" + loopCount + ":\n" + 
-				onTrueInstructions + "\n" +
-				//am ende wird die condition erneut geprueft
-				
-				"goto conditionLabel" + loopCount + "\n" +
-				//label fuer abbruch
-				"endOfWhileLabel" + loopCount + ":";
-	}
-	
-	
-	/**@brief
-	 * verarbeitet Variablen-Deklarationen.
-	 * Der Name der Variable wird in der Hashmap variables mit dem zugehoerigen Index in der Variablentabelle gespeichert 
-	 */
-	public String visitVarDeclaration(VarDeclarationContext ctx) {
-		if(variables.containsKey(ctx.varName.getText())) {
-			throw new VariableAlreadyDefinedException(ctx.varName);
-		}
-		variables.put(ctx.varName.getText(), variables.size());	//speichert in variablen tabelle
-		return ";delclaration\n";
-	}
-	
-	/**@brief
-	 * verarbeitet Konstanten-Deklarationen.
-	 * Der Name der Konstante wird in der Hashmap constants mit dem zugehoerigen Index in der Konstantentabelle gespeichert 
-	 */
-	public String visitConstDeclaration(ConstDeclarationContext ctx) {
-		if(variables.containsKey(ctx.constName.getText())) {
-			throw new ConstantAlreadyDefinedException(ctx.constName);
-		}
-		variables.put(ctx.constName.getText(), variables.size());	//speichert in constants tabelle
-		constantsHasBeenAssigned.put(ctx.constName.getText(), false);
-		return ";delclaration\n";
-	}
-	
-	/**@brief
-	 * verarbeitet Zuweisungen. 
-	 * Es erfolgt ein Zugriff auf die Variablen-Map, um den Index der lokalen Variablentabelle zu erhalten.
-	 */
-	public String visitAssignment(AssignmentContext ctx) {
-		int index = -1;
-		
-		//wenn kein eintrag vorhanden ist, muss es eine variable sein
-		if(constantsHasBeenAssigned.get(ctx.varName.getText()) == null) {
-			index = requireVariableIndex(ctx.varName);
-		} else if (constantsHasBeenAssigned.get(ctx.varName.getText()) == true) {
-			throw new ConstantReassignException(ctx.varName);
-		} else {
-			index = requireVariableIndex(ctx.varName);
-			constantsHasBeenAssigned.put(ctx.varName.getText(), true);
-		}
-	
-		
-		return visit(ctx.expr) 
-			 + "\n" 
-			 + "istore " 
-			 + index
-			 + "\n";
-	}
-	
-	/**@brief
-	 * verarbeitet den Aufruf von Variablen
-	 * Es erfolgt ein Zugriff auf die Variablen-Map, um den Index der lokalen Variablentabelle zu erhalten.
-	 */
-	public String visitVariable(VariableContext ctx) {
-		return "iload " 
-			 + requireVariableIndex(ctx.varName)
-			 + "\n";
-	}
-	
-	/**@brief
-	 * verarbeitet den Aufruf von Konstanten
-	 * Es erfolgt ein Zugriff auf die Konstanten-Map, um den Index der lokalen Konstantentabelle zu erhalten.
-	 */
-	public String visitConstant(ConstantContext ctx) {
-		return "iload " 
-			 + requireVariableIndex(ctx.constName)
-			 + "\n";
-	}
-
-	
-	/**@brief
-	 * verarbeitet funktions-aufrufe
-	 */
-	public String visitFunctionCall(FunctionCallContext ctx) {
-		int numberOfParams = ctx.arguments.expressions.size();
-		
-		//ueberprueft, ob Funktion definiert wurde
-		if(!definedFunctions.contains(ctx.functionName.getText(), numberOfParams)) {
-			throw new UndefinedFunctionException(ctx.functionName);
-		}
-		
-		String instructions = "";
-		
-		//verarbeitet ggf. uebergebene parameter
-		String argumentInstructions = visit(ctx.arguments);
-		if(argumentInstructions != null) {
-			instructions += argumentInstructions + "\n";
-		}
-		
-		//jasmin-instruction um funktion aufzurufen
-		instructions +=  "invokestatic tpblcOut/" + ctx.functionName.getText() + "(";
-		
-		//generiert korrekte signatur fuer die funktion (anzahl der parameter)
-		instructions += stringRepeat("I", numberOfParams);
-		instructions += ")I\n";
-		
-		return instructions;
-	}
-	
-	/**@brief
-	 * verarbeitet funktions-deklarationen 
-	 */
-	public String visitFunctionDefinition(FunctionDefinitionContext ctx) {
-		//kopiert die variablentabelle, um unterschiedliche scopes zu ermoeglichen
-		Map<String, Integer> oldVariables = variables;
-
-		//neue hasmap fuer den aktuellen gueltigkeitsbereich
-		variables = new HashMap<>();
-		//verarbeitet parameter-deklarationen der funktion
-		visit(ctx.params);
-		
-		//verarbeitet funktionsrumpf
-		String statementInstructions = visit(ctx.statements);
-		
-		//generiert korrekte signatur 
-		String result = ".method public static " + ctx.functionName.getText() + "(";
-		//aehnlich wie bei functionCall
-		int numberOfParams = ctx.params.declarations.size();
-		result += stringRepeat("I", numberOfParams);
-		result += ")I\n"
-			 + ".limit locals 100\n"
-			 + ".limit stack 100\n"
-			 //und fuehrt instructions in korrekter reihenfolge zusammen
-			 + (statementInstructions == null ? " " : statementInstructions + "\n")
-			 + visit(ctx.returnValue) + "\n"
-			 + "ireturn\n"
-			 + ".end method\n";
-		
-		//stellt die variablen-tabelle des vorangegangenen gueltigkeitsbereich wieder her
-		variables = oldVariables;
-		return result;
-	}
-	
-	
+	////////////////////////////////HILFSFUNKTIONEN (intern)//////////////////////
 	/**@brief
 	 * Simple Hilfsfunktion, die einen gegebenen String count-mal mit sich selbst konkateniert 
 	 * @param string	Ausgangsstring, der wiederholt werden soll
