@@ -394,6 +394,9 @@ public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 			case ">=":
 				compareInstruction = "if_icmpge";
 				break;
+			case "==":
+				compareInstruction = "if_icmpeq";
+				break;
 			default:
 				throw new IllegalArgumentException("Unknown operator: " + ctx.compareOp.getText());
 		}
