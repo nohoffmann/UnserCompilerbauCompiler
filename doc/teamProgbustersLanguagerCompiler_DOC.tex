@@ -32,7 +32,7 @@
 \section{Einleitung}
 % TO-DO: Auf finalen Namen der Sprache eingehen
 
-Als Abschlussprojekt des Moduls 'Compilerbau' unter Leitung von Thorsten Jakobs, M.Sc., htw saar wurde dieser Compiler zur von uns eigens entwickelten Sprache \textit{Team Progbusters Language} (Arbeitstitel) entwickelt, mit den in \textit{2. Anforderungen} beschriebenen Voraussetzungen und Zielen. Die Sprache basiert im Wesentlichen auf C, wurde jedoch auf wesentliche Elemente wie Grundrechenarten, Funktionen, if-Statements und eine Form der Schleife reduziert. Weiterhin vorhanden sind Bezeichner, Konstanten, Variablen, die Klammerung wird ebenfalls ber\"ucksichtigt.
+Als Abschlussprojekt des Moduls 'Compilerbau' unter Leitung von Thorsten Jakobs, M.Sc., htw saar wurde dieser Compiler zur von uns eigens entwickelten Sprache \textit{Team Progbusters Language} (Arbeitstitel) entwickelt, mit den in \textit{2. Anforderungen} beschriebenen Voraussetzungen und Zielen. Die Sprache eine C-ähnliche Syntax, wurde jedoch auf wesentliche Elemente wie Grundrechenarten, Funktionen, if-Statements und eine Form der Schleife reduziert. Weiterhin vorhanden sind Bezeichner, Konstanten, Variablen, die Klammerung wird ebenfalls ber\"ucksichtigt.
 
 
 Diese Dokumentation behandelt die Anforderungen an den Compiler, den theoretischen Hintergrund, die Konzeption der Entwicklung, unsere verwendeten Technologien, sowie unsere Vorgehensweise während der Entwicklung und die Probleme, auf die wir gestoßen sind und unsere Lösungsansätze. Ausgangs wird auch die Handhabung des Compilers näher erläutert.
@@ -99,7 +99,7 @@ zu den folgenden Tokens aufgelöst werden.
 
 
 % TO-DO: Kapitelnummer prüfen!
-Der Teil des Compilers, der diese Aufgabe übernimmt, wird \textit{Lexer} genannt. Der Lexer überprüft für jedes Zeichen der Eingabedatei, welchem Token dieses zugeordnet werden kann. Dies geschieht auf Grundlage von definierten Regeln, welche mit sogenannten \textit{regulären Ausdrücken} formuliert werden. Ein regulärer Ausdruck besteht aus einer Sequenz von Zeichen, die ein bestimmtes Muster definieren. Reguläre Ausdrücke können auch rekursiv verwendet werden, um auf Grundlage einfacher regulärer Ausdrücke komplexere zu bilden. Beispiele für reguläre Ausdrücke werden im Kapitel \texit{6.1 Erste Schritte: Auswertung von arithmetischen Ausdrücken} GGF. KAPITELNUMMER ÄNDERN! aufgeführt.
+Der Teil des Compilers, der diese Aufgabe übernimmt, wird \textit{Lexer} genannt. Der Lexer überprüft für jedes Zeichen der Eingabedatei, welchem Token dieses zugeordnet werden kann. Dies geschieht auf Grundlage von definierten Regeln, welche mit sogenannten \textit{regulären Ausdrücken} formuliert werden. Ein regulärer Ausdruck besteht aus einer Sequenz von Zeichen, die ein bestimmtes Muster definieren. Reguläre Ausdrücke können auch rekursiv verwendet werden, um auf Grundlage einfacher regulärer Ausdrücke komplexere zu bilden. Beispiele für reguläre Ausdrücke werden im Kapitel \textit{6.1 Erste Schritte: Auswertung von arithmetischen Ausdrücken} GGF. KAPITELNUMMER ÄNDERN! aufgeführt.
 
 \subsection{Syntaktische Analyse}
 % TO-DO: Grafik
@@ -264,7 +264,9 @@ Nach diesen Schritten sind wir also in der Lage einen Syntaxbaum zu erstellen. D
 Der nächste wichtige Schritt der Übersetzung besteht nun in der Auswertung dieses Baumes. Dazu wird der Baum als Datenstruktur betrachtet. ANTLR liefert dabei mehrere Methoden, die auf Instanzen der Klasse ''ParseTree'' angewandt werden können. 
 Jedes Token, das in der Grammatik definiert wurde und durch einen Knoten im Baum repräsentiert wird, besitzt eine sogenannte Visit-Methode. Diese Methode gibt eine Kette mit Zeichen zurück, wobei diese Zeichenkette die Anweisungen in der Zielsprache (Jasmin) enthält. Das Abarbeiten dieser Visit-Methoden in der richtigen Reihenfolge bildet die Grundlage für die Übersetzung, da hiernach alle Instruktionen in der Zielsprache zusammengesetzt sind. Was genau in einer Visit-Methode passiert, wird vom Entwickler festgelegt. ANTLR stellt sogehesen nur eine Vorlage zur Verfügung.
 
-Um diese korrekte Reihenfolge zu gewährleisten, muss eine Anfangsregel (Startaxiom) festgelegt sein. In diesem Beispiel wurde festgelegt, dass der Programmstart - sprich der Wurzelknoten des Baumes - eine ''expression'' sein muss. Das bedeutet, das zunächst die Visit-Methode des Wurzelknoten aufgerufen wird. Damit nun auch die inneren Knoten des Syntaxbaums berücksichtigt werden, ist der Aufruf einer weiteren von ANTLR generierten Methode notwendig. Jeder Knoten des Baum besitzt eine visitChild()-Methode, welche die entsprechenden Visit-Methoden der untergeordneten Knoten aufruft.
+Um diese korrekte Reihenfolge zu gewährleisten, muss eine Anfangsregel (Startaxiom) festgelegt sein. In diesem Beispiel wurde festgelegt, dass der Programmstart - sprich der Wurzelknoten des Baumes - eine ''expression'' sein muss. Das bedeutet, das zunächst die Visit-Methode des Wurzelknoten aufgerufen wird. Damit nun auch die inneren Knoten des Syntaxbaums berücksichtigt werden, ist der Aufruf einer weiteren von ANTLR generierten Methode notwendig. Jeder Knoten des Baum besitzt eine visitChildren()-Methode, welche die entsprechenden Visit-Methoden der untergeordneten Knoten aufruft.
+
+\pagebreak
 
 Um diese rekursive Vorgehensweise verständlicher zu machen, folgt ein Beispiel.
 
@@ -280,7 +282,89 @@ public String visitAddition(AdditionContext ctx) {
 \end{lstlisting}
 Die Tatsache, dass es eine Methode visitAddition mit diesem Eingabeparameter und diesem Rückgabewert gibt, geht auf ANTLR zurück. Der Funktionsrumpf wurde jedoch von uns verfasst.
 
+Zunächst werden die Kind-Knoten der Addition, sprich die Operanden, besucht. Wenn die Operanden aus weiteren mathematischen Operationen bestehen, werden zunächst diese aufgerufen, um die beliebige Länge von Ausdrücken zu ermöglichen. Handelt es sich bei einem Operanden um eine Zahl, wird die Methode visitNumber() aufgerufen.
 
+\begin{lstlisting} [frame=single]
+/**@brief
+ * verarbeitet ganze Zahlen
+ */
+public String visitNumber(NumberContext ctx) {
+	return "ldc " + ctx.getChild(0) + "\n";
+}
+\end{lstlisting}
+
+Der Befehl \textit{ldc} steht für \textit{load constant} und ist die Jasmin-Instruktion, um einen Wert auf den Stack zu legen. \textit{ctx.getChild(0)} sorgt dafür, dass der Wert aus dem entsprechenden Knoten aus dem Baum entnommen wird.
+Der Befehl \textit{iadd} in der visitAddition()-Methode steht für \textit{integer addition} und ist die Jasmin-Anweisung, zwei ganzzahlige Werte vom Stack zu nehmen, diese zu addieren und schließlich das Ergebnis wieder auf den Stack zu legen.
+
+\pagebreak
+
+Der Compiler-interne Ablauf für die Übersetzung des Ausdruck 
+\begin{lstlisting} [frame=single]
+2 + 4
+\end{lstlisting}
+wäre also wie folgt.
+
+Nach der lexikalischen und syntaktischen Analyse liegt folgender Syntaxbaum vor:
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.4]{antlr4_parse_tree_visitAdditionVisitNumberBeispiel.png}
+\caption{Syntaxbaum für beispielhaften arithmetischen Ausdruck}
+\label{fig:method}
+\end{figure}
+
+Zunächst wird die visitAddition-Methode aufgerufen, da der Operator der expression das ''+'' Zeichen ist. Die visitChildren-Methode gibt nun die Zeichenkette
+\begin{lstlisting} [frame=single]
+ldc 2
+ldc 4
+\end{lstlisting}
+zurück, da die untergeordneten Expressions nur Zahlen enthalten. Dem fügt die visitAddition-Methode wiederrum den Befehl
+\begin{lstlisting} [frame=single]
+iadd
+\end{lstlisting}
+hinzu, um die Addition durchzuführen.
+\linebreak
+
+In der JavaVM werden diese Instruktionen wie folgt verarbeitet:
+Im Initialzustand ist der Stack leer.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.2]{stack_visual.png}
+\caption{Zustand des Kellerspeicher der JavaVM}
+\label{fig:method}
+\end{figure}
+
+Der Befehl \textit{ldc 2} legt den Wert \textit{2} auf den Stack.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.2]{stack_visual(1).png}
+\caption{Zustand des Kellerspeicher der JavaVM}
+\label{fig:method}
+\end{figure}
+
+Der Befehl \textit{ldc 4} legt den Wert \textit{4} auf den Stack.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.2]{stack_visual(2).png}
+\caption{Zustand des Kellerspeicher der JavaVM}
+\label{fig:method}
+\end{figure}
+
+Der Befehl \textit{iadd} nimmt zwei Werte vom Stack und legt das Ergebnis der Addition dieser Werte wieder auf den Stack
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.2]{stack_visual(3).png}
+\caption{Zustand des Kellerspeicher der JavaVM}
+\label{fig:method}
+\end{figure}
+
+
+
+\pagebreak
 
 \subsection{Ausweiten der simplen Grammatik}
 Nachdem die Sprache grundlegende Funktionalität erhielt, versuchten wir die weiteren Bestandteile, die durch die Anforderungen festgelegt wurden, zu implementieren. 
@@ -313,23 +397,110 @@ println( argument );
 \end{lstlisting}
 
 \subsection{Implementierung von Variablen}
+Bestandteile
+	-	Deklaration(int [name]):
+			prüfen, ob Variable mit diesem Namen bereits exisiert
+				falls ja, Exception (variable already defined)
+				falls nicht, neuer Eintrag mit Namen und Index in Variablentabelle
+	-	Wertzuweisung ([name] = [expression])
+			auflösen des Namen nach Index in Tabelle
+				falls nicht gefunden, Exception (undefined variable)
+				falls gefunden, generieren der Instruktionen
+					visit(ctx.expr), legt zuzuweisenden Wert auf Stack
+					"istore [index]", speichert in JavaVM-Variablentabelle
+	-	Aufruf ([name] als Teil einer Expression)
+			auflösen des Namen nach Index in Tabelle
+				falls nicht gefunden, Exception (undefined variable)
+				falls gefunden, generieren der Instruktionen
+					"iload [index]", kopiert Wert aus der JavaVM-Variablentabelle und legt diesen auf Stack
+
 
 \subsection{Implementierung von Funktionen}
+Bevor der eigentliche Visitor arbeit, wird der gesamte Baum auf Funktionsdeklarationen untersucht. Dies sorgt dafür, dass Funktionen an beliebigen Stellen im Quellcode definiert werden können und keine Vorwärtsdeklarationen notwendig sind. Die gefundenen Funktionen werden in einer Liste gespeichert.
 
+Bestandteile
+	-	Deklaration
+			prüfen, ob Funktion mit diesem Namen und dieser Signatur bereits exisiert
+				falls ja, Exception (function already defined)
+				falls nicht, neuer Eintrag mit Namen und Signatur in Funktionsliste
+
+	- 	Aufruf			
+			prüfen, ob Funktion in Funktionsliste enthalten ist
+				falls nein, Exception (undefined function)
+				falls ja, 
+					Kopieren von alter Variablentabelle und Konstruieren von neuer (ermöglicht scopes)
+					Zusammensetzen von Argumenten und instructions
+					eigentlicher Aufruf "invokestatic [functionname] ([ggf. parameter])"
+					Wiederherstellen von alter Variablentabelle
 
 \subsection{Implementierung von Konstanten}
+Intern Erweiterung von Variablen.
+Zusätzliche Schritte:
+	-	Deklaration
+		-	hasBeenAssigned-Flag auf false setzen
+
+	-	Wertzuweisung
+		-	Unterscheidung, ob Konstante oder Variable
+				falls Konstante:
+					Prüfen, ob Konstante bereits Wert zugewiesen wurde
+						falls ja, Exception (constant reassign)
+						falls nicht, Zuweisung durchführen und entsprechendes Flag true setzen
 
 \subsection{Implementierung von Bedingten Verzweigungen}
+Aufteilen in
+	conditionInstructions
+	onTrueInstructions
+	onFalseInstructions
+	
+Zusammensetzen
+	-	conditionInstructions, Bedingung wird überprüft
+		falls Bedingung zu true evaluiert wird
+			Sprung zu onTrueInstructions, onFalseInstructions überspringen
+		falls Bedingung zu false evaluiert wird
+			Ausführen von onFalseInstructions, onTrueInstructions überspringen
+	
+Labels
+	für Sprungbefehle werden Labels benötigt. Um diese eindeutig benennen zu können wird gezählt, wie oft if-else vorkommt
+	
+
+
+Evaluieren der Bedingung:
+	wie in C als int (in unserem Fall also expression). 0 == false, jeder andere Wert == true
+	 	-> expression regel entsprechend angepasst, möglich sind
+	 		- Vergleiche (<, <=, >, >=, ==)
+	 		- Logik-Gatter (\& \&, ||, !)
+
 
 \subsection{Implementierung einer Schleife}
+Aufteilen in
+	conditionInstructions
+	onTrueInstructions
+	
+Zusammensetzen
+	[conditionLabel]
+	conditionInstructions
+		Wenn conditionInstructions zu true evaluiert werden
+			Sprung zu onTrueLabel
+		Wenn conditionInstruction zu false evaluiert werden
+			Sprung zu endOfWhileLabel
+	
+	[onTrueLabel]
+	onTrueInstructions
+	Sprung zu conditionLabel	
+			
+	[endOfWhileLabel]
 
-
-
+Labels
+	für Sprungbefehle werden Labels benötigt. Um diese eindeutig benennen zu können wird gezählt, wie oft while vorkommt
 
 \pagebreak
+
+
+% @marvin, eigentlich könnte man das irgendwie mit vorgehen während der entwicklung mergen, hat ja ne sehr große schnittmenge
 \section{Aufgetrene Probleme und deren Lösung}
 
 \subsection{Operatorenpriorität bei arithmetischen Ausdrücken}
+vgl Kapitel oben
 
 \subsection{Variablen}
 Ein wichtiger Bestandteil jeder Programmiersprache ist die Möglichkeit Variablen zu nutzen. Damit eine Variable im späteren Programmverlauf genutzt werden kann, muss sie zunächst deklariert werden. In unserer Sprache erfolgt dies durch die Angabe [Datentyp] [Name];. Beispielsweise legt der Aufruf
@@ -382,39 +553,19 @@ Ein möglicher Fehler seitens des Benutzer unserer Sprache ist, dass eine Variab
 
 \pagebreak
 \section{Verwendung des Compilers}
-Abbreviations should be introduced at the first mention in the main text – no abbreviations lists. Suggested structure of main text (not enforced) is provided below.
-Must include all authors, identified by initials, for example:
-A.A. conceived the experiment(s),  A.A. and B.A. conducted the experiment(s), C.A. and D.A. analysed the results.  All authors reviewed the manuscript.
-
-\section*{Additional information}
-
-To include, in this order: \textbf{Accession codes} (where applicable); \textbf{Competing interests} (mandatory statement).
-
-The corresponding author is responsible for submitting a \href{http://www.nature.com/srep/policies/index.html#competing}{competing interests statement} on behalf of all authors of the paper. This statement must be included in the submitted article file.
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=\linewidth]{/home/noah/Pictures/meisterwerk.jpg}
-\caption{Legend (350 words max). Example legend text.}
-\label{fig:stream}
-\end{figure}
-
-\begin{table}[ht]
-\centering
-\begin{tabular}{|l|l|l|}
-\hline
-Condition & n & p \\
-\hline
-A & 5 & 0.1 \\
-\hline
-B & 10 & 0.01 \\
-\hline
-\end{tabular}
-\caption{\label{tab:example}Legend (350 words max). Example legend text.}
-\end{table}
-
-Figures and tables can be referenced in LaTeX using the ref command, e.g. Figure \ref{fig:stream} and Table \ref{tab:example}.
-
+\subsection{Verwendung der UnsereCompilerbauSprache}
+	- println-Funktion
+	- Variablen deklarieren, definieren, aufrufen
+	- Konstanten "
+	- Funktionen deklarieren, aufrufen
+	- Arithmetik
+	- Aussgaenlogik
+	- if-else-statements
+	- while-Schleife
+\subsection{Aufrufen des UnserCompilerbauCompilers}
+	- java -jar UCC.jar sourceCode.txt
+  (	- java -jar jasmin.jar output.j)
+  	- java output
 
 \section{Anhang}
 \subsection{Quellenangaben}
