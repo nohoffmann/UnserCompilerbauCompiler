@@ -5,7 +5,7 @@
 \label{subsec:arithExp}
 % TO-DO: Kapitelnummer einfügen und prüfen
 % kapitel 5 ist hier doch falsch????
-Der Vorgehensweise unter 5.IRGENDWAS HIER KAPITEL EINFÜGEN entsprechend, implementierten wir zuerst die unserer Sicht nach grundlegendste Fähigkeit einer Programmiersprache: das Auswerten von arithmetischen Ausdrücken. Es soll möglich sein, Ausdrücke, die die Grundrechenarten sowie eine beliebig tiefe Schachtelung von Klammern enthalten, zu erkennen und der Operatorenpriorität entsprechend die gelesenen Tokens in einem Syntaxbaum zusammenzuführen. Dazu formulierten wir folgende Grammatik:
+Der Vorgehensweise unter \textit{\ref{sec:grundsatz}. Allgemeiner Grundsatz} entsprechend, implementierten wir zuerst die unserer Sicht nach grundlegendste Fähigkeit einer Programmiersprache: das Auswerten von arithmetischen Ausdrücken. Es soll möglich sein, Ausdrücke, die die Grundrechenarten sowie eine beliebig tiefe Schachtelung von Klammern enthalten, zu erkennen und der Operatorenpriorität entsprechend die gelesenen Tokens in einem Syntaxbaum zusammenzuführen. Dazu formulierten wir folgende Grammatik:
 
 
 \begin{lstlisting} [frame=single] 
@@ -50,9 +50,9 @@ Auf die Deklaration dürfen beliebig viele Regeln für die Grammatik folgen. Zur
 
 Die Regel WS (Whitespace) besagt, dass bestimmte Zeichen, die nur der Formatierung dienen, ignoriert werden, da sie für das Übersetzen einer Quelldatei keine Bedeutung haben.
 
-Die darauffolgenden Regeln sind Aliasse für die Zeichen, die in arithmetischen Ausdrücken verwendet werden. Diese Auslagerung steigert unseres Erachtens nach die Lesbarkeit der letzten Regeln dieses Beispiels, sind aber nicht zwingend notwendig.
+Die darauffolgenden Regeln sind Aliase für die Zeichen, die in arithmetischen Ausdrücken verwendet werden. Diese Auslagerung steigert unseres Erachtens nach die Lesbarkeit der letzten Regeln dieses Beispiels, sind aber nicht zwingend notwendig.
 
-Die wohl relevanteste Regel trägt den Namen ''expression'' und legt fest, wie sich ein arithmetischer Ausdruck zusammensetzzen kann. Im Vergleich zu den vorherigen Regeln, wurde hier von der Möglichkeit, mehrere alternative Möglichkeiten anzugeben, Gebrauch gemacht. Die Regel besagt, dass ein arithmetischer Ausdruck entweder aus 
+Die wohl relevanteste Regel trägt den Namen ''expression'' und legt fest, wie sich ein arithmetischer Ausdruck zusammensetzen kann. Im Vergleich zu den vorherigen Regeln, wurde hier von der Möglichkeit, mehrere alternative Möglichkeiten anzugeben, Gebrauch gemacht. Die Regel besagt, dass ein arithmetischer Ausdruck entweder aus 
 \begin{itemize}
 \item einer Zahl,
 \item einem geklammerten Ausdruck,
@@ -64,9 +64,9 @@ Die wohl relevanteste Regel trägt den Namen ''expression'' und legt fest, wie s
 besteht.
 Durch die Rekursion (die Regel verweist auf sich selbst) ist eine beliebige Länge des Ausdruckes möglich.
 
-Eine Besonderheit, die zu beachten ist, besteht in der Rangfolge der Operatoren. Die höchste Bindung besitzt ein geklammerter Term, die nächststärke Divisionen und Multiplikationen. Die schwächste Bindung besitzen Subtraktionen und Additionen.
+Eine Besonderheit, die zu beachten ist, besteht in der Rangfolge der Operatoren. Die höchste Bindung besitzt ein geklammerter Term, die nächst höchste Bindung Divisionen und Multiplikationen. Die schwächste Bindung besitzen Subtraktionen und Additionen.
 
-Damit diese Priorität gewährleistet werden kann, sind die Regeln in dieser bestimmten Reihenfolge notiert. ANTLR versucht immer zuerst die ''oberste'' Regel anzuwenden, daraufhin die darunter usw.. Deshalb wird der folgende Ausdruck 
+Damit diese Priorität gewährleistet werden kann, sind die Regeln in dieser bestimmten Reihenfolge notiert. ANTLR versucht immer zuerst die ''oberste'' Regel anzuwenden, daraufhin die darunter stehende usw.. Deshalb wird der folgende Ausdruck 
 
 \begin{lstlisting} [frame=single]
 2*10-48*(4-1)-16/4
@@ -78,7 +78,6 @@ zu diesem Syntaxbaum aufgelöst:
 \centering
 \includegraphics[scale=0.4]{pics/antlr4_parse_tree_arithmetic.png}
 \caption{Syntaxbaum für beispielhaften arithmetischen Ausdruck}
-\label{fig:method}
 \end{figure}
 
 Des Weiteren ist zu beachten, dass arithmetischen Ausdrücke gleicher Operatorenpriorität von links  nach rechts ausgewertet werden müssen. Als Beispiel lässt sich hier der Term 
@@ -86,14 +85,14 @@ Des Weiteren ist zu beachten, dass arithmetischen Ausdrücke gleicher Operatoren
 8-5+2
 \end{lstlisting}
 nennen. Sowohl die Subtraktion als auch die Addition besitzen die gleiche Bindung. Wenn man hier fälschlicherweise zuerst die Addition, also 5+2, was 7 ergibt, auswertet und das Ergebnis dieser Operation von 8 subtrahiert, erhält man als Gesamtergebnis 1. 
-In der korrekten Reihenfolge erfolgt zuerst die Subtraktion, also 8-5, was 3 ergibt, und erst darauf die Addition von 1, was als Gesamtergbnis 4 liefert. 
+In der korrekten Reihenfolge erfolgt zuerst die Subtraktion, also 8-5, was 3 ergibt, und erst darauf die Addition von 1, was als Gesamtergebnis 4 liefert. 
 Um diese Fehlerquelle auszuschließen, sind in unserer Grammatik die Regel für Subtraktion vor der für Addition und die Regel für Division vor der für Multiplikation definiert. Da bei reinen Additionen bzw. reinen Multiplikationen die Auswertungsreihenfolge tatsächlich keine Rolle spielt, eine Subtraktion jedoch vor einer Additionen (vgl. Beispiel oben) ausgewertet werden muss, sorgt die Reihenfolge der Regeln in der Grammatik für eine korrekte Auswertung.
 
 Ein analoges Beispiel zu Divisionen und Multiplikationen ist
 \begin{lstlisting} [frame=single]
 8/2*4
 \end{lstlisting}
-Auch hier ergibt sich ein ähnliches Problem wie beim vorherigen Beispiel. Wird zuerst die Multiplikation (2*4) ausgeführt und erst danach die Division (also 8/8 in diesem Fall), ist das Endergbnis 1 und nicht wie in der richtigen Reihenfolge 16.
+Auch hier ergibt sich ein ähnliches Problem wie beim vorherigen Beispiel. Wird zuerst die Multiplikation (2*4) ausgeführt und erst danach die Division (also 8/8 in diesem Fall), ist das Endergebnis 1 und nicht wie in der richtigen Reihenfolge 16.
 
 Nach diesen Schritten sind wir also in der Lage einen Syntaxbaum zu erstellen. Der nötige Programmcode dafür wird von ANTLR automatisiert erstellt. Dabei ist die Eingabe dieses Programmes der auszuwertende Ausdruck. Die Ausgabe ist der Syntaxbaum, der zu Testzwecken auch als Grafik (vgl. Abbildung oben) ausgegeben werden kann. 
 
@@ -148,7 +147,6 @@ Nach der lexikalischen und syntaktischen Analyse liegt folgender Syntaxbaum vor:
 \centering
 \includegraphics[scale=0.4]{pics/antlr4_parse_tree_visitAdditionVisitNumberBeispiel.png}
 \caption{Syntaxbaum für beispielhaften arithmetischen Ausdruck}
-\label{fig:method}
 \end{figure}
 
 Zunächst wird die visitAddition-Methode aufgerufen, da der Operator der expression das ''+'' Zeichen ist. Die visitChildren-Methode gibt nun die Zeichenkette
@@ -170,7 +168,6 @@ Im Initialzustand ist der Stack leer.
 \centering
 \includegraphics[scale=0.2]{pics/stack_visual.png}
 \caption{Zustand des Kellerspeicher der JavaVM}
-\label{fig:method}
 \end{figure}
 
 Der Befehl \textit{ldc 2} legt den Wert \textit{2} auf den Stack.
@@ -179,7 +176,6 @@ Der Befehl \textit{ldc 2} legt den Wert \textit{2} auf den Stack.
 \centering
 \includegraphics[scale=0.2]{pics/stack_visual(1).png}
 \caption{Zustand des Kellerspeicher der JavaVM}
-\label{fig:method}
 \end{figure}
 
 Der Befehl \textit{ldc 4} legt den Wert \textit{4} auf den Stack.
@@ -188,7 +184,6 @@ Der Befehl \textit{ldc 4} legt den Wert \textit{4} auf den Stack.
 \centering
 \includegraphics[scale=0.2]{pics/stack_visual(2).png}
 \caption{Zustand des Kellerspeicher der JavaVM}
-\label{fig:method}
 \end{figure}
 
 Der Befehl \textit{iadd} nimmt zwei Werte vom Stack und legt das Ergebnis der Addition dieser Werte wieder auf den Stack
@@ -208,10 +203,10 @@ Der Befehl \textit{iadd} nimmt zwei Werte vom Stack und legt das Ergebnis der Ad
 Nachdem die Sprache grundlegende Funktionalität erhielt, versuchten wir die weiteren Bestandteile, die durch die Anforderungen festgelegt wurden, zu implementieren. 
 
 
-\subsection*{Ergebnisausgabe}
-Ein Programm ohne Ausgabe ergibt keinen Sinn, da nie das berechnete Ergebnis betrachtet werden kann. Eine Ausgabefunktion zu implementieren stellte sich nicht als all zu großes Problem heraus, da Jasmin die Fähigkeit besitzt Objekte und Methoden in der Java Libary zu nutzen. Wir implentierten dies Ausgabefunktion wie folgt:
+\subsubsection{Ergebnisausgabe}
+Ein Programm ohne Ausgabe ergibt keinen Sinn, da nie das berechnete Ergebnis betrachtet werden kann. Eine Ausgabefunktion zu implementieren stellte sich nicht als all zu großes Problem heraus, da Jasmin die Fähigkeit besitzt Objekte und Methoden in der Java Library zu nutzen. Wir implementierten dies Ausgabefunktion wie folgt:
 
-\begin{lstlisting}[frame=single]
+\scriptsize \begin{lstlisting}[frame=single]
 /**@brief
  * vearbeitet den Aufruf der println-Funktion
  */
@@ -226,6 +221,7 @@ public String visitPrintln(PrintlnContext ctx) {
 }
 \end{lstlisting}
 
+\normalsize
 Es wird zuerst ein System.out-Objekt auf den Stack gelegt, danach der auszugebende Wert. Schließlich folgt der Aufruf der Methode println(), die das Argument sowie das System.out-Objekt vom Stack wieder herunternimmt.
 
 
@@ -254,11 +250,11 @@ Bestandteile
 
 
 \subsection{Implementierung von Funktionen}
-Bevor der eigentliche Visitor arbeit, wird der gesamte Baum auf Funktionsdeklarationen untersucht. Dies sorgt dafür, dass Funktionen an beliebigen Stellen im Quellcode definiert werden können und keine Vorwärtsdeklarationen notwendig sind. Die gefundenen Funktionen werden in einer Liste gespeichert.
+Bevor der eigentliche Visitor arbeitet, wird der gesamte Baum auf Funktionsdeklarationen untersucht. Dies sorgt dafür, dass Funktionen an beliebigen Stellen im Quellcode definiert werden können und keine Vorwärtsdeklarationen notwendig sind. Die gefundenen Funktionen werden in einer Liste gespeichert.
 
 Bestandteile
 	-	Deklaration
-			prüfen, ob Funktion mit diesem Namen und dieser Signatur bereits exisiert
+			prüfen, ob Funktion mit diesem Namen und dieser Signatur bereits existiert
 				falls ja, Exception (function already defined)
 				falls nicht, neuer Eintrag mit Namen und Signatur in Funktionsliste
 
