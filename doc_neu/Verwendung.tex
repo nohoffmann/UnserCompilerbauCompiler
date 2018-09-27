@@ -22,7 +22,7 @@ Alle Statements ausser if-else-Anweisungen und Schleifen werden mit einem Semiko
 
 \subsection*{Variablen}
 \subparagraph{Deklaration}
-Variablen werden mit dem Schlüsselwort 'int' sowie dem gewünschten Namen nach einem Leerzeichen deklariert.
+Variablen werden mit dem Schlüsselwort \textit{int} sowie dem gewünschten Namen nach einem Leerzeichen deklariert.
 Der Name wird durch einen Bezeichner angegeben.
 
 Beispiel:
@@ -56,11 +56,11 @@ beispiel2 = beispiel1 - 1;
 \end{lstlisting}
 
 
-\subsection{Konstanten}
+\subsection*{Konstanten}
 Konstanten werden ähnlich wie Variablen verwendet.
 
 \subparagraph{Deklaration}
-Im Gegensatz zu einer Variablen wird dem Namen das Schlüsselwort ''const int'' anstatt nur ''int'' vorgestellt.
+Im Gegensatz zu einer Variablen wird dem Namen das Schlüsselwort \textit{const int} anstatt nur \textit{int} vorgestellt.
 
 Beispiel:
 \begin{lstlisting} [frame=single] 
@@ -71,8 +71,8 @@ const int BEISPIEL;
 Die Wertzuweisung erfolgt wie bei einer Variable, darf jedoch nur ein mal pro Konstante erfolgen.
  
 
-\subsection{Ergebnisausgabe}
-Mit Hilfe der Funktion println([argument]) können numerische Werte, arithmetische Ausdrücke, logische Ausdrücke, Vergleiche, Rückgabewerte von Funktionen, Variablen und Konstanten auf die Konsole ausgegeben werden.
+\subsection*{Ergebnisausgabe}
+Mit Hilfe der Funktion \textit{println([argument])} können numerische Werte, arithmetische Ausdrücke, logische Ausdrücke, Vergleiche, Rückgabewerte von Funktionen, Variablen und Konstanten auf die Konsole ausgegeben werden.
 
 Beispiele:
 \begin{lstlisting} [frame=single] 
@@ -99,16 +99,31 @@ println(BEISPIEL);
 \subparagraph{Aufruf}
 
 
-
 \subsection{Arithmetik}
-
 
 \subsection{Aussgaenlogik}
 
 \subsection{Bedingte Verzweigungen}
 
 \subsection{Schleifen}
-	
+Eine Schleife beginnt mit dem Schlüsselwort \textit{while}, wird von einer Bedingung in runden Klammern gefolgt und schließt mit einem Schleifenrumpf ab. Der Schleifenrumpf wiederrum wird mit geschweiften Klammern geöffnet und abgeschlossen.
+
+Sowohl beim ersten Aufruf der Schleife als nach jedem Schleifendurchlauf wird überprüft, ob die gegebenene Bedingung wahr oder falsch ist. Ist die Bedingung wahr, werden die Anweisungen im Schleifenrumpf ausgeführt. Falls die Bedingung falsch ist, werden die Anweisungen nicht ausgeührt.
+
+Beispiel (gibt die Summer der Zahlen von 1 bis 10 aus):
+\begin{lstlisting} [frame=single] 
+int i;
+int x;
+
+i = 0;
+x = 0;
+
+while(i <= 10) {
+	i = i + 1;
+	x = x + i;
+}
+println(x);
+\end{lstlisting}
 	
 \subsection{Reservierte Schlüsselwörter und Symbole}	
 
@@ -145,7 +160,7 @@ println(BEISPIEL);
     == & Operator um zwei Werte auf Gleichheit zu überprüfen\\ \hline    
     
     \& \&  & logisches Und \\ \hline    
-    || & logischer Oder \\ \hline    
+    || & logischer Oder (inklusiv) \\ \hline    
     ! & logisches Nicht \\ \hline    
     
   \end{tabular}
