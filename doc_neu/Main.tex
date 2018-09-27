@@ -1,0 +1,52 @@
+\documentclass[12pt, a4paper, oneside, ngerman]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[]{hyperref}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{caption}
+
+
+\title{Projektarbeit Compilerbau}
+\usepackage[german]{babel}
+
+
+\begin{document}
+\selectlanguage{german}
+\author{Jonas Wenner, Jens Marvin Reuter, Noah Hoffmann}
+
+\maketitle
+\thispagestyle{empty}
+\pagebreak
+\tableofcontents
+\newpage
+
+
+\begin{abstract}
+
+% TO-DO: Auf finalen Namen der Sprache eingehen
+
+Als Abschlussprojekt des Moduls 'Compilerbau' unter Leitung von Thorsten Jakobs, M.Sc., htw saar wurde dieser Compiler zur von uns eigens entwickelten Sprache \textit{Team Progbusters Language} (Arbeitstitel) entwickelt, mit den in \textit{2. Anforderungen} beschriebenen Voraussetzungen und Zielen. Die Sprache besitzt eine C-ähnliche Syntax, wurde jedoch auf wesentliche Elemente wie Grundrechenarten, Funktionen, if-Statements und eine Form der Schleife reduziert. Weiterhin vorhanden sind Bezeichner, Konstanten und Variablen, die Klammerung wird ebenfalls berücksichtigt.
+
+Diese Dokumentation behandelt die Anforderungen an den Compiler, den theoretischen Hintergrund, die Konzeption der Entwicklung, unsere verwendeten Technologien, sowie unsere Vorgehensweise während der Entwicklung und die Probleme, auf die wir gestoßen sind und unsere Lösungsansätze. Ausgangs wird auch die Handhabung des Compilers näher erläutert.
+
+\end{abstract}
+
+\newpage
+\include{Anforderungen}
+\pagebreak
+\include{Theorie}
+\pagebreak
+\include{Konzept}
+\pagebreak
+\include{Technologie}
+\pagebreak
+\include{Vorgehen}
+\pagebreak
+\include{Probleme}
+\pagebreak
+\include{Verwendung}
+\pagebreak
+\include{Anhang}
+\pagebreak
+\end{document}
