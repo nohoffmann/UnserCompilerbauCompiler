@@ -34,6 +34,7 @@ import de.progbusters.parser.ArithmeticParser.InverseGateContext;
 import de.progbusters.parser.ArithmeticParser.LoopContext;
 import de.progbusters.parser.ArithmeticParser.MainStatementContext;
 import de.progbusters.parser.ArithmeticParser.MultiplicationContext;
+import de.progbusters.parser.ArithmeticParser.NegativeNumberContext;
 import de.progbusters.parser.ArithmeticParser.NumberContext;
 import de.progbusters.parser.ArithmeticParser.OrGateContext;
 import de.progbusters.parser.ArithmeticParser.PrintlnContext;
@@ -136,6 +137,13 @@ public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 	 */
 	public String visitNumber(NumberContext ctx) {
 		return "ldc " + ctx.getChild(0) + "\n";
+	}
+	
+	/**@brief
+	 * verarbeitet negative ganze Zahlen
+	 */
+	public String visitNegativeNumber(NegativeNumberContext ctx) {
+		return "bipush -" + ctx.getChild(1) + "\n"; 
 	}
 	
 	/**@brief
