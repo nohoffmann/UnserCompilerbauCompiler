@@ -328,3 +328,25 @@ Labels
 	für Sprungbefehle werden Labels benötigt. Um diese eindeutig benennen zu können wird gezählt, wie oft while vorkommt
 
 % @marvin, eigentlich könnte man das irgendwie mit vorgehen während der entwicklung mergen, hat ja ne sehr große schnittmenge
+
+\subsection{Dokumentation}
+% TO-DO: Vorgehensweise der Erstellung der Dokumentation
+% TO-DO: Erstellung in LaTeX (Texmaker), Aufteilung des Dokumentes
+% TO-DO: Zusammenarbeit über Git
+% TO-DO: Alias einfügen
+Damit keine unnötigen Entwicklungs- bzw. Zwischenschrittdateien von \latex TODO: GGF. ENTFERNEN in das verwendete Git-Repository übernommen werden, wurde ein Alias erstellt, der ebendiese Dateien automatisiert entfernt. Dieses sieht wie folgt aus:
+\begin{lstlisting}[frame=single]
+rmtex_dev()
+{
+	echo "Removing .aux"
+	rm *.aux &> /dev/null
+	echo "Removing .toc"
+	rm *.toc &> /dev/null
+	echo "Removing .synctex.gz"
+	rm *.synctex.gz &> /dev/null
+	echo "Removing .log"
+	em *.log &> /dev/null
+	echo "Removing .out"
+	rm *.out &> /dev/null
+}
+\end{lstlisting}
