@@ -29,6 +29,7 @@ public class Main {
 		  untere Zeile schreibt in Datei outputFile*/
 		//System.out.println(compile(input));
 		writeJasminCodeToFile(compile(input), outputFile);
+		Runtime.getRuntime().exec("java -jar ../../../../lib/jasmin.jar " + outputFile);
 	}
 	
 	//startet lexer, parser und visitor
