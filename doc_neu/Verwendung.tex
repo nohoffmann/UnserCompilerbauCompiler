@@ -7,11 +7,11 @@ Ein gültiges Programm in der UnsereCompilerbauSprache besteht aus beliebig viel
 Der einzige Datentyp der Sprache ist 'int'. Ein 'int' repräsentiert eine ganze Zahl mit einer Größe von 32 bit. Mögliche Werte liegen zwischen -2147483648 und 2147483647 ($-2^{31}$ bis $2^{31} - 1$).
 
 \subsection{Bezeichner}
-Bezeichner werden genutzt, um Variablen, Konstanten sowie Funktionen zu bennnen.
-Beziechner müssen eindeutig sein, d.h. ein Bezeichner darf im entsprechenden Gültigkeitsbereich in nur einer Deklaration vorkommen. Gültige Bezeichner beginnen mit einem Klein- oder Großbuchstaben und dürfen von belibig vielen weiteren Klein- bzw. Großbuchstaben sowie den Ziffern von 0 bis 9 gefolgt werden. Ein Bezeichner darf kein reserviertes Schlüsselwort sein (vgl. Liste der reservierten Schlüsselwörter).
+Bezeichner werden genutzt, um Variablen, Konstanten sowie Funktionen zu benennen.
+Beziechner müssen eindeutig sein, d.h. ein Bezeichner darf im entsprechenden Gültigkeitsbereich in nur einer Deklaration des gleichen Typ vorkommen. Gültige Bezeichner beginnen mit einem Klein- oder Großbuchstaben und dürfen von belibig vielen weiteren Klein- bzw. Großbuchstaben sowie den Ziffern von 0 bis 9 gefolgt werden. Ein Bezeichner darf kein reserviertes Schlüsselwort sein (vgl. Liste der reservierten Schlüsselwörter).
 
 \subsection{Numerische Werte}
-Numerische Werte bestehen aus einer beliebig langen Folge de Ziffern von 0 bis 9. Ein numerischer Wert muss aus mindestens einer Ziffer bestehen.
+Numerische Werte bestehen aus einer beliebig langen Folge der Ziffern von 0 bis 9. Ein numerischer Wert muss aus mindestens einer Ziffer bestehen.
 
 \subsection{Besondere Formatierungszeichen} 
 Leerzeichen, Tabstops sowie Zeilenumbrüche dürfen in einer Quelltext-Datei vorkommen, werden jedoch vom Compiler ignoriert.
@@ -30,11 +30,9 @@ Beispiel:
 int beispiel;
 \end{lstlisting}
 
-
-
 \subparagraph{Definition}
 Nach dem eine Variable deklariert wurde, kann ihr ein Wert zugewiesen werden. Eine Zuweisung erfolgt durch das Gleichheitszeichen ''=''. Die Linke Seite der Zuwesiung ist dabei der Name der Variable, die rechte Seite  kann ein arithmetischer Ausdruck, der Aufruf einer Funktion, eine Variable oder eine Konstante sein.
-Wertzuweisungen dürfen beliebig oft erfolgen.
+Wertzuweisungen von Variablen dürfen beliebig oft erfolgen.
 Die Zuweisung muss getrennt von der Deklaration erfolgen.
 
 Beispiel:
@@ -58,14 +56,100 @@ beispiel2 = beispiel1 - 1;
 \end{lstlisting}
 
 
-	- Variablen deklarieren, definieren, aufrufen
-	- Konstanten "	
-	- println-Funktion
-	- Funktionen deklarieren, aufrufen
-	- Arithmetik
-	- Aussgaenlogik
-	- if-else-statements
-	- while-Schleife
+\subsection{Konstanten}
+Konstanten werden ähnlich wie Variablen verwendet.
+
+\subparagraph{Deklaration}
+Im Gegensatz zu einer Variablen wird dem Namen das Schlüsselwort ''const int'' anstatt nur ''int'' vorgestellt.
+
+Beispiel:
+\begin{lstlisting} [frame=single] 
+const int BEISPIEL;
+\end{lstlisting}
+
+\subparagraph{Definition}
+Die Wertzuweisung erfolgt wie bei einer Variable, darf jedoch nur ein mal pro Konstante erfolgen.
+ 
+
+\subsection{Ergebnisausgabe}
+Mit Hilfe der Funktion println([argument]) können numerische Werte, arithmetische Ausdrücke, logische Ausdrücke, Vergleiche, Rückgabewerte von Funktionen, Variablen und Konstanten auf die Konsole ausgegeben werden.
+
+Beispiele:
+\begin{lstlisting} [frame=single] 
+int beispiel;
+const int BEISPIEL;
+
+beispiel = 42;
+BEISPIEL = 123;
+
+println(42);
+println(42*5);
+println(42<5);
+println(42<5 && beispiel==BEISPIEL);
+println(testFunktion(42));
+println(beispiel);
+println(BEISPIEL);
+\end{lstlisting}
+
+
+\subsection{Funktionen}
+
+\subparagraph{Deklaration}
+
+\subparagraph{Aufruf}
+
+
+
+\subsection{Arithmetik}
+
+
+\subsection{Aussgaenlogik}
+
+\subsection{Bedingte Verzweigungen}
+
+\subsection{Schleifen}
+	
+	
+\subsection{Reservierte Schlüsselwörter und Symbole}	
+
+\begin{center}
+  \begin{tabular}{ | c | c | }
+    \hline
+    Schlüsselwort & Bedeutung\\ \hline \hline
+    int & Deklariert eine Variable\\ \hline
+    const int & Deklariert eine Konstante\\ \hline
+    println & Aufruf der Ausgabefunktion\\ \hline
+    return & Hinter ''return'' folgt der Rückgabewert einer Funktion\\ \hline
+    if & Beginn eines if(-else)-Statemnets\\ \hline
+    else & Beginn des else-Teil eines if-else-Statemnets\\ \hline
+    while & Beginn einer while-Schleige\\ \hline
+    
+  \end{tabular}
+\end{center}
+
+
+\begin{center}
+  \begin{tabular}{ | c | c | }
+    \hline
+    Symbol & Bedeutung\\ \hline \hline
+    = & Zuweisungsoperator\\ \hline
+    + & Operator für Additionen\\ \hline
+    - & Operator für Subtraktionen\\ \hline
+    * & Operator für Multiplikationen\\ \hline
+    / & Operator für Divisionen\\ \hline
+    
+    < & Vergleichsoperator für kleiner als\\ \hline
+    <= & Vergleichsoperator für kleiner gleich\\ \hline
+    > & Vergleichsoperator für größer als\\ \hline
+    >= & Vergleichsoperator für größer gleich\\ \hline    
+    == & Operator um zwei Werte auf Gleichheit zu überprüfen\\ \hline    
+    
+    \& \&  & logisches Und \\ \hline    
+    || & logischer Oder \\ \hline    
+    ! & logisches Nicht \\ \hline    
+    
+  \end{tabular}
+\end{center}
 	
 \section{Aufrufen des UnserCompilerbauCompilers}
 	- java -jar UCC.jar sourceCode.txt
