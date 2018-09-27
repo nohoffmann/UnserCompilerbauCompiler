@@ -35,21 +35,21 @@ wird die Variable an der Position <var-nam> wieder auf den Stack gelegt.
 Jasmin akzeptiert nur ganze Zahlen > 0, jedoch keine Zeichenketten, für <var-num>
 Deshalb muss unser Compiler den Variablenname, den der Nutzer der Sprache wählt, zu einem Index auflösen.
 
-\subsection*{Redifinition von bereits definierte Variable}
+\subsubsection{Redefinition von bereits definierte Variable}
 Wenn im Syntaxbaum eine Variablendeklaration gefunden wird, wird zunächst überprüft, ob eine Variable mit diesem Namen bereits vorhanden ist. Für diesen Abgleich wird intern eine HashMap verwendet. Ist der Name noch nicht vorhanden, wird er der HashMap hinzugefügt, wobei der Schlüssel der Name der Variable und der Wert die aktuelle Größe der Tabelle ist. Dies ist notwendig, um den Jasmin-Befehlen astore und aload einen Index  zu übergeben.
 
-\subsection*{Zugriff auf undefinierte Variable}
+\subsubsection{Zugriff auf undefinierte Variable}
 Ein möglicher Fehler seitens des Benutzer unserer Sprache ist, dass eine Variable aufgerufen wird, obwohl diese zuvor nicht definiert wurde. Beim Aufruf einer Variablen wird deshalb zunächst überprüft, ob diese in der Variablen-Map vorhanden ist. Falls nicht wird eine entsprechende Exception ausgelöst.
 
 
 \subsection{Funktionen}
-\subsection*{Zugriff auf undefinierte Funktion}
-\subsection*{Redifinition von bereits defnierter Funktion}
-\subsection*{Gültigkeitsbereiche}
-\subsection*{Funktionen mit gleichem Namen und unterschiedlichen Signaturen}
-\subsection*{Vorwärtsdeklarationen}
+\subsubsection{Zugriff auf undefinierte Funktion}
+\subsection{Redefinition von bereits definierter Funktion}
+\subsubsection{Gültigkeitsbereiche}
+\subsubsection{Funktionen mit gleichem Namen und unterschiedlichen Signaturen}
+\subsection{Vorwärtsdeklarationen}
 
 \subsection{Bedingte Verzweigungen}
-\subsection*{Umsetzung in Jasmin mit Hilfe von Labels und Sprungbefehlen}
+\subsubsection{Umsetzung in Jasmin mit Hilfe von Labels und Sprungbefehlen}
 
 
