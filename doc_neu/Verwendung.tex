@@ -1,16 +1,73 @@
 % !TEX root = Main.tex
 
-\section{Verwendung des Compilers}
-\subsection{Verwendung der UnsereCompilerbauSprache}
-	- println-Funktion
+\section{Verwendung der UnsereCompilerbauSprache}
+Ein gültiges Programm in der UnsereCompilerbauSprache besteht aus beliebig vielen Statements und Funktionsdefinitionen. 
+
+\subsection{Datentypen}
+Der einzige Datentyp der Sprache ist 'int'. Ein 'int' repräsentiert eine ganze Zahl mit einer Größe von 32 bit. Mögliche Werte liegen zwischen -2147483648 und 2147483647 ($-2^{31}$ bis $2^{31} - 1$).
+
+\subsection{Bezeichner}
+Bezeichner werden genutzt, um Variablen, Konstanten sowie Funktionen zu bennnen.
+Beziechner müssen eindeutig sein, d.h. ein Bezeichner darf im entsprechenden Gültigkeitsbereich in nur einer Deklaration vorkommen. Gültige Bezeichner beginnen mit einem Klein- oder Großbuchstaben und dürfen von belibig vielen weiteren Klein- bzw. Großbuchstaben sowie den Ziffern von 0 bis 9 gefolgt werden. Ein Bezeichner darf kein reserviertes Schlüsselwort sein (vgl. Liste der reservierten Schlüsselwörter).
+
+\subsection{Numerische Werte}
+Numerische Werte bestehen aus einer beliebig langen Folge de Ziffern von 0 bis 9. Ein numerischer Wert muss aus mindestens einer Ziffer bestehen.
+
+\subsection{Besondere Formatierungszeichen} 
+Leerzeichen, Tabstops sowie Zeilenumbrüche dürfen in einer Quelltext-Datei vorkommen, werden jedoch vom Compiler ignoriert.
+
+
+\subsection{Statements}
+Alle Statements ausser if-else-Anweisungen und Schleifen werden mit einem Semikolon '';''.
+
+\subsection*{Variablen}
+\subparagraph{Deklaration}
+Variablen werden mit dem Schlüsselwort 'int' sowie dem gewünschten Namen nach einem Leerzeichen deklariert.
+Der Name wird durch einen Bezeichner angegeben.
+
+Beispiel:
+\begin{lstlisting} [frame=single] 
+int beispiel;
+\end{lstlisting}
+
+
+
+\subparagraph{Definition}
+Nach dem eine Variable deklariert wurde, kann ihr ein Wert zugewiesen werden. Eine Zuweisung erfolgt durch das Gleichheitszeichen ''=''. Die Linke Seite der Zuwesiung ist dabei der Name der Variable, die rechte Seite  kann ein arithmetischer Ausdruck, der Aufruf einer Funktion, eine Variable oder eine Konstante sein.
+Wertzuweisungen dürfen beliebig oft erfolgen.
+Die Zuweisung muss getrennt von der Deklaration erfolgen.
+
+Beispiel:
+\begin{lstlisting} [frame=single] 
+beispiel = 42;
+beispiel = eineFunktion();
+beispiel = 1 + 2 + 3;
+beispiel = eineAndereVariable;
+beispiel = EINE_KONSTANTE;
+\end{lstlisting}
+
+\subparagraph{Aufruf}
+Variablen dürfen auch in der rechten Seite einer Zuweisung vorkommen.
+Beispiel:
+\begin{lstlisting} [frame=single] 
+int beispiel1;
+int beispiel2;
+
+beispiel1 = 42;
+beispiel2 = beispiel1 - 1;
+\end{lstlisting}
+
+
 	- Variablen deklarieren, definieren, aufrufen
-	- Konstanten "
+	- Konstanten "	
+	- println-Funktion
 	- Funktionen deklarieren, aufrufen
 	- Arithmetik
 	- Aussgaenlogik
 	- if-else-statements
 	- while-Schleife
-\subsection{Aufrufen des UnserCompilerbauCompilers}
+	
+\section{Aufrufen des UnserCompilerbauCompilers}
 	- java -jar UCC.jar sourceCode.txt
   (	- java -jar jasmin.jar output.j)
   	- java output
