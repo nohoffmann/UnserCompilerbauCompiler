@@ -95,9 +95,41 @@ println(BEISPIEL);
 \subsection{Funktionen}
 
 \subparagraph{Deklaration}
+Funktionen könnnen an einer beliebigen Stelle im Quellcode deklariert werden. Ein Aufruf ist auch vor der Deklaration möglich.
+
+Eine Funktionsdeklaration setzt sich folgendermaßen zusammen:
+Schlüsselwort ''int'' für den Typ des Rückgabewerts, Bezeichner als Name der Funktion, öffnende runde Klammer, beliebig viele Variablendeklarationen (keine Übergabeparameter sind auch möglich), schließende runde Klammer und schließlich ein Funktionsrumpf.
+Der Funktionsrump beginnt mit einer öffnenden geschweiften Klammer gefolgt von beliebig vielen Statements. 
+Ein besonderes Statement ist die Rückgabe. Beim Auruf von \textit{return} wird die Funktion verlassen. Wenn hinter \textit{return} ein numerischer Wert, eine Variable, eine Konstante, ein arithmetischer Ausdruck, ein logischer Ausdruck oder der Aufruf einer weiteren Funktion folgt, so stellt dies den Rückgabewert der Funktion dar.
+Der Funktionsrumpf wird mit einer schließenden geschweiften Klammer abgschlossen.
+
+Beispiel:
+\begin{lstlisting} [frame=single] 
+int add(int a, int b) {
+	println(a);
+	println(b);
+	return a + b;
+}
+\end{lstlisting}
 
 \subparagraph{Aufruf}
+Funktionsaufrufe dürfen in der rechten Seite von Zuweisungen, als Argument für die println-Funktion und als Teil von logischen sowie arithmetischen Ausdrücken vorkommen. Funktionsaufrufe dürfen auch eigenständige Statements sein.
 
+Ein Funktionsaufruf setzt sich wie folgt zusammen:
+[nameDerFunktion]([Parameterliste])
+
+Die Funktion wird beim Verlassen mit dem zuvor definierten Rückgabewert substituiert.
+
+Beispiel;
+\begin{lstlisting} [frame=single] 
+int x;
+int y;
+int z;
+
+x = 40;
+y = 2;
+z = add(x, y);
+\end{lstlisting}
 
 \subsection{Arithmetik}
 
