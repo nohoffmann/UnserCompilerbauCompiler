@@ -18,7 +18,7 @@ Leerzeichen, Tabstops sowie Zeilenumbrüche dürfen in einer Quelltext-Datei vor
 
 
 \subsection{Statements}
-Alle Statements ausser if-else-Anweisungen und Schleifen werden mit einem Semikolon '';''.
+Alle Statements ausser if-else-Anweisungen und Schleifen werden mit einem Semikolon '';'' beendet.
 
 \subsection*{Variablen}
 \subparagraph{Deklaration}
@@ -31,7 +31,7 @@ int beispiel;
 \end{lstlisting}
 
 \subparagraph{Definition}
-Nach dem eine Variable deklariert wurde, kann ihr ein Wert zugewiesen werden. Eine Zuweisung erfolgt durch das Gleichheitszeichen ''=''. Die Linke Seite der Zuwesiung ist dabei der Name der Variable, die rechte Seite  kann ein arithmetischer Ausdruck, der Aufruf einer Funktion, eine Variable oder eine Konstante sein.
+Nach dem eine Variable deklariert wurde, kann ihr ein Wert zugewiesen werden. Eine Zuweisung erfolgt durch das Gleichheitszeichen ''=''. Die linke Seite der Zuwesiung ist dabei der Name der Variable, die rechte Seite  kann ein arithmetischer Ausdruck, der Aufruf einer Funktion, eine Variable oder eine Konstante sein.
 Wertzuweisungen von Variablen dürfen beliebig oft erfolgen.
 Die Zuweisung muss getrennt von der Deklaration erfolgen.
 
@@ -132,10 +132,76 @@ z = add(x, y);
 \end{lstlisting}
 
 \subsection{Arithmetik}
+Arithmetische Ausdrücke dürfen folgende Komponenten besitzen:
 
-\subsection{Aussgaenlogik}
+\subparagraph{Operationen}
+Jede Operation setzt sich aus einem linken Operanden, einem Operator sowie einem rechten Operanden zusammen.
+
+Zulässige Operationen sind:
+\begin{center}
+  \begin{tabular}{ | c | c | }
+    \hline
+    Operator & Operation\\ \hline \hline
+    + & Additionen\\ \hline
+    - & Subtraktionen\\ \hline
+    * & Multiplikationen\\ \hline
+    / & Divisionen\\ \hline
+  \end{tabular}
+\end{center}
+Die Operationen sind hier in aufsteigender Bindung aufgelistet, d.h., dass beispielsweise eine Division eine höhere Bindung als eine Addition besitzt. (Umgangssprachlich ''Punkt vor Strich'')
+
+\subparagraph{Operanden}
+Zulässige Operanden für aritmetische Operationen sind:
+
+\begin{list}{•}
+\item numerische Werte \item
+\item Variablen
+\item Konstanten
+\item Funktionen (bzw. deren Rückgabewerte)
+\item weitere Operationen
+\end{list}
+
+Aus dem letzten Eintrag dieser Liste ergibt sich eine Rekursion, die eine beliebige Länge von arithmetischen Ausdrücken ermöglicht.
+
+\subparagraph{Klammerung}
+Operationen dürfen Klammern mit beliebiger Verschachtelungstiefe enthalten.
+Geklammerte Terme besitzen die höchst mögliche Bindung, d.h. höher als eine Division.
+
+\subsection{Aussagenlogik}
+Logische Ausdrücke werden wie in C intern als ''integer'' gespeichert und besitzen keinen eigenen Datentyp. Dabei repräsentiert der Wert 0 den Wahrheitswert \textit{false}, alle anderen Werte gelten als \textit{true}. Wie auch arithmetische Ausdrücke, dürfen logische Ausdrücke eine beliebige Länge besitzen und eine beliebig tiefe Klammerschachtelung besitzen.
+
+Logische Ausdrücke werden verwendet, um Bedingungen auszudrücken, also in if-else-statements sowie in Schleifen.
+
+Folgende Operationen stehen dafür in dieser Priorität zur Verfügung:
+\begin{center}
+  \begin{tabular}{ | c | c | c | }
+    \hline
+    Operation & Operator & Ergebnis\\ \hline \hline
+    Konjunktion & \& \& & Wahr, wenn beide Operanden wahr sind. Sonst false.\\ \hline
+    Disjunktion & || & Wahr, wenn ein oder beide Operanden wahr sind. \\ 
+	& & Sonst false.\\ \hline
+    Negation & ! & Das Gegenteil das negierten Term.\\ \hline   
+  \end{tabular}
+\end{center}
+
+Desweiteren stehen folgende Vergleichsoperationen zur Verfügung:
+\begin{center}
+  \begin{tabular}{ | c | c | }
+    \hline
+    Operator & Vergleich\\ \hline \hline
+    < & kleiner als\\ \hline
+    <= & kleiner als oder gleich\\ \hline
+    > & größer als\\ \hline
+    >= & größer als oder gleich\\ \hline    
+    == & gleich\\ \hline    
+  \end{tabular}
+\end{center}
+Wenn ein Vergleich eine wahre Aussage ist, ist das Ergebnis des Vergleich \textit{true}.
+Wenn ein Vergleich eine falsche Aussage ist, ist das Ergebnis \textit{false}.
 
 \subsection{Bedingte Verzweigungen}
+%%to be written
+
 
 \subsection{Schleifen}
 Eine Schleife beginnt mit dem Schlüsselwort \textit{while}, wird von einer Bedingung in runden Klammern gefolgt und schließt mit einem Schleifenrumpf ab. Der Schleifenrumpf wiederrum wird mit geschweiften Klammern geöffnet und abgeschlossen.
@@ -169,7 +235,7 @@ println(x);
     return & Hinter ''return'' folgt der Rückgabewert einer Funktion\\ \hline
     if & Beginn eines if(-else)-Statemnets\\ \hline
     else & Beginn des else-Teil eines if-else-Statemnets\\ \hline
-    while & Beginn einer while-Schleige\\ \hline
+    while & Beginn einer while-Schleife\\ \hline
     
   \end{tabular}
 \end{center}
@@ -192,7 +258,7 @@ println(x);
     == & Operator um zwei Werte auf Gleichheit zu überprüfen\\ \hline    
     
     \& \&  & logisches Und \\ \hline    
-    || & logischer Oder (inklusiv) \\ \hline    
+    || & logisches Oder (inklusiv) \\ \hline    
     ! & logisches Nicht \\ \hline    
     
   \end{tabular}
