@@ -8,7 +8,7 @@
 Der Vorgehensweise unter \textit{\ref{sec:grundsatz}. Allgemeiner Grundsatz} entsprechend, implementierten wir zuerst die unserer Sicht nach grundlegendste Fähigkeit einer Programmiersprache: das Auswerten von arithmetischen Ausdrücken. Es soll möglich sein, Ausdrücke, die die Grundrechenarten sowie eine beliebig tiefe Schachtelung von Klammern enthalten, zu erkennen und der Operatorenpriorität entsprechend die gelesenen Tokens in einem Syntaxbaum zusammenzuführen. Dazu formulierten wir folgende Grammatik:
 
 
-\begin{lstlisting} [frame=single] 
+\scriptsize\begin{lstlisting} [frame=single] 
 //Datei: Arithmetic.g4
 grammar Arithmetic;
 
@@ -39,7 +39,7 @@ expression: INTEGER
 ///////////////////////////////////////////////////////
 
 \end{lstlisting}
-
+\normalsize
 Eine Grammatik für ANTLR hat folgenden Aufbau:
 
 Die Definition der Grammatik beginnt mit dem Schlüsselwort ''grammar'' sowie dem Namen der Grammatik. Dabei gilt es zu beachten, dass die Datei den gleichen Namen wie die Grammatik selbst sowie die Dateiendung ''.g4'' besitzt. Diese Deklaration wird mit einem Semikolon abgeschlossen.
@@ -96,14 +96,10 @@ Auch hier ergibt sich ein ähnliches Problem wie beim vorherigen Beispiel. Wird 
 
 Nach diesen Schritten sind wir also in der Lage einen Syntaxbaum zu erstellen. Der nötige Programmcode dafür wird von ANTLR automatisiert erstellt. Dabei ist die Eingabe dieses Programmes der auszuwertende Ausdruck. Die Ausgabe ist der Syntaxbaum, der zu Testzwecken auch als Grafik (vgl. Abbildung oben) ausgegeben werden kann. 
 
-\pagebreak
-
 Der nächste wichtige Schritt der Übersetzung besteht nun in der Auswertung dieses Baumes. Dazu wird der Baum als Datenstruktur betrachtet. ANTLR liefert dabei mehrere Methoden, die auf Instanzen der Klasse ''ParseTree'' angewandt werden können. 
 Jedes Token, das in der Grammatik definiert wurde und durch einen Knoten im Baum repräsentiert wird, besitzt eine sogenannte Visit-Methode. Diese Methode gibt eine Kette mit Zeichen zurück, wobei diese Zeichenkette die Anweisungen in der Zielsprache (Jasmin) enthält. Das Abarbeiten dieser Visit-Methoden in der richtigen Reihenfolge bildet die Grundlage für die Übersetzung, da hiernach alle Instruktionen in der Zielsprache zusammengesetzt sind. Was genau in einer Visit-Methode passiert, wird vom Entwickler festgelegt. ANTLR stellt sogehesen nur eine Vorlage zur Verfügung.
 
 Um diese korrekte Reihenfolge zu gewährleisten, muss eine Anfangsregel (Startaxiom) festgelegt sein. In diesem Beispiel wurde festgelegt, dass der Programmstart - sprich der Wurzelknoten des Baumes - eine ''expression'' sein muss. Das bedeutet, das zunächst die Visit-Methode des Wurzelknoten aufgerufen wird. Damit nun auch die inneren Knoten des Syntaxbaums berücksichtigt werden, ist der Aufruf einer weiteren von ANTLR generierten Methode notwendig. Jeder Knoten des Baum besitzt eine visitChildren()-Methode, welche die entsprechenden Visit-Methoden der untergeordneten Knoten aufruft.
-
-\pagebreak
 
 Um diese rekursive Vorgehensweise verständlicher zu machen, folgt ein Beispiel.
 
@@ -117,6 +113,7 @@ public String visitAddition(AdditionContext ctx) {
 		+ "iadd\n";
 }
 \end{lstlisting}
+\pagebreak
 Die Tatsache, dass es eine Methode visitAddition mit diesem Eingabeparameter und diesem Rückgabewert gibt, geht auf ANTLR zurück. Der Funktionsrumpf wurde jedoch von uns verfasst.
 
 Zunächst werden die Kind-Knoten der Addition, sprich die Operanden, besucht. Wenn die Operanden aus weiteren mathematischen Operationen bestehen, werden zunächst diese aufgerufen, um die beliebige Länge von Ausdrücken zu ermöglichen. Handelt es sich bei einem Operanden um eine Zahl, wird die Methode visitNumber() aufgerufen.
@@ -133,13 +130,11 @@ public String visitNumber(NumberContext ctx) {
 Der Befehl \textit{ldc} steht für \textit{load constant} und ist die Jasmin-Instruktion, um einen Wert auf den Stack zu legen. \textit{ctx.getChild(0)} sorgt dafür, dass der Wert aus dem entsprechenden Knoten aus dem Baum entnommen wird.
 Der Befehl \textit{iadd} in der visitAddition()-Methode steht für \textit{integer addition} und ist die Jasmin-Anweisung, zwei ganzzahlige Werte vom Stack zu nehmen, diese zu addieren und schließlich das Ergebnis wieder auf den Stack zu legen.
 
-\pagebreak
-
 Der Compiler-interne Ablauf für die Übersetzung des Ausdruck 
 \begin{lstlisting} [frame=single]
 2 + 4
 \end{lstlisting}
-wäre also wie folgt.
+wäre also wie folgt: \\
 
 Nach der lexikalischen und syntaktischen Analyse liegt folgender Syntaxbaum vor:
 
@@ -148,7 +143,7 @@ Nach der lexikalischen und syntaktischen Analyse liegt folgender Syntaxbaum vor:
 \includegraphics[scale=0.4]{pics/antlr4_parse_tree_visitAdditionVisitNumberBeispiel.png}
 \caption{Syntaxbaum für beispielhaften arithmetischen Ausdruck}
 \end{figure}
-
+\pagebreak
 Zunächst wird die visitAddition-Methode aufgerufen, da der Operator der expression das ''+'' Zeichen ist. Die visitChildren-Methode gibt nun die Zeichenkette
 \begin{lstlisting} [frame=single]
 ldc 2
@@ -231,110 +226,99 @@ println( argument );
 \end{lstlisting}
 
 \subsection{Implementierung von Variablen}
-Bestandteile
-	-	Deklaration(int [name]):
-			prüfen, ob Variable mit diesem Namen bereits exisiert
-				falls ja, Exception (variable already defined)
-				falls nicht, neuer Eintrag mit Namen und Index in Variablentabelle
-	-	Wertzuweisung ([name] = [expression])
-			auflösen des Namen nach Index in Tabelle
-				falls nicht gefunden, Exception (undefined variable)
-				falls gefunden, generieren der Instruktionen
-					visit(ctx.expr), legt zuzuweisenden Wert auf Stack
-					"istore [index]", speichert in JavaVM-Variablentabelle
-	-	Aufruf ([name] als Teil einer Expression)
-			auflösen des Namen nach Index in Tabelle
-				falls nicht gefunden, Exception (undefined variable)
-				falls gefunden, generieren der Instruktionen
-					"iload [index]", kopiert Wert aus der JavaVM-Variablentabelle und legt diesen auf Stack
+Eine Variable wird folgendermaßen deklariert:
+\begin{lstlisting}[frame=single]
+int NAME;
+\end{lstlisting}
+Stößt der Compiler auf solch eine Zeile, wird geprüft, ob bereits eine Variable mit dem selben Namen im Programm existiert. Ist dies der Fall, wird eine Exception geworfen und der Kompiliervorgang bricht ab. Existiert der Name der Variablen noch nicht im Programm wird ein neuer Eintrag in der Variablentabelle erstellt.
 
+Um einer deklarierten Variable einen Wert zuzuweisen, wird folgende Syntax verwendet:
+\begin{lstlisting}[frame=single]
+NAME = EXPRESSION;
+\end{lstlisting}
+Wobei die EXPRESSION sich zu einem Wert evaluieren lassen muss.
+Wird eine solche Anweisung erkannt, wird zuerst versucht, den Namen der Variablen zu dem dazugehörigen Index der Variablentabelle auszuwerten. Gelingt dies nicht, wurde die Variable nicht deklariert und es wird eine Exception geworfen. Kann der Name der Variablen zu einem Index ausgewertet werden, wird die Variable mit 
+\begin{lstlisting}[frame=single]
+visit(ctx.expr)
+\end{lstlisting}
+auf den Stack gelegt und mit ''istore [index]'' der Wert der Variablen in der Jasmin-Variablentabelle gespeichert.
+
+Eine Variable wird über ihren Namen als Teil einer Expression aufgerufen. Hier wird dann intern der Name zum Index der Variable aufgelöst. Gelingt dies nicht, wurde die Variable nicht deklariert und es wird eine Exception geworden. Ansonsten wird mit
+''iload [index]'' der Wert der Variablen zur Verarbeitung auf den Stack der JavaVM gelegt.
 
 \subsection{Implementierung von Funktionen}
 Bevor der eigentliche Visitor arbeitet, wird der gesamte Baum auf Funktionsdeklarationen untersucht. Dies sorgt dafür, dass Funktionen an beliebigen Stellen im Quellcode definiert werden können und keine Vorwärtsdeklarationen notwendig sind. Die gefundenen Funktionen werden in einer Liste gespeichert.
 
-Bestandteile
-	-	Deklaration
-			prüfen, ob Funktion mit diesem Namen und dieser Signatur bereits existiert
-				falls ja, Exception (function already defined)
-				falls nicht, neuer Eintrag mit Namen und Signatur in Funktionsliste
+Funktionen werden mit folgender Syntax deklariert:
+% ToDo: Bitte einfügen
 
-	- 	Aufruf			
-			prüfen, ob Funktion in Funktionsliste enthalten ist
-				falls nein, Exception (undefined function)
-				falls ja, 
-					Kopieren von alter Variablentabelle und Konstruieren von neuer (ermöglicht scopes)
-					Zusammensetzen von Argumenten und instructions
-					eigentlicher Aufruf "invokestatic [functionname] ([ggf. parameter])"
-					Wiederherstellen von alter Variablentabelle
+Stößt der Compiler auf solch eine Syntax, wird anhand einer Funktionsliste geprüft, ob eine Funktion mit einer solchen Signatur bereits existiert. Ist dies so, wird eine Exception geworfen und der Kompiliervorgang bricht ab. Andernfalls wird ein neuer Eintrag mit dem Namen und der Signatur der Funktion in die Funktionsliste eingefügt.
+
+Beim Aufruf von Funktionen wird ebenfalls geprüft, ob eine Funktion mit der gegebenen Signatur existiert. Existiert die Funktion nicht, wird eine Exception geworfen, andernfalls wird die vorher verwendete Variablentabelle gesichert und eine neue Variablentabelle für die Funktion angelegt. Dies ermöglicht die Realisierung von Variablen-Scopes. Danach werden die Argumente und Instruktionen der Funktion durch
+\begin{lstlisting}[frame=single]
+invokestatic [functionname] ([ggf. parameter])
+\end{lstlisting}
+bearbeitet.
+Nach dem Abarbeiten der Funktion wird die vorherige, gesicherte Variablentabelle wieder hergestellt.
 
 \subsection{Implementierung von Konstanten}
-Intern Erweiterung von Variablen.
-Zusätzliche Schritte:
-	-	Deklaration
-		-	hasBeenAssigned-Flag auf false setzen
-
-	-	Wertzuweisung
-		-	Unterscheidung, ob Konstante oder Variable
-				falls Konstante:
-					Prüfen, ob Konstante bereits Wert zugewiesen wurde
-						falls ja, Exception (constant reassign)
-						falls nicht, Zuweisung durchführen und entsprechendes Flag true setzen
+Konstanten sind intern als Erweiterung von Variablen anzusehen. 
+Zusätzlich zu Variablen werden bei konstanten folgende Schritte ausgeführt:
+Wird eine Konstante deklariert, wird deren hasBeenAssigned-Flag auf false gesetzt.
+Bei der Wertzuweisung zu der Konstanten wird geprüft, welchen Wert dieses Flag besitzt. Ist der Wert false, wird eine normale Zuweisung durchgeführt und der Wert des Flags auf true gesetzt. Ist der Wert true, wurde der Konstanten bereits eine Wert zugewiesen und eine weitere Zuweisung kann nicht erfolgen. Es wird eine Exception geworfen und der Kompiliervorgang bricht ab.
 
 \subsection{Implementierung von Bedingten Verzweigungen}
-Aufteilen in
-	conditionInstructions
-	onTrueInstructions
-	onFalseInstructions
-	
-Zusammensetzen
-	-	conditionInstructions, Bedingung wird überprüft
-		falls Bedingung zu true evaluiert wird
-			Sprung zu onTrueInstructions, onFalseInstructions überspringen
-		falls Bedingung zu false evaluiert wird
-			Ausführen von onFalseInstructions, onTrueInstructions überspringen
-	
-Labels
-	für Sprungbefehle werden Labels benötigt. Um diese eindeutig benennen zu können wird gezählt, wie oft if-else vorkommt
-	
+Verzweigungen sind in drei Teile aufzuteilen:
+\begin{itemize}
+	\item conditionInstructions
+	\item onTrueInstructions
+	\item onFalseInstructions	
+\end{itemize}
 
+Wird auf eine conditionInstruction getroffen, wird diese bearbeitet.
+Evaluiert die Expression zu true, werden die onTrueInstructions ausgeführt, die onFalseInstructions werden übersprungen. Evaluiert die conditionInstruction zu false, werden die onTrueInstructions übersprungen und die onFalseInstructions ausgeführt.
+Um die entsprechenden Instruktionen zu überspringen, werden Labels benötigt, die markieren, an welche Stelle des Programms gesprungen werden kann. Damit die Labels für jede Verzweigung einzigartig sind, wird gezählt, wie oft Verzweigungen vorkommen und die Labels werden entsprechend benannt.
 
-Evaluieren der Bedingung:
-	wie in C als int (in unserem Fall also expression). 0 == false, jeder andere Wert == true
-	 	-> expression regel entsprechend angepasst, möglich sind
-	 		- Vergleiche (<, <=, >, >=, ==)
-	 		- Logik-Gatter (\& \&, ||, !)
-
+Evaluiert werden die Bedingungen wie folgt:
+Ergibt die Expression 0, gilt sie als false, alle anderen Werte gelten als true.
+Erlaubte Operatoren der conditionInstruction-Expression sind folgende Operatoren:
+\begin{itemize}
+	\item Vergleiche (<, <=, >, >=, ==)
+	\item Logik-Gatter (\& \&, ||, !)
+\end{itemize}
 
 \subsection{Implementierung einer Schleife}
-Aufteilen in
-	conditionInstructions
-	onTrueInstructions
-	
-Zusammensetzen
-	[conditionLabel]
-	conditionInstructions
-		Wenn conditionInstructions zu true evaluiert werden
+Eine Schleife kann intern aufgeteilt werden in
+\begin{itemize}
+\item Bedingung
+\item Befehle, auszuführen, wenn Bedingung wahr ist
+\end{itemize}
+
+Im Pseudocode sieht eine Schleife folgendermaßen aus:
+\\
+\begin{algorithm}[H]
+	conditionLabel \\
+	conditionInstructions \\
+		\If{conditionInstructions == true}
+		{ 
 			Sprung zu onTrueLabel
-		Wenn conditionInstruction zu false evaluiert werden
+		}
+		\If{conditionInstruction == false}
+		{
 			Sprung zu endOfWhileLabel
-	
-	[onTrueLabel]
-	onTrueInstructions
-	Sprung zu conditionLabel	
-			
-	[endOfWhileLabel]
-
-Labels
-	für Sprungbefehle werden Labels benötigt. Um diese eindeutig benennen zu können wird gezählt, wie oft while vorkommt
-
-% @marvin, eigentlich könnte man das irgendwie mit vorgehen während der entwicklung mergen, hat ja ne sehr große schnittmenge
+		}
+	[onTrueLabel] \\
+	onTrueInstructions \\
+	Sprung zu conditionLabel \\	
+	endOfWhileLabel
+\end{algorithm}
+\(\)\\
+Die Labels werden benötigt, damit in der Schleife an die entsprechende Stelle gesprungen werden kann. Damit intern die Labels zur richtigen Schleife zugeordnet werden können, wird mitgezählt, wie oft Schleifen im Programm verwendet werden.
 
 \subsection{Dokumentation}
-% TO-DO: Vorgehensweise der Erstellung der Dokumentation
-% TO-DO: Erstellung in LaTeX (Texmaker), Aufteilung des Dokumentes
-% TO-DO: Zusammenarbeit über Git
-% TO-DO: Alias einfügen
-Damit keine unnötigen Entwicklungs- bzw. Zwischenschrittdateien von \latex TODO: GGF. ENTFERNEN in das verwendete Git-Repository übernommen werden, wurde ein Alias erstellt, der ebendiese Dateien automatisiert entfernt. Dieses sieht wie folgt aus:
+Zur effizienten Erstellung der Dokumentation wurde \LaTeX \(\) in Verbindung mit TexMaker verwendet. Dazu wurden die einzelnen Hauptüberschriften in eigene Dateien ausgelagert und in der Hauptdatei inkludiert. Dies hat eine erhöhte Übersichtlichkeit zur Folge.
+Um die Dokumentation versioniert zu speichern, wurde diese im verwendeten Git-Repository hochgeladen. Damit keine unnötigen Entwicklungs- bzw. Zwischenschrittdateien von \LaTeX \(\) in das verwendete Git-Repository übernommen werden, wurde ein Alias erstellt, der ebendiese Dateien beim Alias-Aufruf automatisiert entfernt. Dieser Alias sieht wie folgt aus:
+
 \begin{lstlisting}[frame=single]
 rmtex_dev()
 {

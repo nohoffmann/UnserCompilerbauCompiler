@@ -4,24 +4,23 @@
 Ein gültiges Programm in der UnsereCompilerbauSprache besteht aus beliebig vielen Statements und Funktionsdefinitionen. 
 
 \subsection{Datentypen}
-Der einzige Datentyp der Sprache ist 'int'. Ein 'int' repräsentiert eine ganze Zahl mit einer Größe von 32 bit. Mögliche Werte liegen zwischen -2147483648 und 2147483647 ($-2^{31}$ bis $2^{31} - 1$).
+Der einzige Datentyp der Sprache ist 'int'. Ein 'int' repräsentiert eine ganze Zahl mit einer Größe von 32 bit. Mögliche Werte zur Zuweisung liegen zwischen -2147483648 und 2147483647 ($-2^{31}$ bis $2^{31} - 1$).
 
 \subsection{Bezeichner}
 Bezeichner werden genutzt, um Variablen, Konstanten sowie Funktionen zu benennen.
-Beziechner müssen eindeutig sein, d.h. ein Bezeichner darf im entsprechenden Gültigkeitsbereich in nur einer Deklaration des gleichen Typ vorkommen. Gültige Bezeichner beginnen mit einem Klein- oder Großbuchstaben und dürfen von belibig vielen weiteren Klein- bzw. Großbuchstaben sowie den Ziffern von 0 bis 9 gefolgt werden. Ein Bezeichner darf kein reserviertes Schlüsselwort sein (vgl. Liste der reservierten Schlüsselwörter).
+Bezeichner müssen eindeutig sein, d.h. ein Bezeichner darf im entsprechenden Gültigkeitsbereich in nur einer Deklaration des gleichen Typ vorkommen. Gültige Bezeichner beginnen mit einem Klein- oder Großbuchstaben und dürfen von beliebig vielen weiteren Klein- bzw. Großbuchstaben sowie den Ziffern von 0 bis 9 gefolgt werden. Ein Bezeichner darf kein reserviertes Schlüsselwort sein (vgl. Liste der reservierten Schlüsselwörter).
 
 \subsection{Numerische Werte}
 Numerische Werte bestehen aus einer beliebig langen Folge der Ziffern von 0 bis 9. Ein numerischer Wert muss aus mindestens einer Ziffer bestehen.
 
 \subsection{Besondere Formatierungszeichen} 
-Leerzeichen, Tabstops sowie Zeilenumbrüche dürfen in einer Quelltext-Datei vorkommen, werden jedoch vom Compiler ignoriert.
-
+Leerzeichen, Tabulatoren sowie Zeilenumbrüche dürfen in einer Quelltext-Datei vorkommen, werden jedoch vom Compiler ignoriert.
 
 \subsection{Statements}
-Alle Statements ausser if-else-Anweisungen und Schleifen werden mit einem Semikolon '';'' beendet.
+Alle Statements außer Verzweigungen, Funktionsdeklarationen und Schleifen werden mit einem Semikolon '';'' beendet.
 
-\subsection*{Variablen}
-\subparagraph{Deklaration}
+\subsection{Variablen}
+\subsubsection{Deklaration}
 Variablen werden mit dem Schlüsselwort \textit{int} sowie dem gewünschten Namen nach einem Leerzeichen deklariert.
 Der Name wird durch einen Bezeichner angegeben.
 
@@ -30,7 +29,7 @@ Beispiel:
 int beispiel;
 \end{lstlisting}
 
-\subparagraph{Definition}
+\subsubsection{Definition}
 Nach dem eine Variable deklariert wurde, kann ihr ein Wert zugewiesen werden. Eine Zuweisung erfolgt durch das Gleichheitszeichen ''=''. Die linke Seite der Zuwesiung ist dabei der Name der Variable, die rechte Seite  kann ein arithmetischer Ausdruck, der Aufruf einer Funktion, eine Variable oder eine Konstante sein.
 Wertzuweisungen von Variablen dürfen beliebig oft erfolgen.
 Die Zuweisung muss getrennt von der Deklaration erfolgen.
@@ -44,7 +43,7 @@ beispiel = eineAndereVariable;
 beispiel = EINE_KONSTANTE;
 \end{lstlisting}
 
-\subparagraph{Aufruf}
+\subsubsection{Aufruf}
 Variablen dürfen auch in der rechten Seite einer Zuweisung vorkommen.
 Beispiel:
 \begin{lstlisting} [frame=single] 
@@ -56,10 +55,10 @@ beispiel2 = beispiel1 - 1;
 \end{lstlisting}
 
 
-\subsection*{Konstanten}
+\subsection{Konstanten}
 Konstanten werden ähnlich wie Variablen verwendet.
 
-\subparagraph{Deklaration}
+\subsubsection{Deklaration}
 Im Gegensatz zu einer Variablen wird dem Namen das Schlüsselwort \textit{const int} anstatt nur \textit{int} vorgestellt.
 
 Beispiel:
@@ -67,11 +66,11 @@ Beispiel:
 const int BEISPIEL;
 \end{lstlisting}
 
-\subparagraph{Definition}
+\subsubsection{Definition}
 Die Wertzuweisung erfolgt wie bei einer Variable, darf jedoch nur ein mal pro Konstante erfolgen.
  
 
-\subsection*{Ergebnisausgabe}
+\subsubsection{Ergebnisausgabe}
 Mit Hilfe der Funktion \textit{println([argument])} können numerische Werte, arithmetische Ausdrücke, logische Ausdrücke, Vergleiche, Rückgabewerte von Funktionen, Variablen und Konstanten auf die Konsole ausgegeben werden.
 
 Beispiele:
@@ -94,7 +93,7 @@ println(BEISPIEL);
 
 \subsection{Funktionen}
 
-\subparagraph{Deklaration}
+\subsubsection{Deklaration}
 Funktionen könnnen an einer beliebigen Stelle im Quellcode deklariert werden. Ein Aufruf ist auch vor der Deklaration möglich.
 
 Eine Funktionsdeklaration setzt sich folgendermaßen zusammen:
@@ -112,7 +111,7 @@ int add(int a, int b) {
 }
 \end{lstlisting}
 
-\subparagraph{Aufruf}
+\subsubsection{Aufruf}
 Funktionsaufrufe dürfen in der rechten Seite von Zuweisungen, als Argument für die println-Funktion und als Teil von logischen sowie arithmetischen Ausdrücken vorkommen. Funktionsaufrufe dürfen auch eigenständige Statements sein.
 
 Ein Funktionsaufruf setzt sich wie folgt zusammen:
@@ -131,10 +130,10 @@ y = 2;
 z = add(x, y);
 \end{lstlisting}
 
-\subsection{Arithmetik}
+\subsubsection{Arithmetik}
 Arithmetische Ausdrücke dürfen folgende Komponenten besitzen:
 
-\subparagraph{Operationen}
+\subsubsection{Operationen}
 Jede Operation setzt sich aus einem linken Operanden, einem Operator sowie einem rechten Operanden zusammen.
 
 Zulässige Operationen sind:
@@ -150,7 +149,7 @@ Zulässige Operationen sind:
 \end{center}
 Die Operationen sind hier in aufsteigender Bindung aufgelistet, d.h., dass beispielsweise eine Division eine höhere Bindung als eine Addition besitzt. (Umgangssprachlich ''Punkt vor Strich'')
 
-\subparagraph{Operanden}
+\subsubsection{Operanden}
 Zulässige Operanden für aritmetische Operationen sind:
 
 \begin{list}{•}
@@ -163,7 +162,7 @@ Zulässige Operanden für aritmetische Operationen sind:
 
 Aus dem letzten Eintrag dieser Liste ergibt sich eine Rekursion, die eine beliebige Länge von arithmetischen Ausdrücken ermöglicht.
 
-\subparagraph{Klammerung}
+\subsubsection{Klammerung}
 Operationen dürfen Klammern mit beliebiger Verschachtelungstiefe enthalten.
 Geklammerte Terme besitzen die höchst mögliche Bindung, d.h. höher als eine Division.
 
@@ -233,8 +232,8 @@ println(x);
     const int & Deklariert eine Konstante\\ \hline
     println & Aufruf der Ausgabefunktion\\ \hline
     return & Hinter ''return'' folgt der Rückgabewert einer Funktion\\ \hline
-    if & Beginn eines if(-else)-Statemnets\\ \hline
-    else & Beginn des else-Teil eines if-else-Statemnets\\ \hline
+    if & Beginn eines if(-else)-Statements\\ \hline
+    else & Beginn des else-Teil eines if-else-Statements\\ \hline
     while & Beginn einer while-Schleife\\ \hline
     
   \end{tabular}
@@ -267,4 +266,4 @@ println(x);
 \section{Aufrufen des UnserCompilerbauCompilers}
 	- java -jar UCC.jar sourceCode.txt
   (	- java -jar jasmin.jar output.j)
-  	- java output
+- java output
