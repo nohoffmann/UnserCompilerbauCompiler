@@ -5,13 +5,13 @@
 \subsection{Eclipse}
 Zur Entwicklung wurde die integrierte Entwicklungsumgebung Eclipse in der aktuellen Version (4.8.0) genutzt. 
 Eclipse bietet mehrere Vorteile, die ein einfacheres und effizienteres Entwickeln erlauben. Eclipse enthält einen Datei-Explorer, mit dessen Hilfe die Navigation durch die verschiedenen Verzeichnisse zusammen mit Editor und Konsole innerhalb eines Fensters geschehen kann. Des Weiteren bietet Eclipse automatische Vorschläge zur Code- und Textvervollständigung an, was die Schreibgeschwindigkeit und damit die Arbeitseffizienz erhöht. 
-Außerdem kann Eclipse durch Plug-Ins erweitert werden. Als Plug-In nutzen wir beispielsweise das Test-Framework TestNG, um verschiedene Testfälle automatisiert zu prüfen.
+\\
+Weiterhin kann Eclipse durch Plug-Ins erweitert werden. Als Plug-In nutzen wir beispielsweise das Test-Framework TestNG, um verschiedene Testfälle automatisiert zu prüfen.
 \\\\
-Ein großer Nachteil von Eclipse ist die von uns erfahrene Unzuverlässigkeit. Die IDE wirft immer wieder nicht nachvollziehbare, manchmal sogar gar keine Fehlermeldungen, wenn Aufgaben wie das Öffnen und Kompilieren von Projekten fehlschlagen. Des weiteren trat unabhängig voneinander auf verschiedenen Rechnern mit verschiedenen Betriebssystemen (getestet u.A. unter Ubuntu Linux, Arch Linux und Mac OS X) das Problem auf, dass das Projekt nicht geöffnet werden konnte. Besonders kafkaesk war jedoch die Situation, dass sich das Projekt mit der \textit{'Eclipse IDE for C/C++ Developers'} öffnen ließ, nicht jedoch mit \textit{'Eclipse IDE for Java Developers'}. Letztendlich war die Arbeit mit Eclipse unter Arch Linux nicht möglich, sodass andere Projektteilnehmer die Aufgabe des Kompilierens übernehmen mussten.
+Ein großer Nachteil von Eclipse ist die von uns erfahrene Unzuverlässigkeit. Die IDE wirft immer wieder nicht nachvollziehbare, manchmal sogar gar keine Fehlermeldungen, wenn Aufgaben wie das Öffnen und Kompilieren von Projekten fehlschlagen. Des weiteren trat unabhängig voneinander auf verschiedenen Rechnern mit verschiedenen Betriebssystemen (getestet u.A. unter Ubuntu Linux, Arch Linux und Mac OS X) das Problem auf, dass das Projekt nicht geöffnet werden konnte. Besonders seltsam war jedoch die Situation, dass sich das Projekt mit der \textit{'Eclipse IDE for C/C++ Developers'} öffnen ließ, nicht jedoch mit \textit{'Eclipse IDE for Java Developers'}. Letztendlich war die Arbeit mit Eclipse unter Arch Linux nicht möglich, sodass andere Projektteilnehmer die Aufgabe des Kompilierens übernehmen mussten.
 
 \subsection{TestNG}
-% TO-DO: Versionsnummer prüfen
-TestNG ist ein Framework, das dem zu testenden Programm Eingabewerte übergibt und die tatsächlichen Ergebnisse des Programms mit den erwarteten Ergebnissen abgleicht. Dabei können beliebig viele Testszenarien geprüft werden. Es werden sogenannte positive Tests, also solche, bei denen die Eingabe ein erwartetes Ergebnis hervorruft, als auch negative Tests, bei denen geprüft wird, ob nicht vorhergesehene Eingaben mit entsprechenden Fehlermeldungen korrekt behandelt werden, durchgeführt. TestNG wurde von uns in Version 6.10 (PRÜFEN!) genutzt.
+TestNG ist ein Framework, das dem zu testenden Programm Eingabewerte übergibt und die tatsächlichen Ergebnisse des Programms mit den erwarteten Ergebnissen abgleicht. Dabei können beliebig viele Testszenarien geprüft werden. Es werden sogenannte positive Tests, also solche, bei denen die Eingabe ein erwartetes Ergebnis hervorruft, als auch negative Tests, bei denen geprüft wird, ob nicht vorhergesehene Eingaben mit entsprechenden Fehlermeldungen korrekt behandelt werden, durchgeführt. TestNG wurde von uns in Version 6.14 genutzt.
 
 Als Beispiel: Der Quelltext
 \begin{lstlisting} [frame=single]
@@ -35,8 +35,7 @@ Die Java VM ist ein Zwischenschritt beim Ausführen von Java-Code. Eine Java-Que
 
 In diesem Projekt wird die Java VM verwendet, um die Kompilate unseres eigenen Compilers, nachdem diese von Jasmin bearbeitet wurden, auszuführen.
 
-Zu beachten ist, dass die Java VM stack-basiert operiert und nicht wie der x86-Befehlssatz mit Registern arbeitet. Dies ist bei der Implementierung des Compilers zu beachten und erfordert eine besondere Denkweise.
-% @Noah: Genauer beschreiben
+Zu beachten ist, dass die Java VM stack-basiert operiert und nicht wie der x86-Befehlssatz mit Registern arbeitet. Dies ist bei der Implementierung des Compilers zu beachten und erfordert eine besondere Denkweise und Kenntnis der Stack-Struktur.
 
 \subsection{Git}
 Nach einiger Zeit der Arbeit am Projekt wurde klar, dass es auf Dauer sehr ineffizient ist, die Aktualisierungen über eine WhatsApp-Gruppe zu verteilen. Daher haben wir über die Plattform \textit{GitHub} ein Repository erstellt, in dem alle Änderungen zentral verwaltet und verteilt werden.

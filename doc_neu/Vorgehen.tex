@@ -1,10 +1,9 @@
 % !TEX root = Main.tex
 
-\section{Vorgehen während der Entwicklung}
+\section{Vorgehen während der Entwicklung und Implementierung der Sprache}
+Dieser Abschnitt beschreibt unser Vorgehen während der Entwicklung der Programmiersprache. Ein Unterabschnitt stellt dabei jeweils einen Entwicklungsschritt des Compilers da. Um diese Abschnitte besser verständlich zu machen, wird teilweise von Kapitel \ref{sec:verwendung}. \textit{Verwendung der UnsereCompilerbauSprache} vorgegriffen.
 \subsection{Erste Schritte: Auswertung von arithmetischen Ausdrücken}
 \label{subsec:arithExp}
-% TO-DO: Kapitelnummer einfügen und prüfen
-% kapitel 5 ist hier doch falsch????
 Der Vorgehensweise unter \textit{\ref{sec:grundsatz}. Allgemeiner Grundsatz} entsprechend, implementierten wir zuerst die unserer Sicht nach grundlegendste Fähigkeit einer Programmiersprache: das Auswerten von arithmetischen Ausdrücken. Es soll möglich sein, Ausdrücke, die die Grundrechenarten sowie eine beliebig tiefe Schachtelung von Klammern enthalten, zu erkennen und der Operatorenpriorität entsprechend die gelesenen Tokens in einem Syntaxbaum zusammenzuführen. Dazu formulierten wir folgende Grammatik:
 
 
@@ -199,7 +198,7 @@ Nachdem die Sprache grundlegende Funktionalität erhielt, versuchten wir die wei
 
 
 \subsubsection{Ergebnisausgabe}
-Ein Programm ohne Ausgabe ergibt keinen Sinn, da nie das berechnete Ergebnis betrachtet werden kann. Eine Ausgabefunktion zu implementieren stellte sich nicht als all zu großes Problem heraus, da Jasmin die Fähigkeit besitzt Objekte und Methoden in der Java Library zu nutzen. Wir implementierten dies Ausgabefunktion wie folgt:
+Ein Programm ohne Ausgabe ergibt keinen Sinn, da das berechnete Ergebnis nicht betrachtet werden kann. Eine Ausgabefunktion zu implementieren stellte sich hier nicht als zu großes Problem heraus, da Jasmin die Fähigkeit besitzt Objekte und Methoden der Java Library zu nutzen. Wir nutzen dies und implementierten die Ausgabefunktion wie folgt:
 
 \scriptsize \begin{lstlisting}[frame=single]
 /**@brief
@@ -230,7 +229,7 @@ Eine Variable wird folgendermaßen deklariert:
 \begin{lstlisting}[frame=single]
 int NAME;
 \end{lstlisting}
-Stößt der Compiler auf solch eine Zeile, wird geprüft, ob bereits eine Variable mit dem selben Namen im Programm existiert. Ist dies der Fall, wird eine Exception geworfen und der Kompiliervorgang bricht ab. Existiert der Name der Variablen noch nicht im Programm wird ein neuer Eintrag in der Variablentabelle erstellt.
+Stößt der Compiler im Parsetree auf solch eine Zeile, wird geprüft, ob bereits eine Variable mit dem selben Namen im Programm existiert. Ist dies der Fall, wird eine Exception geworfen und der Kompiliervorgang bricht ab. Existiert der Name der Variablen noch nicht im Programm wird ein neuer Eintrag in der Variablentabelle erstellt.
 
 Um einer deklarierten Variable einen Wert zuzuweisen, wird folgende Syntax verwendet:
 \begin{lstlisting}[frame=single]
