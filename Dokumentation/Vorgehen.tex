@@ -1,9 +1,10 @@
 % !TEX root = Main.tex
 
-\section{Vorgehen während der Entwicklung und Implementierung der Sprache}
-Dieser Abschnitt beschreibt unser Vorgehen während der Entwicklung der Programmiersprache. Ein Unterabschnitt stellt dabei jeweils einen Entwicklungsschritt des Compilers da. Um diese Abschnitte besser verständlich zu machen, wird teilweise von Kapitel \ref{sec:verwendung}. \textit{Verwendung der UnsereCompilerbauSprache} vorgegriffen.
+\section{Vorgehen während der Entwicklung}
 \subsection{Erste Schritte: Auswertung von arithmetischen Ausdrücken}
 \label{subsec:arithExp}
+% TO-DO: Kapitelnummer einfügen und prüfen
+% kapitel 5 ist hier doch falsch????
 Der Vorgehensweise unter \textit{\ref{sec:grundsatz}. Allgemeiner Grundsatz} entsprechend, implementierten wir zuerst die unserer Sicht nach grundlegendste Fähigkeit einer Programmiersprache: das Auswerten von arithmetischen Ausdrücken. Es soll möglich sein, Ausdrücke, die die Grundrechenarten sowie eine beliebig tiefe Schachtelung von Klammern enthalten, zu erkennen und der Operatorenpriorität entsprechend die gelesenen Tokens in einem Syntaxbaum zusammenzuführen. Dazu formulierten wir folgende Grammatik:
 
 
@@ -198,7 +199,7 @@ Nachdem die Sprache grundlegende Funktionalität erhielt, versuchten wir die wei
 
 
 \subsubsection{Ergebnisausgabe}
-Ein Programm ohne Ausgabe ergibt keinen Sinn, da das berechnete Ergebnis nicht betrachtet werden kann. Eine Ausgabefunktion zu implementieren stellte sich hier nicht als zu großes Problem heraus, da Jasmin die Fähigkeit besitzt Objekte und Methoden der Java Library zu nutzen. Wir nutzen dies und implementierten die Ausgabefunktion wie folgt:
+Ein Programm ohne Ausgabe ergibt keinen Sinn, da nie das berechnete Ergebnis betrachtet werden kann. Eine Ausgabefunktion zu implementieren stellte sich nicht als all zu großes Problem heraus, da Jasmin die Fähigkeit besitzt Objekte und Methoden in der Java Library zu nutzen. Wir implementierten dies Ausgabefunktion wie folgt:
 
 \scriptsize \begin{lstlisting}[frame=single]
 /**@brief
@@ -229,71 +230,85 @@ Eine Variable wird folgendermaßen deklariert:
 \begin{lstlisting}[frame=single]
 int NAME;
 \end{lstlisting}
-Stößt der Compiler im Parsetree auf solch eine Zeile, wird geprüft, ob bereits eine Variable mit dem selben Namen im Programm existiert. Ist dies der Fall, wird eine Exception geworfen und der Kompiliervorgang bricht ab. Existiert der Name der Variablen noch nicht im Programm wird ein neuer Eintrag in der Variablentabelle erstellt.
+Wenn ein entsprechender Knoten im Syntaxbaum besucht wird, wird geprüft, ob bereits eine Variable mit dem selben Namen im aktuellen Gültigkeitsbereich existiert. Ist dies der Fall, wird eine Exception ausgelöst und der Kompiliervorgang mit einer entsprechenden Fehlermeldung beendet. Existiert der Name der Variablen im aktuellen Gültigkeitsbereich noch nicht wird ein neuer Eintrag in der Variablentabelle erstellt.
 
 Um einer deklarierten Variable einen Wert zuzuweisen, wird folgende Syntax verwendet:
 \begin{lstlisting}[frame=single]
 NAME = EXPRESSION;
 \end{lstlisting}
-Wobei die EXPRESSION sich zu einem Wert evaluieren lassen muss.
-Wird eine solche Anweisung erkannt, wird zuerst versucht, den Namen der Variablen zu dem dazugehörigen Index der Variablentabelle auszuwerten. Gelingt dies nicht, wurde die Variable nicht deklariert und es wird eine Exception geworfen. Kann der Name der Variablen zu einem Index ausgewertet werden, wird die Variable mit 
+Dabei muss eine EXPRESSION zu einem Wert evaluierbar sein.
+Wird ein Knoten mit einer Zuweisung besucht, erfolgt zuerst der Versuch den Namen der Variablen zu einem Index in der Variablentabelle aufzulösen. Gelingt dies nicht, bedeutet das, dass die Variable nicht deklariert wurde. Es wird eine enstprechende Exception ausgelöst. Kann der Name der Variablen zu einem Index aufgelöst werden, wird der Wert der Variable mit 
 \begin{lstlisting}[frame=single]
-visit(ctx.expr)
+istore [index]
 \end{lstlisting}
-auf den Stack gelegt und mit ''istore [index]'' der Wert der Variablen in der Jasmin-Variablentabelle gespeichert.
+vom Stack genommen und in der Jasmin-Variablentabelle gespeichert.
 
-Eine Variable wird über ihren Namen als Teil einer Expression aufgerufen. Hier wird dann intern der Name zum Index der Variable aufgelöst. Gelingt dies nicht, wurde die Variable nicht deklariert und es wird eine Exception geworden. Ansonsten wird mit
-''iload [index]'' der Wert der Variablen zur Verarbeitung auf den Stack der JavaVM gelegt.
+Wird auf eine Variable lesend zugegriffen, d.h. sie kommt im rechten Teil einer Zuweisung vor, so muss auch wieder der Name zu einem Index aufgelöst werden. Hierzu wird intern die gleiche Methode verwendet. Nach erfolgreichem Ermitteln des Index kann der Wert der Variable mit dem Befehl 
+\begin{lstlisting}[frame=single]
+iload [index]
+\end{lstlisting}
+wieder auf den Stack gelegt und somit verwendet werden.
 
 \subsection{Implementierung von Funktionen}
-Bevor der eigentliche Visitor arbeitet, wird der gesamte Baum auf Funktionsdeklarationen untersucht. Dies sorgt dafür, dass Funktionen an beliebigen Stellen im Quellcode definiert werden können und keine Vorwärtsdeklarationen notwendig sind. Die gefundenen Funktionen werden in einer Liste gespeichert.
+Vor dem eigentlichen Aufruf des Visitors, wird der gesamte Baum auf Funktionsdeklarationen untersucht. Dies sorgt dafür, dass Funktionen an beliebigen Stellen im Quellcode definiert werden können und keine Vorwärtsdeklarationen notwendig sind. Die gefundenen Funktionen werden in einer Liste gespeichert.
 
-Funktionen werden mit folgender Syntax deklariert:
-% ToDo: Bitte einfügen
+%Funktionen werden mit folgender Syntax deklariert:
+% ToDo: Bitte einfügen; 
+%	siehe Kapitel Verwendung
 
-Stößt der Compiler auf solch eine Syntax, wird anhand einer Funktionsliste geprüft, ob eine Funktion mit einer solchen Signatur bereits existiert. Ist dies so, wird eine Exception geworfen und der Kompiliervorgang bricht ab. Andernfalls wird ein neuer Eintrag mit dem Namen und der Signatur der Funktion in die Funktionsliste eingefügt.
-
-Beim Aufruf von Funktionen wird ebenfalls geprüft, ob eine Funktion mit der gegebenen Signatur existiert. Existiert die Funktion nicht, wird eine Exception geworfen, andernfalls wird die vorher verwendete Variablentabelle gesichert und eine neue Variablentabelle für die Funktion angelegt. Dies ermöglicht die Realisierung von Variablen-Scopes. Danach werden die Argumente und Instruktionen der Funktion durch
+Wird ein Knoten mit einer Funktionsdeklaration besucht wird zunächst in dieser Liste überprüft, ob eine Funktion mit der gleichen Signatur bereits existiert. Ist dies der Fall, wird eine Exception ausgelöst und der Kompiliervorgang abgebrochen. Andernfalls wird ein neuer Eintrag mit dem Namen und der Signatur der Funktion in die Funktionsliste eingefügt.
+Die Signatur besteht dabei aus dem Namen und den übergebenen Parametern. Beispielsweise dürfen sowohl die Funktion
 \begin{lstlisting}[frame=single]
-invokestatic [functionname] ([ggf. parameter])
+int doSomething();
 \end{lstlisting}
-bearbeitet.
-Nach dem Abarbeiten der Funktion wird die vorherige, gesicherte Variablentabelle wieder hergestellt.
+als auch die Funktionen
+\begin{lstlisting}[frame=single]
+int doSomething(int paramA);
+int doSomething(int paramA, int paramB);
+\end{lstlisting}
+in der gleichen Quelldatei vorkommen, da sie sich in den Übergabeparametern unterscheiden.
+
+Beim Aufruf von Funktionen wird ebenfalls geprüft, ob eine Funktion mit der gegebenen Signatur existiert. Existiert die Funktion nicht, wird eine Exception ausgelöst, andernfalls der Funktionsaufruf wie folgt verarbeitet. 
+In einem String wird die Anweisungen für den Aufruf für Jasmin zusammengesetzt, wobei zunächst gegebenenfalls Variablen für die Übergabeparameter angelegt werden. 
+Anschließend wird der Aufruf in Jasmin-Syntax generiert.
+
+\begin{lstlisting}[frame=single]
+invokestatic [objektname]/[funktionsname]([parameter])[rückgabetyp]
+\end{lstlisting}
+Der Objektname ist nur intern, also für die JVM relevant, da diese der Java-Philosophie entsprechend stark objektorientiert ausgerichtet ist. Es muss also nur darauf geachtet werden, dass der Objektname gleich dem der Jasmin-Main-Funktion ist.
+Die Parameterliste besteht aus je einem ''I'' (für Integer) pro übergebenem Parameter.
+Der Rückgabetyp wird wiederrum durch ein ''I'' für den Datentyp Integer angegeben. Da der einzige unterstützte Datentyp unserer Sprache ''int'' ist, ist der Rückgabetyp hardcodiert und damit für jede Funktion gleich.
+
+Desweiteren wird bei einem Funktionsaufruf die aktuelle Variablentabelle kopiert und eine neue Variablentabelle für die Funktion angelegt. Dies ermöglicht verschiedene Gültigkeitsbereiche (engl. scopes). 
+Beim Verlassen der Funktion wird die vorherige Variablentabelle wieder hergestellt.
 
 \subsection{Implementierung von Konstanten}
 Konstanten sind intern als Erweiterung von Variablen anzusehen. 
-Zusätzlich zu Variablen werden bei konstanten folgende Schritte ausgeführt:
+Zusätzlich zu Variablen werden bei Konstanten folgende Schritte ausgeführt:
 Wird eine Konstante deklariert, wird deren hasBeenAssigned-Flag auf false gesetzt.
-Bei der Wertzuweisung zu der Konstanten wird geprüft, welchen Wert dieses Flag besitzt. Ist der Wert false, wird eine normale Zuweisung durchgeführt und der Wert des Flags auf true gesetzt. Ist der Wert true, wurde der Konstanten bereits eine Wert zugewiesen und eine weitere Zuweisung kann nicht erfolgen. Es wird eine Exception geworfen und der Kompiliervorgang bricht ab.
+Bei der Wertzuweisung zu der Konstanten wird geprüft, welchen Wert dieses Flag besitzt. Ist der Wert false, wird eine normale Zuweisung durchgeführt und der Wert des Flags auf true gesetzt. Ist der Wert true, wurde der Konstanten bereits eine Wert zugewiesen, weshalb eine weitere Zuweisung nicht erfolgen darf. Es wird eine Exception ausgelöst und der Kompiliervorgang mit einer entsprechenden Fehlermeldung abgebrochen.
 
 \subsection{Implementierung von Bedingten Verzweigungen}
-Verzweigungen sind in drei Teile aufzuteilen:
+Verzweigungen sind in drei Teile untergliedert:
 \begin{itemize}
 	\item conditionInstructions
 	\item onTrueInstructions
 	\item onFalseInstructions	
 \end{itemize}
 
-Wird auf eine conditionInstruction getroffen, wird diese bearbeitet.
-Evaluiert die Expression zu true, werden die onTrueInstructions ausgeführt, die onFalseInstructions werden übersprungen. Evaluiert die conditionInstruction zu false, werden die onTrueInstructions übersprungen und die onFalseInstructions ausgeführt.
-Um die entsprechenden Instruktionen zu überspringen, werden Labels benötigt, die markieren, an welche Stelle des Programms gesprungen werden kann. Damit die Labels für jede Verzweigung einzigartig sind, wird gezählt, wie oft Verzweigungen vorkommen und die Labels werden entsprechend benannt.
-
-Evaluiert werden die Bedingungen wie folgt:
-Ergibt die Expression 0, gilt sie als false, alle anderen Werte gelten als true.
-Erlaubte Operatoren der conditionInstruction-Expression sind folgende Operatoren:
-\begin{itemize}
-	\item Vergleiche (<, <=, >, >=, ==)
-	\item Logik-Gatter (\& \&, ||, !)
-\end{itemize}
+Die conditionInstructions enthalten die Auswertung eines mathematischen Ausdrucks, dessen Ergebnis einen Wahrheitswert repräsentiert. Der Wert 0 repräsentiert \textit{false}, alle anderen Werte werden als \textit{true} interpretiert.
+ 
+Wird die Bedingung zu true evaluiert, werden die onTrueInstructions ausgeführt, die onFalseInstructions werden übersprungen. Andernfalls, werden die onTrueInstructions übersprungen und die onFalseInstructions ausgeführt.
+Um die entsprechenden Instruktionen zu überspringen, werden Labels benötigt, die einen Sprung zu einer definierten Stelle im Proramm ermöglichen. Damit die Labels für jede Verzweigung eindeutig sind, wird gezählt, wie oft Verzweigungen vorkommen und die Labels entsprechend benannt.
 
 \subsection{Implementierung einer Schleife}
-Eine Schleife kann intern aufgeteilt werden in
+Eine Schleife wird intern  in
 \begin{itemize}
 \item Bedingung
-\item Befehle, auszuführen, wenn Bedingung wahr ist
+\item Befehle, die bei einer wahren Bedingung ausgeführt werden
 \end{itemize}
 
-Im Pseudocode sieht eine Schleife folgendermaßen aus:
+Der folgende Pseudocode ist ähnlich zu entsprechenden Jasmin-Anweisungen :
 \\
 \begin{algorithm}[H]
 	conditionLabel \\
