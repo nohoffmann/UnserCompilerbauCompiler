@@ -1,6 +1,9 @@
 % !TEX root = Main.tex
 
-\section{Aufgetrene Probleme und deren Lösung}
+\section{Aufgetretene Probleme und deren Lösung}
+
+\subsection{Probleme im Projekt und Team}
+Neben den bereits in anderen Kapiteln genannten Problemen mit Werkzeugen wie \textit{Eclipse}, bestand auch eine große Barriere im Team in der Zeiteinteilung. So ergaben sich zum Beispiel unterschiedliche Arbeitszeiten und Zeitspannen, in denen am Projekt gearbeitet werden konnte, was Absprachen und Besprechungen in die Länge zieht und nach unserer Erfahrung sehr mühsam macht.
 
 \subsection{Operatorenpriorität bei arithmetischen Ausdrücken}
 vgl. Kapitel oben
@@ -31,12 +34,12 @@ Mit dem Befehl
 \begin{lstlisting}[frame=single]
 aload <var-num>
 \end{lstlisting}
-wird die Variable an der Position <var-nam> wieder auf den Stack gelegt. 
+wird die Variable an der Position <var-num> wieder auf den Stack gelegt. 
 Jasmin akzeptiert nur ganze Zahlen > 0, jedoch keine Zeichenketten, für <var-num>
 Deshalb muss unser Compiler den Variablenname, den der Nutzer der Sprache wählt, zu einem Index auflösen.
 
 \subsubsection{Redefinition von bereits definierte Variable}
-Wenn im Syntaxbaum eine Variablendeklaration gefunden wird, wird zunächst überprüft, ob eine Variable mit diesem Namen bereits vorhanden ist. Für diesen Abgleich wird intern eine HashMap verwendet. Ist der Name noch nicht vorhanden, wird er der HashMap hinzugefügt, wobei der Schlüssel der Name der Variable und der Wert die aktuelle Größe der Tabelle ist. Dies ist notwendig, um den Jasmin-Befehlen astore und aload einen Index  zu übergeben.
+Wenn im Syntaxbaum eine Variablendeklaration gefunden wird, wird zunächst überprüft, ob eine Variable mit diesem Namen bereits vorhanden ist. Für diesen Abgleich wird intern eine HashMap verwendet. Ist der Name noch nicht vorhanden, wird er der HashMap hinzugefügt, wobei der Schlüssel der Name der Variable und der Wert die aktuelle Größe der Tabelle ist. Dies ist notwendig, um den Jasmin-Befehlen \textit{astore} und \textit{aload} einen Index  zu übergeben.
 
 \subsubsection{Zugriff auf undefinierte Variable}
 Ein möglicher Fehler seitens des Benutzer unserer Sprache ist, dass eine Variable aufgerufen wird, obwohl diese zuvor nicht definiert wurde. Beim Aufruf einer Variablen wird deshalb zunächst überprüft, ob diese in der Variablen-Map vorhanden ist. Falls nicht wird eine entsprechende Exception ausgelöst.
@@ -44,7 +47,7 @@ Ein möglicher Fehler seitens des Benutzer unserer Sprache ist, dass eine Variab
 
 \subsection{Funktionen}
 \subsubsection{Zugriff auf undefinierte Funktion}
-\subsection{Redefinition von bereits definierter Funktion}
+\subsection{Redefinition von bereits definierten Funktion}
 \subsubsection{Gültigkeitsbereiche}
 \subsubsection{Funktionen mit gleichem Namen und unterschiedlichen Signaturen}
 \subsection{Vorwärtsdeklarationen}
