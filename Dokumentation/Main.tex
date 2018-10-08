@@ -1,0 +1,53 @@
+\documentclass[12pt, a4paper, oneside, ngerman]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[]{hyperref}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{algorithm2e}
+
+
+\title{Projektarbeit Compilerbau}
+\usepackage[german]{babel}
+
+\setlength\parindent{0pt}
+
+\begin{document}
+\selectlanguage{german}
+\author{Jonas Wenner, Jens Marvin Reuter, Noah Hoffmann}
+
+\maketitle
+\thispagestyle{empty}
+\pagebreak
+\tableofcontents
+\newpage
+
+
+\begin{abstract}
+
+\noindent
+Als Abschlussprojekt des Moduls 'Compilerbau' unter Leitung von Thorsten Jakobs, M.Sc., htw saar wurde dieser Compiler zur von uns eigens entwickelten Sprache \textit{UCBS} (\textbf{U}nsere \textbf{C}ompiler\textbf{b}au-\textbf{S}prache) entwickelt, mit den in \textit{\ref{sec:anforderungen}. Anforderungen} beschriebenen Voraussetzungen und Zielen. Die Sprache besitzt eine C-ähnliche Syntax, wurde jedoch auf wesentliche Elemente wie Grundrechenarten, Funktionen, if-Statements und eine Form der Schleife reduziert. Weiterhin vorhanden sind Bezeichner, Konstanten und Variablen. Die Klammerung wird ebenfalls berücksichtigt.
+\\\\
+Diese Dokumentation behandelt die Anforderungen an den Compiler, den theoretischen Hintergrund, die Konzeption der Entwicklung, unsere verwendeten Technologien, sowie unsere Vorgehensweise während der Entwicklung und die Probleme, auf die wir gestoßen sind und unsere Lösungsansätze. Ausgangs wird auch die Handhabung des Compilers näher erläutert.
+
+\end{abstract}
+
+\newpage
+\include{Anforderungen}
+\pagebreak
+\include{Theorie}
+\pagebreak
+\include{Konzept}
+\pagebreak
+\include{Technologie}
+\pagebreak
+\include{Vorgehen}
+\pagebreak
+\include{Probleme}
+\pagebreak
+\include{Verwendung}
+\pagebreak
+\include{Anhang}
+\pagebreak
+\end{document}

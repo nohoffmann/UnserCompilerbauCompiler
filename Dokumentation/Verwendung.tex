@@ -1,0 +1,277 @@
+% !TEX root = Main.tex
+
+\section{Verwendung der UnsereCompilerbauSprache}
+\label{sec:verwendung}
+Ein gültiges Programm in der UnsereCompilerbauSprache besteht aus beliebig vielen Statements und Funktionsdefinitionen. 
+
+\subsection{Datentypen}
+Der einzige Datentyp der Sprache ist 'int'. Ein 'int' repräsentiert eine ganze Zahl mit einer Größe von 32 Bit. Mögliche Werte zur Zuweisung liegen zwischen -2147483648 und 2147483647 ($-2^{31}$ bis $2^{31} - 1$).
+
+\subsection{Bezeichner}
+Bezeichner werden genutzt, um Variablen, Konstanten sowie Funktionen zu benennen.
+Bezeichner müssen eindeutig sein, d.h. ein Bezeichner darf im entsprechenden Gültigkeitsbereich in nur einer Deklaration des gleichen Typ vorkommen. Gültige Bezeichner beginnen mit einem Klein- oder Großbuchstaben und dürfen von beliebig vielen weiteren Klein- bzw. Großbuchstaben sowie den Ziffern von 0 bis 9 gefolgt werden. Ein Bezeichner darf kein reserviertes Schlüsselwort sein (vgl. Liste der reservierten Schlüsselwörter).
+
+\subsection{Numerische Werte}
+Numerische Werte bestehen aus einer beliebig langen Folge der Ziffern von 0 bis 9. Ein numerischer Wert muss aus mindestens einer Ziffer bestehen.
+
+\subsection{Besondere Formatierungszeichen} 
+Leerzeichen, Tabulatoren sowie Zeilenumbrüche dürfen in einer Quelltext-Datei vorkommen, werden jedoch vom Compiler ignoriert.
+
+\subsection{Statements}
+Alle Statements außer Verzweigungen, Funktionsdeklarationen und Schleifen werden mit einem Semikolon '';'' beendet.
+
+\subsection{Variablen}
+\subsubsection{Deklaration}
+Variablen werden mit dem Schlüsselwort \textit{int} sowie dem gewünschten Namen nach einem Leerzeichen deklariert.
+Der Name wird durch einen Bezeichner angegeben.
+
+Beispiel:
+\begin{lstlisting} [frame=single] 
+int beispiel;
+\end{lstlisting}
+
+\subsubsection{Definition}
+Nach dem eine Variable deklariert wurde, kann ihr ein Wert zugewiesen werden. Eine Zuweisung erfolgt durch das Gleichheitszeichen ''=''. Die linke Seite der Zuwesiung ist dabei der Name der Variable, die rechte Seite  kann ein arithmetischer Ausdruck, der Aufruf einer Funktion, eine Variable oder eine Konstante sein.
+Wertzuweisungen von Variablen dürfen beliebig oft erfolgen.
+Die Zuweisung muss getrennt von der Deklaration erfolgen.
+
+Beispiel:
+\begin{lstlisting} [frame=single] 
+beispiel = 42;
+beispiel = eineFunktion();
+beispiel = 1 + 2 + 3;
+beispiel = eineAndereVariable;
+beispiel = EINE_KONSTANTE;
+\end{lstlisting}
+
+\subsubsection{Aufruf}
+Variablen dürfen auch in der rechten Seite einer Zuweisung vorkommen.
+Beispiel:
+\begin{lstlisting} [frame=single] 
+int beispiel1;
+int beispiel2;
+
+beispiel1 = 42;
+beispiel2 = beispiel1 - 1;
+\end{lstlisting}
+
+
+\subsection{Konstanten}
+Konstanten werden ähnlich wie Variablen verwendet.
+
+\subsubsection{Deklaration}
+Im Gegensatz zu einer Variablen wird dem Namen das Schlüsselwort \textit{const int} anstatt nur \textit{int} vorgestellt.
+
+Beispiel:
+\begin{lstlisting} [frame=single] 
+const int BEISPIEL;
+\end{lstlisting}
+
+\subsubsection{Definition}
+Die Wertzuweisung erfolgt wie bei einer Variable, darf jedoch nur ein mal pro Konstante erfolgen.
+ 
+
+\subsubsection{Ergebnisausgabe}
+Mit Hilfe der Funktion \textit{println([argument])} können numerische Werte, arithmetische Ausdrücke, logische Ausdrücke, Vergleiche, Rückgabewerte von Funktionen, Variablen und Konstanten auf die Konsole ausgegeben werden.
+
+Beispiele:
+\begin{lstlisting} [frame=single] 
+int beispiel;
+const int BEISPIEL;
+
+beispiel = 42;
+BEISPIEL = 123;
+
+println(42);
+println(42*5);
+println(42<5);
+println(42<5 && beispiel==BEISPIEL);
+println(testFunktion(42));
+println(beispiel);
+println(BEISPIEL);
+\end{lstlisting}
+
+
+\subsection{Funktionen}
+
+\subsubsection{Deklaration}
+Funktionen könnnen an einer beliebigen Stelle im Quellcode deklariert werden. Ein Aufruf ist auch vor der Deklaration möglich.
+
+Eine Funktionsdeklaration setzt sich folgendermaßen zusammen:
+Schlüsselwort ''int'' für den Typ des Rückgabewerts, Bezeichner als Name der Funktion, öffnende runde Klammer, beliebig viele Variablendeklarationen (keine Übergabeparameter sind auch möglich), schließende runde Klammer und schließlich ein Funktionsrumpf.
+Der Funktionsrumpf beginnt mit einer öffnenden geschweiften Klammer gefolgt von beliebig vielen Statements. 
+Ein besonderes Statement ist die Rückgabe. Beim Aufruf von \textit{return} wird die Funktion verlassen. Wenn hinter \textit{return} ein numerischer Wert, eine Variable, eine Konstante, ein arithmetischer Ausdruck, ein logischer Ausdruck oder der Aufruf einer weiteren Funktion folgt, so stellt dies den Rückgabewert der Funktion dar.
+Der Funktionsrumpf wird mit einer schließenden geschweiften Klammer abgeschlossen.
+
+Beispiel:
+\begin{lstlisting} [frame=single] 
+int add(int a, int b) {
+	println(a);
+	println(b);
+	return a + b;
+}
+\end{lstlisting}
+
+\subsubsection{Aufruf}
+Funktionsaufrufe dürfen in der rechten Seite von Zuweisungen, als Argument für die println-Funktion und als Teil von logischen sowie arithmetischen Ausdrücken vorkommen. Funktionsaufrufe dürfen auch eigenständige Statements sein.
+
+Ein Funktionsaufruf setzt sich wie folgt zusammen:
+[nameDerFunktion]([Parameterliste])
+
+Die Funktion wird beim Verlassen mit dem zuvor definierten Rückgabewert substituiert.
+
+Beispiel;
+\begin{lstlisting} [frame=single] 
+int x;
+int y;
+int z;
+
+x = 40;
+y = 2;
+z = add(x, y);
+\end{lstlisting}
+
+\subsubsection{Arithmetik}
+Arithmetische Ausdrücke dürfen folgende Komponenten besitzen:
+
+\subsubsection{Operationen}
+Jede Operation setzt sich aus einem linken Operanden, einem Operator sowie einem rechten Operanden zusammen.
+
+Zulässige Operationen sind:
+\begin{center}
+  \begin{tabular}{ | c | c | }
+    \hline
+    Operator & Operation\\ \hline \hline
+    + & Additionen\\ \hline
+    - & Subtraktionen\\ \hline
+    * & Multiplikationen\\ \hline
+    / & Divisionen\\ \hline
+  \end{tabular}
+\end{center}
+Die Operationen sind hier in aufsteigender Bindung aufgelistet, d.h., dass beispielsweise eine Division eine höhere Bindung als eine Addition besitzt. (Umgangssprachlich ''Punkt vor Strich'')
+
+\subsubsection{Operanden}
+Zulässige Operanden für aritmetische Operationen sind:
+
+\begin{itemize}
+\item numerische Werte \item
+\item Variablen
+\item Konstanten
+\item Funktionen (bzw. deren Rückgabewerte)
+\item weitere Operationen
+\end{itemize}
+
+Aus dem letzten Eintrag dieser Liste ergibt sich eine Rekursion, die eine beliebige Länge von arithmetischen Ausdrücken ermöglicht.
+
+\subsubsection{Klammerung}
+Operationen dürfen Klammern mit beliebiger Verschachtelungstiefe enthalten.
+Geklammerte Terme besitzen die höchst mögliche Bindung, d.h. höher als eine Division.
+
+\subsection{Aussagenlogik}
+Logische Ausdrücke werden wie in C intern als ''integer'' gespeichert und besitzen keinen eigenen Datentyp. Dabei repräsentiert der Wert 0 den Wahrheitswert \textit{false}, alle anderen Werte gelten als \textit{true}. Wie auch arithmetische Ausdrücke, dürfen logische Ausdrücke eine beliebige Länge besitzen und eine beliebig tiefe Klammerschachtelung besitzen.
+
+Logische Ausdrücke werden verwendet, um Bedingungen auszudrücken, also in if-else-statements sowie in Schleifen.
+
+Folgende Operationen stehen dafür in dieser Priorität zur Verfügung:
+\begin{center}
+  \begin{tabular}{ | c | c | c | }
+    \hline
+    Operation & Operator & Ergebnis\\ \hline \hline
+    Konjunktion & \& \& & Wahr, wenn beide Operanden wahr sind. Sonst false.\\ \hline
+    Disjunktion & || & Wahr, wenn ein oder beide Operanden wahr sind. \\ 
+	& & Sonst false.\\ \hline
+    Negation & ! & Das Gegenteil das negierten Term.\\ \hline   
+  \end{tabular}
+\end{center}
+
+Desweiteren stehen folgende Vergleichsoperationen zur Verfügung:
+\begin{center}
+  \begin{tabular}{ | c | c | }
+    \hline
+    Operator & Vergleich\\ \hline \hline
+    < & kleiner als\\ \hline
+    <= & kleiner als oder gleich\\ \hline
+    > & größer als\\ \hline
+    >= & größer als oder gleich\\ \hline    
+    == & gleich\\ \hline    
+  \end{tabular}
+\end{center}
+Wenn ein Vergleich eine wahre Aussage ist, ist das Ergebnis des Vergleich \textit{true}.
+Wenn ein Vergleich eine falsche Aussage ist, ist das Ergebnis \textit{false}.
+
+\subsection{Bedingte Verzweigungen}
+%%to be written
+
+
+\subsection{Schleifen}
+Eine Schleife beginnt mit dem Schlüsselwort \textit{while}, wird von einer Bedingung in runden Klammern gefolgt und schließt mit einem Schleifenrumpf ab. Der Schleifenrumpf wiederrum wird mit geschweiften Klammern geöffnet und abgeschlossen.
+
+Sowohl beim ersten Aufruf der Schleife als nach jedem Schleifendurchlauf wird überprüft, ob die gegebenene Bedingung wahr oder falsch ist. Ist die Bedingung wahr, werden die Anweisungen im Schleifenrumpf ausgeführt. Falls die Bedingung falsch ist, werden die Anweisungen nicht ausgeührt.
+
+Beispiel (gibt die Summer der Zahlen von 1 bis 10 aus):
+\begin{lstlisting} [frame=single] 
+int i;
+int x;
+
+i = 0;
+x = 0;
+
+while(i <= 10) {
+	i = i + 1;
+	x = x + i;
+}
+println(x);
+\end{lstlisting}
+	
+\subsection{Reservierte Schlüsselwörter und Symbole}	
+
+\begin{center}
+  \begin{tabular}{ | c | c | }
+    \hline
+    Schlüsselwort & Bedeutung\\ \hline \hline
+    int & Deklariert eine Variable\\ \hline
+    const int & Deklariert eine Konstante\\ \hline
+    println & Aufruf der Ausgabefunktion\\ \hline
+    return & Hinter ''return'' folgt der Rückgabewert einer Funktion\\ \hline
+    if & Beginn eines if(-else)-Statements\\ \hline
+    else & Beginn des else-Teil eines if-else-Statements\\ \hline
+    while & Beginn einer while-Schleife\\ \hline
+    
+  \end{tabular}
+\end{center}
+
+
+\begin{center}
+  \begin{tabular}{ | c | c | }
+    \hline
+    Symbol & Bedeutung\\ \hline \hline
+    = & Zuweisungsoperator\\ \hline
+    + & Operator für Additionen\\ \hline
+    - & Operator für Subtraktionen\\ \hline
+    * & Operator für Multiplikationen\\ \hline
+    / & Operator für Divisionen\\ \hline
+    
+    < & Vergleichsoperator für kleiner als\\ \hline
+    <= & Vergleichsoperator für kleiner gleich\\ \hline
+    > & Vergleichsoperator für größer als\\ \hline
+    >= & Vergleichsoperator für größer gleich\\ \hline    
+    == & Operator um zwei Werte auf Gleichheit zu überprüfen\\ \hline    
+    
+    \& \&  & logisches Und \\ \hline    
+    || & logisches Oder (inklusiv) \\ \hline    
+    ! & logisches Nicht \\ \hline    
+    
+  \end{tabular}
+\end{center}
+	
+\section{Aufrufen des UnserCompilerbauCompilers}
+Da der von uns entwickelte Compiler ein Java-Programm darstellt und von der JavaVM ausgeführt werden muss, wird der Compiler folgendermaßen aufgerufen:
+\begin{lstlisting} [frame=single]
+java -jar UCC.jar sourceCode.txt 
+\end{lstlisting}
+Dabei wird die Datei tpblcOut.class als kompiliertes Programm ausgegeben.
+Das Programm kann mit 
+\begin{lstlisting} [frame=single]
+java tpblcOut
+\end{lstlisting}
+ausgeführt werden.

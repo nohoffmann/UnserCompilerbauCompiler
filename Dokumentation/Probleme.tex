@@ -1,0 +1,58 @@
+% !TEX root = Main.tex
+
+\section{Aufgetretene Probleme und deren Lösung}
+
+\subsection{Probleme im Projekt und Team}
+Neben den bereits in anderen Kapiteln genannten Problemen mit Werkzeugen wie \textit{Eclipse}, bestand auch eine große Barriere im Team in der Zeiteinteilung. So ergaben sich zum Beispiel unterschiedliche Arbeitszeiten und Zeitspannen, in denen am Projekt gearbeitet werden konnte, was Absprachen und Besprechungen in die Länge zieht und nach unserer Erfahrung sehr mühsam macht.
+
+\subsection{Operatorenpriorität bei arithmetischen Ausdrücken}
+vgl. Kapitel oben
+
+\subsection{Variablen}
+Ein wichtiger Bestandteil jeder Programmiersprache ist die Möglichkeit Variablen zu nutzen. Damit eine Variable im späteren Programmverlauf genutzt werden kann, muss sie zunächst deklariert werden. In unserer Sprache erfolgt dies durch die Angabe [Datentyp] [Name];. Beispielsweise legt der Aufruf
+
+\begin{lstlisting}[frame=single]
+int x;
+\end{lstlisting}
+
+eine Integer-Variable mit dem Namen x an.
+
+Als nächstes sollte eine Wertzuweisung erfolgen:
+\begin{lstlisting}[frame=single]
+x = 42;
+\end{lstlisting}
+
+Nachdem diese obligatorischen Schritte vollzogen wurde, kann der Wert der Variable beliebig oft ausgelesen oder verändert werden.
+
+Damit diese Features in die Zielsprache zu übertragen werden, nutzt unser Compiler eine Variablentabelle. Jasmin besitzt die Möglichkeit den Wert der oben auf dem Stack liegt zwischenzuspeichern. Der Befehl
+\begin{lstlisting}[frame=single]
+astore <var-num>
+\end{lstlisting}
+nimmt den Wert vom Stack und speichert in am Index <var-num> in der Variablentabelle.
+
+Mit dem Befehl
+\begin{lstlisting}[frame=single]
+aload <var-num>
+\end{lstlisting}
+wird die Variable an der Position <var-num> wieder auf den Stack gelegt. 
+Jasmin akzeptiert nur ganze Zahlen > 0, jedoch keine Zeichenketten, für <var-num>
+Deshalb muss unser Compiler den Variablenname, den der Nutzer der Sprache wählt, zu einem Index auflösen.
+
+\subsubsection{Redefinition von bereits definierte Variable}
+Wenn im Syntaxbaum eine Variablendeklaration gefunden wird, wird zunächst überprüft, ob eine Variable mit diesem Namen bereits vorhanden ist. Für diesen Abgleich wird intern eine HashMap verwendet. Ist der Name noch nicht vorhanden, wird er der HashMap hinzugefügt, wobei der Schlüssel der Name der Variable und der Wert die aktuelle Größe der Tabelle ist. Dies ist notwendig, um den Jasmin-Befehlen \textit{astore} und \textit{aload} einen Index  zu übergeben.
+
+\subsubsection{Zugriff auf undefinierte Variable}
+Ein möglicher Fehler seitens des Benutzer unserer Sprache ist, dass eine Variable aufgerufen wird, obwohl diese zuvor nicht definiert wurde. Beim Aufruf einer Variablen wird deshalb zunächst überprüft, ob diese in der Variablen-Map vorhanden ist. Falls nicht wird eine entsprechende Exception ausgelöst.
+
+
+\subsection{Funktionen}
+\subsubsection{Zugriff auf undefinierte Funktion}
+\subsection{Redefinition von bereits definierten Funktion}
+\subsubsection{Gültigkeitsbereiche}
+\subsubsection{Funktionen mit gleichem Namen und unterschiedlichen Signaturen}
+\subsection{Vorwärtsdeklarationen}
+
+\subsection{Bedingte Verzweigungen}
+\subsubsection{Umsetzung in Jasmin mit Hilfe von Labels und Sprungbefehlen}
+
+
