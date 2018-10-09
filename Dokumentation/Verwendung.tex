@@ -1,11 +1,10 @@
 % !TEX root = Main.tex
 
 \section{Verwendung der UnsereCompilerbauSprache}
-\label{sec:verwendung}
 Ein gültiges Programm in der UnsereCompilerbauSprache besteht aus beliebig vielen Statements und Funktionsdefinitionen. 
 
 \subsection{Datentypen}
-Der einzige Datentyp der Sprache ist 'int'. Ein 'int' repräsentiert eine ganze Zahl mit einer Größe von 32 Bit. Mögliche Werte zur Zuweisung liegen zwischen -2147483648 und 2147483647 ($-2^{31}$ bis $2^{31} - 1$).
+Der einzige Datentyp der Sprache ist 'int'. Ein 'int' repräsentiert eine ganze Zahl mit einer Größe von 32 bit. Mögliche Werte liegen zwischen -2147483648 und 2147483647 ($-2^{31}$ bis $2^{31} - 1$). %das hat doch nix mit zuweisung zu tun?! der wertebereich ändert sich ja nicht dadurch dass es eine bzw. keine zuweisung ist 
 
 \subsection{Bezeichner}
 Bezeichner werden genutzt, um Variablen, Konstanten sowie Funktionen zu benennen.
@@ -18,7 +17,8 @@ Numerische Werte bestehen aus einer beliebig langen Folge der Ziffern von 0 bis 
 Leerzeichen, Tabulatoren sowie Zeilenumbrüche dürfen in einer Quelltext-Datei vorkommen, werden jedoch vom Compiler ignoriert.
 
 \subsection{Statements}
-Alle Statements außer Verzweigungen, Funktionsdeklarationen und Schleifen werden mit einem Semikolon '';'' beendet.
+Alle Statements außer if-else-Anweisungen und Schleifen werden mit einem Semikolon '';'' beendet.
+%eine halbe seite weiter oben steht, dass eine funktionsdeklaration KEIN statement ist...
 
 \subsection{Variablen}
 \subsubsection{Deklaration}
@@ -41,8 +41,10 @@ beispiel = 42;
 beispiel = eineFunktion();
 beispiel = 1 + 2 + 3;
 beispiel = eineAndereVariable;
-beispiel = EINE_KONSTANTE;
+beispiel = EINEKONSTANTE;
 \end{lstlisting}
+%identifier können keine underscores enhalten
+
 
 \subsubsection{Aufruf}
 Variablen dürfen auch in der rechten Seite einer Zuweisung vorkommen.
@@ -99,9 +101,9 @@ Funktionen könnnen an einer beliebigen Stelle im Quellcode deklariert werden. E
 
 Eine Funktionsdeklaration setzt sich folgendermaßen zusammen:
 Schlüsselwort ''int'' für den Typ des Rückgabewerts, Bezeichner als Name der Funktion, öffnende runde Klammer, beliebig viele Variablendeklarationen (keine Übergabeparameter sind auch möglich), schließende runde Klammer und schließlich ein Funktionsrumpf.
-Der Funktionsrumpf beginnt mit einer öffnenden geschweiften Klammer gefolgt von beliebig vielen Statements. 
-Ein besonderes Statement ist die Rückgabe. Beim Aufruf von \textit{return} wird die Funktion verlassen. Wenn hinter \textit{return} ein numerischer Wert, eine Variable, eine Konstante, ein arithmetischer Ausdruck, ein logischer Ausdruck oder der Aufruf einer weiteren Funktion folgt, so stellt dies den Rückgabewert der Funktion dar.
-Der Funktionsrumpf wird mit einer schließenden geschweiften Klammer abgeschlossen.
+Der Funktionsrump beginnt mit einer öffnenden geschweiften Klammer gefolgt von beliebig vielen Statements. 
+Ein besonderes Statement ist die Rückgabe. Beim Auruf von \textit{return} wird die Funktion verlassen. Wenn hinter \textit{return} ein numerischer Wert, eine Variable, eine Konstante, ein arithmetischer Ausdruck, ein logischer Ausdruck oder der Aufruf einer weiteren Funktion folgt, so stellt dies den Rückgabewert der Funktion dar.
+Der Funktionsrumpf wird mit einer schließenden geschweiften Klammer abgschlossen.
 
 Beispiel:
 \begin{lstlisting} [frame=single] 
@@ -153,13 +155,13 @@ Die Operationen sind hier in aufsteigender Bindung aufgelistet, d.h., dass beisp
 \subsubsection{Operanden}
 Zulässige Operanden für aritmetische Operationen sind:
 
-\begin{itemize}
+\begin{list}{•}
 \item numerische Werte \item
 \item Variablen
 \item Konstanten
 \item Funktionen (bzw. deren Rückgabewerte)
 \item weitere Operationen
-\end{itemize}
+\end{list}
 
 Aus dem letzten Eintrag dieser Liste ergibt sich eine Rekursion, die eine beliebige Länge von arithmetischen Ausdrücken ermöglicht.
 
@@ -264,14 +266,12 @@ println(x);
   \end{tabular}
 \end{center}
 	
-\section{Aufrufen des UnserCompilerbauCompilers}
-Da der von uns entwickelte Compiler ein Java-Programm darstellt und von der JavaVM ausgeführt werden muss, wird der Compiler folgendermaßen aufgerufen:
+\section{Aufruf des UnserCompilerbauCompilers}
+Um eine Textdatei mit Anweisungen in der UCBS zu übersetzen, muss folgender Aufruf auf der Kommandozeilenebene erfolgen:
 \begin{lstlisting} [frame=single]
 java -jar UCC.jar sourceCode.txt 
 \end{lstlisting}
-Dabei wird die Datei tpblcOut.class als kompiliertes Programm ausgegeben.
-Das Programm kann mit 
+Die Ausgabedatei tpblcOut.class kann nun mit Hilfe der JRE ausgeführt werden.
 \begin{lstlisting} [frame=single]
 java tpblcOut
 \end{lstlisting}
-ausgeführt werden.
