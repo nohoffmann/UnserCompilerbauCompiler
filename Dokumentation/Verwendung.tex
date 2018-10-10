@@ -202,13 +202,45 @@ Wenn ein Vergleich eine wahre Aussage ist, ist das Ergebnis des Vergleich \texti
 Wenn ein Vergleich eine falsche Aussage ist, ist das Ergebnis \textit{false}.
 
 \subsection{Bedingte Verzweigungen}
-%%to be written
+Eine bedingte Verzweigung ist ein Programmabschnitt der abhängig von einer Bedingung ausgeführt oder ignoriert wird. Es ist ebenfalls möglich eine Alternative anzugeben, die nur ausgeführt wird, falls die Bedingung nicht erfüllt wird.
 
+Eine bedingte Verzweigung beginnt mit dem Schlüsselwort \textit{if} gefolgt von einer Bedingung umschlossen von runden Klammern. Dabei muss die Bedingung ein logischer Ausdruck sein. Wenn die Bedingung zu \textit{true} evaluiert wird, werden die Statements, die umgeben von geschweiften Klammern auf die Bedingung folgen, ausgeführt. 
+Optional dürfen anschlißend das Schlüsselwort \textit{else} sowie weitere Statements umschlossen von geschweiften Klammern folgen. Diese Anweisungen werden ausgeführt falls die Bedingung zu \textit{false} evaluiert wird. Der else-Teil darf auch ausgelassen werden.
+
+Beispiel (nur if-Teil):
+\begin{lstlisting} [frame=single] 
+int x;
+int y;
+
+x = 42;
+y = 3;
+
+if(x > y) {
+	println(x);
+} 
+\end{lstlisting}
+
+Beispiel (vollständiges if-else-statement):
+\begin{lstlisting} [frame=single] 
+int x;
+int y;
+
+x = 42;
+y = 3;
+
+if(x > y) {
+	println(x);
+} else {
+	println(y);
+}
+\end{lstlisting}
 
 \subsection{Schleifen}
 Eine Schleife beginnt mit dem Schlüsselwort \textit{while}, wird von einer Bedingung in runden Klammern gefolgt und schließt mit einem Schleifenrumpf ab. Der Schleifenrumpf wiederrum wird mit geschweiften Klammern geöffnet und abgeschlossen.
 
 Sowohl beim ersten Aufruf der Schleife als nach jedem Schleifendurchlauf wird überprüft, ob die gegebenene Bedingung wahr oder falsch ist. Ist die Bedingung wahr, werden die Anweisungen im Schleifenrumpf ausgeführt. Falls die Bedingung falsch ist, werden die Anweisungen nicht ausgeührt.
+
+
 
 Beispiel (gibt die Summer der Zahlen von 1 bis 10 aus):
 \begin{lstlisting} [frame=single] 
