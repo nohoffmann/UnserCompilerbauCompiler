@@ -14,7 +14,7 @@ Bezeichner müssen eindeutig sein, d.h. ein Bezeichner darf im entsprechenden G�
 Numerische Werte bestehen aus einer beliebig langen Folge der Ziffern von 0 bis 9. Ein numerischer Wert muss aus mindestens einer Ziffer bestehen.
 
 \subsection{Besondere Formatierungszeichen} 
-Tabulatoren sowie überschüssige Leerzeichen und Zeilenumbrüche dürfen in einer Quelltext-Datei vorkommen, werden jedoch vom Compiler ignoriert.
+Leerzeichen, Tabulatoren sowie Zeilenumbrüche dürfen in einer Quelltext-Datei vorkommen, werden jedoch vom Compiler ignoriert.
 
 \subsection{Statements}
 Alle Statements außer if-else-Anweisungen und Schleifen werden mit einem Semikolon '';'' beendet.
@@ -73,7 +73,7 @@ const int BEISPIEL;
 Die Wertzuweisung erfolgt wie bei einer Variable, darf jedoch nur ein mal pro Konstante erfolgen.
  
 
-\subsubsection{Ergebnisausgabe TODO: EINE EBENE HÖHER}
+\subsection{Ergebnisausgabe}
 Mit Hilfe der Funktion \textit{println([argument])} können numerische Werte, arithmetische Ausdrücke, logische Ausdrücke, Vergleiche, Rückgabewerte von Funktionen, Variablen und Konstanten auf die Konsole ausgegeben werden.
 
 Beispiele:
@@ -297,7 +297,63 @@ println(x);
     
   \end{tabular}
 \end{center}
-	
+
+\subsection{Beispielprogramm}
+
+\begin{lstlisting} [frame=single]
+int zahl1;
+zahl1 = -4;
+
+int zahl2;
+zahl2 = 9;
+
+int enumerator;
+enumerator = 0;
+
+const int zahl3;
+zahl3 = 9;
+
+if(zahl1 > zahl3)
+{
+	println(zahl1);
+}
+else
+{
+	println(zahl3);
+}
+
+while(enumerator < zahl2)
+{
+	println(enumerator);
+	enumerator = enumerator + 1;
+}
+
+println(funktion(zahl3));
+println(zahl3);
+
+int funktion(int x)
+{
+	x = x+1;
+	return x;
+}
+\end{lstlisting}
+
+Dieses Programm kann mit dem im Projekt entwickelten Compiler übersetzt werden. Beim Betrachten diese Quellcodes werden einige Besonderheiten verdeutlicht.
+\\
+Zunächst ist zu beachten, dass Variablen nicht in einer Anweisung deklariert und initialisiert werden können. Folgende Schreibweise ist also ungültig: 
+\begin{lstlisting} [frame=single]
+int x = 4;
+\end{lstlisting}
+Stattdessen müssen die Initialisierung und Deklaration von Variablen in zwei Schritten durchgeführt werden:
+\begin{lstlisting} [frame=single]
+int x;
+x = 4;
+\end{lstlisting}
+
+Bei der Verwendung von println muss auf den Funktionsnamen sofort die geklammerte Parameterliste folgen. Leerzeichen und sonstige andere Zeichen sind zwischen println und der geklammerten Parameterliste ungültig.
+\\
+Weiterhin fällt auf, dass Vorwärtsdeklarationen von Funktionen nicht notwendig sind.
+
 \section{Aufruf des UnserCompilerbauCompilers}
 Um eine Textdatei mit Anweisungen in der UCBS zu übersetzen, muss folgender Aufruf auf der Kommandozeilenebene erfolgen:
 \begin{lstlisting} [frame=single]
