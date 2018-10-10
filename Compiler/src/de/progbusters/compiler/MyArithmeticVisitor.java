@@ -44,7 +44,6 @@ import de.progbusters.parser.ArithmeticParser.VarDeclarationContext;
 import de.progbusters.parser.ArithmeticParser.VariableContext;
 
 
-//heißt zwar ArithmeticVisitor, handelt aber alles (war bisher nur zu faul es umzubenenn lel)
 /**
  * @brief
  * Die Klasse MyArithmeticVisitor baut auf ANTLR-generiertem Code auf und implementiert die Jasmin-Code-Erzeugung auf Grundlage des vom Parser erstellen Syntaxbaum.
@@ -318,7 +317,7 @@ public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 	}
 	
 	/**@brief
-	 * verarbeitet den Aufruf der while-Schleife
+	 * verarbeitet den Aufruf von while-Schleifen
 	 */
 	public String visitLoop(LoopContext ctx) {
 		String conditionInstructions = visit(ctx.condition);
@@ -540,7 +539,7 @@ public class MyArithmeticVisitor extends ArithmeticBaseVisitor<String> {
 	}
 	
 	/**@brief
-	 * spezifiziert, wie zwei Strings konkateniert werden (?)
+	 * spezifiziert, wie zwei Strings konkateniert werden
 	 */
 	protected String aggregateResult(String aggregate, String nextResult) {
 		if(aggregate == null) {
