@@ -2,6 +2,9 @@ package de.progbusters.compiler.exceptions;
 
 import org.antlr.v4.runtime.Token;
 
+/**@brief
+ * Basisklasse fuer Exceptions zur Compile-Zeit
+ */
 public class CompileException extends RuntimeException {
 	private static final long serialVersionUID = -3546840023649947687L;
 	protected int line;
