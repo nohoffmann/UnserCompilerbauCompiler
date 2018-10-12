@@ -18,8 +18,9 @@ Leerzeichen, Tabulatoren sowie Zeilenumbrüche dürfen in einer Quelltext-Datei 
 
 \subsection{Statements}
 Alle Statements außer if-else-Anweisungen und Schleifen werden mit einem Semikolon '';'' beendet.
-%eine halbe seite weiter oben steht, dass eine funktionsdeklaration KEIN statement ist...
 
+
+\pagebreak
 \subsection{Variablen}
 \subsubsection{Deklaration}
 Variablen werden mit dem Schlüsselwort \textit{int} sowie dem gewünschten Namen nach einem Leerzeichen deklariert.
@@ -57,7 +58,7 @@ beispiel1 = 42;
 beispiel2 = beispiel1 - 1;
 \end{lstlisting}
 
-
+\pagebreak
 \subsection{Konstanten}
 Konstanten werden ähnlich wie Variablen verwendet.
 
@@ -73,7 +74,7 @@ const int BEISPIEL;
 Die Wertzuweisung erfolgt wie bei einer Variable, darf jedoch nur ein mal pro Konstante erfolgen.
  
 
-\subsection{Ergebnisausgabe}
+\subsubsection{Ergebnisausgabe}
 Mit Hilfe der Funktion \textit{println([argument])} können numerische Werte, arithmetische Ausdrücke, logische Ausdrücke, Vergleiche, Rückgabewerte von Funktionen, Variablen und Konstanten auf die Konsole ausgegeben werden.
 
 Beispiele:
@@ -115,25 +116,22 @@ int add(int a, int b) {
 \end{lstlisting}
 
 \subsubsection{Aufruf}
-Funktionsaufrufe dürfen in der rechten Seite von Zuweisungen, als Argument für die println-Funktion und als Teil von logischen sowie arithmetischen Ausdrücken vorkommen. Funktionsaufrufe dürfen auch eigenständige Statements sein.
+Funktionsaufrufe dürfen in der rechten Seite von Zuweisungen, als Argument für die println-Funktion und als Teil von logischen sowie arithmetischen Ausdrücken vorkommen. Funktionsaufrufe dürfen auch eigenständige Statements sein. Ein Funktionsaufruf setzt sich wie folgt zusammen:
 
-Ein Funktionsaufruf setzt sich wie folgt zusammen:
-[nameDerFunktion]([Parameterliste])
+\verb|[nameDerFunktion]([Parameterliste])|
 
 Die Funktion wird beim Verlassen mit dem zuvor definierten Rückgabewert substituiert.
 
-Beispiel;
+Beispiel:
 \begin{lstlisting} [frame=single] 
-int x;
-int y;
-int z;
+int x; int y; int z;
 
 x = 40;
 y = 2;
 z = add(x, y);
 \end{lstlisting}
 
-\subsection{Arithmetik}
+\subsubsection{Arithmetik}
 Arithmetische Ausdrücke dürfen folgende Komponenten besitzen:
 
 \subsubsection{Operationen}
@@ -152,7 +150,7 @@ Zulässige Operationen sind:
 \end{center}
 Die Operationen sind hier in aufsteigender Bindung aufgelistet, d.h., dass beispielsweise eine Division eine höhere Bindung als eine Addition besitzt. (Umgangssprachlich ''Punkt vor Strich'')
 
-\paragraph{Operanden}
+\subsubsection{Operanden}
 Zulässige Operanden für aritmetische Operationen sind:
 
 \begin{list}{•}
@@ -165,7 +163,7 @@ Zulässige Operanden für aritmetische Operationen sind:
 
 Aus dem letzten Eintrag dieser Liste ergibt sich eine Rekursion, die eine beliebige Länge von arithmetischen Ausdrücken ermöglicht.
 
-\paragraph{Klammerung}
+\subsubsection{Klammerung}
 Operationen dürfen Klammern mit beliebiger Verschachtelungstiefe enthalten.
 Geklammerte Terme besitzen die höchst mögliche Bindung, d.h. höher als eine Division.
 
@@ -240,7 +238,7 @@ Eine Schleife beginnt mit dem Schlüsselwort \textit{while}, wird von einer Bedi
 
 Sowohl beim ersten Aufruf der Schleife als nach jedem Schleifendurchlauf wird überprüft, ob die gegebenene Bedingung wahr oder falsch ist. Ist die Bedingung wahr, werden die Anweisungen im Schleifenrumpf ausgeführt. Falls die Bedingung falsch ist, werden die Anweisungen nicht ausgeührt.
 
-
+\pagebreak
 
 Beispiel (gibt die Summer der Zahlen von 1 bis 10 aus):
 \begin{lstlisting} [frame=single] 
@@ -297,63 +295,7 @@ println(x);
     
   \end{tabular}
 \end{center}
-
-\subsection{Beispielprogramm}
-
-\begin{lstlisting} [frame=single]
-int zahl1;
-zahl1 = -4;
-
-int zahl2;
-zahl2 = 9;
-
-int enumerator;
-enumerator = 0;
-
-const int zahl3;
-zahl3 = 9;
-
-if(zahl1 > zahl3)
-{
-	println(zahl1);
-}
-else
-{
-	println(zahl3);
-}
-
-while(enumerator < zahl2)
-{
-	println(enumerator);
-	enumerator = enumerator + 1;
-}
-
-println(funktion(zahl3));
-println(zahl3);
-
-int funktion(int x)
-{
-	x = x+1;
-	return x;
-}
-\end{lstlisting}
-
-Dieses Programm kann mit dem im Projekt entwickelten Compiler übersetzt werden. Beim Betrachten diese Quellcodes werden einige Besonderheiten verdeutlicht.
-\\
-Zunächst ist zu beachten, dass Variablen nicht in einer Anweisung deklariert und initialisiert werden können. Folgende Schreibweise ist also ungültig: 
-\begin{lstlisting} [frame=single]
-int x = 4;
-\end{lstlisting}
-Stattdessen müssen die Initialisierung und Deklaration von Variablen in zwei Schritten durchgeführt werden:
-\begin{lstlisting} [frame=single]
-int x;
-x = 4;
-\end{lstlisting}
-
-Bei der Verwendung von println muss auf den Funktionsnamen sofort die geklammerte Parameterliste folgen. Leerzeichen und sonstige andere Zeichen sind zwischen println und der geklammerten Parameterliste ungültig.
-\\
-Weiterhin fällt auf, dass Vorwärtsdeklarationen von Funktionen nicht notwendig sind.
-
+	
 \section{Aufruf des UnserCompilerbauCompilers}
 Um eine Textdatei mit Anweisungen in der UCBS zu übersetzen, muss folgender Aufruf auf der Kommandozeilenebene erfolgen:
 \begin{lstlisting} [frame=single]

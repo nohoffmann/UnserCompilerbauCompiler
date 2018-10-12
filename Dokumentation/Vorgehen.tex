@@ -90,7 +90,8 @@ Des Weiteren ist zu beachten, dass arithmetischen Ausdrücke gleicher Operatoren
 nennen. Sowohl die Subtraktion als auch die Addition besitzen die gleiche Bindung. Wenn man hier fälschlicherweise zuerst die Addition, also 5+2, was 7 ergibt, auswertet und das Ergebnis dieser Operation von 8 subtrahiert, erhält man als Gesamtergebnis 1. 
 In der korrekten Reihenfolge erfolgt zuerst die Subtraktion, also 8-5, was 3 ergibt, und erst darauf die Addition von 1, was als Gesamtergebnis 4 liefert. 
 Um diese Fehlerquelle auszuschließen, sind in unserer Grammatik die Regel für Subtraktion vor der für Addition und die Regel für Division vor der für Multiplikation definiert. Da bei reinen Additionen bzw. reinen Multiplikationen die Auswertungsreihenfolge tatsächlich keine Rolle spielt, eine Subtraktion jedoch vor einer Additionen (vgl. Beispiel oben) ausgewertet werden muss, sorgt die Reihenfolge der Regeln in der Grammatik für eine korrekte Auswertung.
-
+\\\\
+\linebreak
 Ein analoges Beispiel zu Divisionen und Multiplikationen ist
 \begin{lstlisting} [frame=single]
 8/2*4
@@ -104,6 +105,7 @@ Jedes Token, das in der Grammatik definiert wurde und durch einen Knoten im Baum
 
 Um diese korrekte Reihenfolge zu gewährleisten, muss eine Anfangsregel (Startaxiom) festgelegt sein. In diesem Beispiel wurde festgelegt, dass der Programmstart - sprich der Wurzelknoten des Baumes - eine ''expression'' sein muss. Das bedeutet, das zunächst die Visit-Methode des Wurzelknoten aufgerufen wird. Damit nun auch die inneren Knoten des Syntaxbaums berücksichtigt werden, ist der Aufruf einer weiteren von ANTLR generierten Methode notwendig. Jeder Knoten des Baum besitzt eine visitChildren()-Methode, welche die entsprechenden Visit-Methoden der untergeordneten Knoten aufruft.
 
+\pagebreak
 Um diese rekursive Vorgehensweise verständlicher zu machen, folgt ein Beispiel.
 
 
@@ -116,7 +118,8 @@ public String visitAddition(AdditionContext ctx) {
 		+ "iadd\n";
 }
 \end{lstlisting}
-\pagebreak
+
+
 Die Tatsache, dass es eine Methode visitAddition mit diesem Eingabeparameter und diesem Rückgabewert gibt, geht auf ANTLR zurück. Der Funktionsrumpf wurde jedoch von uns verfasst.
 
 Zunächst werden die Kind-Knoten der Addition, sprich die Operanden, besucht. Wenn die Operanden aus weiteren mathematischen Operationen bestehen, werden zunächst diese aufgerufen, um die beliebige Länge von Ausdrücken zu ermöglichen. Handelt es sich bei einem Operanden um eine Zahl, wird die Methode visitNumber() aufgerufen.
@@ -139,6 +142,7 @@ Der Compiler-interne Ablauf für die Übersetzung des Ausdruck
 \end{lstlisting}
 wäre also wie folgt: \\
 
+\pagebreak
 Nach der lexikalischen und syntaktischen Analyse liegt folgender Syntaxbaum vor:
 
 \begin{figure}[h!]
@@ -146,7 +150,7 @@ Nach der lexikalischen und syntaktischen Analyse liegt folgender Syntaxbaum vor:
 \includegraphics[scale=0.4]{pics/antlr4_parse_tree_visitAdditionVisitNumberBeispiel.png}
 \caption{Syntaxbaum für beispielhaften arithmetischen Ausdruck}
 \end{figure}
-\pagebreak
+
 Zunächst wird die visitAddition-Methode aufgerufen, da der Operator der expression das ''+'' Zeichen ist. Die visitChildren-Methode gibt nun die Zeichenkette
 \begin{lstlisting} [frame=single]
 ldc 2
@@ -157,44 +161,27 @@ zurück, da die untergeordneten Expressions nur Zahlen enthalten. Dem fügt die 
 iadd
 \end{lstlisting}
 hinzu, um die Addition durchzuführen.
-\linebreak
 
+\pagebreak
 In der JavaVM werden diese Instruktionen wie folgt verarbeitet:
-Im Initialzustand ist der Stack leer.
-
-\begin{figure}[h!]
-\centering
-\includegraphics[scale=0.2]{pics/stack_visual.png}
+\begin{figure}[htb]
 \caption{Zustand des Kellerspeicher der JavaVM}
-\end{figure}
-
-Der Befehl \textit{ldc 2} legt den Wert \textit{2} auf den Stack.
-
-\begin{figure}[h!]
-\centering
-\includegraphics[scale=0.2]{pics/stack_visual(1).png}
-\caption{Zustand des Kellerspeicher der JavaVM}
-\end{figure}
-
-Der Befehl \textit{ldc 4} legt den Wert \textit{4} auf den Stack.
-
-\begin{figure}[h!]
-\centering
-\includegraphics[scale=0.2]{pics/stack_visual(2).png}
-\caption{Zustand des Kellerspeicher der JavaVM}
-\end{figure}
-
-Der Befehl \textit{iadd} nimmt zwei Werte vom Stack und legt das Ergebnis der Addition dieser Werte wieder auf den Stack
-
-\begin{figure}[h!]
-\centering
-\includegraphics[scale=0.2]{pics/stack_visual(3).png}
-\caption{Zustand des Kellerspeicher der JavaVM}
+\begin{center}
 \label{fig:method}
+\subfloat[Initialzustand] {
+	\includegraphics[scale=0.2]{pics/stack_visual.png}
+}\quad
+\subfloat[\textit{ldc 2}] {
+	\includegraphics[scale=0.2]{pics/stack_visual(1).png}
+}\\
+\subfloat[\textit{ldc 4}] {
+	\includegraphics[scale=0.2]{pics/stack_visual(2).png}
+}\quad 
+\subfloat[\textit{iadd}] {
+	\includegraphics[scale=0.2]{pics/stack_visual(3).png}
+}\\
+\end{center}
 \end{figure}
-
-
-
 \pagebreak
 
 \subsection{Ausweiten der simplen Grammatik}
@@ -275,9 +262,11 @@ Beim Aufruf von Funktionen wird ebenfalls geprüft, ob eine Funktion mit der geg
 In einem String wird die Anweisungen für den Aufruf für Jasmin zusammengesetzt, wobei zunächst gegebenenfalls Variablen für die Übergabeparameter angelegt werden. 
 Anschließend wird der Aufruf in Jasmin-Syntax generiert.
 
+\scriptsize
 \begin{lstlisting}[frame=single]
 invokestatic [objektname]/[funktionsname]([parameter])[rueckgabetyp]
 \end{lstlisting}
+\normalsize
 
 Der Objektname ist nur intern, also für die JVM relevant, da diese der Java-Philosophie entsprechend stark objektorientiert ausgerichtet ist. Es muss also nur darauf geachtet werden, dass der Objektname gleich dem der Jasmin-Main-Funktion ist.
 Die Parameterliste besteht aus je einem ''I'' (für Integer) pro übergebenem Parameter.
@@ -292,6 +281,7 @@ Zusätzlich zu Variablen werden bei Konstanten folgende Schritte ausgeführt:
 Wird eine Konstante deklariert, wird deren hasBeenAssigned-Flag auf false gesetzt.
 Bei der Wertzuweisung zu der Konstanten wird geprüft, welchen Wert dieses Flag besitzt. Ist der Wert false, wird eine normale Zuweisung durchgeführt und der Wert des Flags auf true gesetzt. Ist der Wert true, wurde der Konstanten bereits eine Wert zugewiesen, weshalb eine weitere Zuweisung nicht erfolgen darf. Es wird eine Exception ausgelöst und der Kompiliervorgang mit einer entsprechenden Fehlermeldung abgebrochen.
 
+\pagebreak
 \subsection{Implementierung von Bedingten Verzweigungen}
 Verzweigungen sind in drei Teile untergliedert:
 \begin{itemize}
